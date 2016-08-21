@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <h:head>
+        <title>صرف رصاص لمركز</title>
+        
+        <link rel="stylesheet" 
+              type="text/css"
+              href="resources/css/rasas.css"/>
+        
+    </h:head>
+    
+    <h:body>
+        
+        <p:growl id="growl" showDetail="true" life="5000"/>
+        
+        <ui:insert name="header">
+		<ui:include src="header.xhtml" />
+	</ui:insert>
+        
+        <br/><br/>
+        <center>
+            <p:outputLabel id = "lblTitle" value="صرف رصاص لمركز"/>
+        </center>
+
+        <h:form styleClass="frmMain" >
+            <center>
+                <h:panelGrid styleClass = "pnl" columns="4" cellpadding="10">
+
+                    
+                    <p:outputLabel id="lblSubCenterNo" value="المركز : " />
+                    <h:selectOneMenu styleClass = "slctMenu" value="#{mBRsMain.subCenterNo}">
+                        <f:selectItem itemLabel="الرقابة الجمركية" itemValue="901"/>
+                        <f:selectItem itemLabel="باب 4" itemValue="902"/>
+                        <f:selectItem itemLabel="ساحة 4" itemValue="903"/>
+                        <f:selectItem itemLabel="ميناء الحاويات" itemValue="904"/>
+                        <f:selectItem itemLabel="محطة الركاب" itemValue="905"/>
+                        <f:selectItem itemLabel="الدرة" itemValue="906"/>
+                        <f:selectItem itemLabel="جنوب وادي عربة" itemValue="907"/>
+                        <f:selectItem itemLabel="وادي عربة" itemValue="908"/>
+                        <f:selectItem itemLabel="وادي اليتم" itemValue="909"/>
+                        <f:selectItem itemLabel="الرابية" itemValue="900"/>
+                    </h:selectOneMenu>
+                    
+                    <p:outputLabel id="lblCurrentYear" value=" السنة : "/>
+                    <p:outputLabel id="lblCurrentYear_" value="#{mBCommon.getCurrentYear()}"/>
+                    
+                    <p:outputLabel id="lblRsFrom" value="من رصاص : "/>
+                    <p:inputText id="txtRsFrom" value="#{mBRsMain.rsFrom}" style="text-align: center;width: 170px;" maxlength="10" required="true"/>
+                    
+                    <p:outputLabel id="lblRsTo" value="الى رصاص : "/>
+                    <p:inputText id="txtRsTo" value="#{mBRsMain.rsTo}" style="text-align: center;width: 170px;" maxlength="10"  required="true"/>
+                    
+                    <br/>
+                    <f:facet name="footer">
+                        <center>
+                            <p:commandButton id="btnRasasReg" value="صرف الرصاص" action="#{mBRsMain.checkRasasSubCenter()}"/>
+                        </center>
+                    </f:facet>
+                    
+                </h:panelGrid>
+            </center>
+        </h:form>
+    </h:body>
+</html>
+

@@ -1,0 +1,29 @@
+.ui-growl {
+    top: 7% !important;
+    left: 0.5%;
+    width: 350px;
+    direction: rtl;
+}
+
+#lblTitle {     
+    font-size: 30px;
+}
+
+.pnl {
+    direction: rtl;
+}
+
+.frmMain {
+    margin-top: 5%;
+}
+
+.slctMenu {
+    width: 170px; 
+    height: 25px;
+}
+
+.lblLoggedAndDate{
+   margin: 0;
+}
+
+

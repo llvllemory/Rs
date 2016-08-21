@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    
+    
+   
+
+    
+    <h:head>
+        <title>شاشة الدخول لنظام الرصاص</title>
+   
+        <link rel="stylesheet" 
+              type="text/css"
+              href="resources/css/rasas.css"/>
+        
+            
+    </h:head>
+    <h:body dir="RTL">
+        
+        <p:growl id="growl" showDetail="true" life="5000"/>
+        
+        <h:form>
+            <center>
+                <h:panelGrid columns="2" cellpadding="10" style="margin-top: 15%">
+            
+                <f:facet name="label">
+                    <p:outputLabel id="lblHeader" value="معلومات الموظف"/>  
+                </f:facet>
+                
+                <p:outputLabel id="lblUsername" value="الرقم الوظيفي : "/>
+                <p:inputText id="txtUsername" value="#{mBLogin.userId}" style="text-align: center" placeholder="الرقم الوظيفي" />
+                
+                <p:outputLabel id="lblPassword" value="كلمة السر : "/>
+                <p:password id="txtPassword" value="#{mBLogin.password}" style="text-align: center" placeholder="كلمة السر"/>
+                
+                <f:facet name="footer">
+                    <center>
+                        <p:commandButton id="lblBtnLogin" value="تسجيل دخول" action="#{mBLogin.login()}"/>
+                    </center>
+                </f:facet>
+            </h:panelGrid>
+            </center>    
+        </h:form>
+        
+    </h:body>
+</html>
+

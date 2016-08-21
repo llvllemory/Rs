@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <h:head>
+        <title>إستلام رصاص اللوازم</title>
+     
+        <link rel="stylesheet" 
+              type="text/css"
+              href="resources/css/rasas.css"/>
+        
+    </h:head>
+    
+    <h:body>
+        
+        <p:growl id="growl" showDetail="true" life="5000"/>
+        
+        <ui:insert name="header">
+		<ui:include src="header.xhtml" />
+	</ui:insert>
+        
+        <br/><br/>
+        <center>
+            <p:outputLabel id = "lblTitle" value="إستلام رصاص اللوازم"/>
+        </center>
+        
+        <h:form styleClass="frmMain" >
+            <center>
+                <h:panelGrid styleClass="pnl" columns="4" cellpadding="10">
+                                       
+                    <p:outputLabel id="lblCenterNo" value="المركز : " />
+                    <h:selectOneMenu styleClass = "slctMenu" value="#{mBRsMain.centerNo}">
+                        <f:selectItem itemLabel="جمرك العقبة" itemValue="220"/>
+                    </h:selectOneMenu>
+                    
+                    <p:outputLabel id="lblCurrentYear" value=" السنة : "/>
+                    <p:outputLabel id="lblCurrentYear_" value="#{mBCommon.getCurrentYear()}"/>
+                    
+                    <p:outputLabel id="lblRsFrom" value="من رصاص : "/>
+                    <p:inputText id="txtRsFrom" value="#{mBRsMain.rsFrom}" style="text-align: center;width: 170px;" maxlength="10" required="true"/>
+                    
+                    <p:outputLabel id="lblRsTo" value="الى رصاص : "/>
+                    <p:inputText id="txtRsTo" value="#{mBRsMain.rsTo}" style="text-align: center;width: 170px;" maxlength="10"  required="true"/>
+                    
+                    <br/>
+                    <f:facet name="footer">
+                        <center>
+                            <p:commandButton id="btnRasasReg" value="إستلام الرصاص" action="#{mBRsMain.checkRasasCenter()}"/>
+                        </center>
+                    </f:facet>
+                    
+                </h:panelGrid>
+            </center>
+        </h:form>
+    </h:body>
+</html>
+
