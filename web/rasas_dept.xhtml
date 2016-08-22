@@ -49,7 +49,8 @@
                     <br/>
                     <f:facet name="footer">
                         <center>
-                            <p:commandButton id="btnRasasReg" value="إستلام الرصاص" action="#{mBRsMain.checkRasasCenter()}"/>
+                            <p:commandButton id="btnSave" value="إستلام الرصاص" action="#{mBRsMain.checkRasasCenter()}" disabled="#{mBPrivilege.btnDisabled(component.id)}"/>
+                            <p:commandButton id="btnDelete" value="حذف الرصاص" action="#{mBRsMain.deleteRasasCenter()}" disabled="#{mBPrivilege.btnDisabled(component.id)}"/>
                         </center>
                     </f:facet>
                     

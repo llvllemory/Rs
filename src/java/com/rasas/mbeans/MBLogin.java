@@ -1,6 +1,7 @@
 package com.rasas.mbeans;
 
 import com.rasas.entities.Users;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -9,7 +10,7 @@ import javax.faces.bean.RequestScoped;
 @ManagedBean
 @RequestScoped
 
-public class MBLogin {
+public class MBLogin implements Serializable{
     
     private String userId;
     private String password;

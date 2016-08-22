@@ -1,6 +1,7 @@
 package com.rasas.mbeans;
 
 import com.rasas.entities.RsMain;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,7 +15,7 @@ import javax.persistence.TypedQuery;
 @ManagedBean
 @RequestScoped
 
-public class MBRsMain {
+public class MBRsMain implements Serializable{
 
     private int rsFrom;
     private int rsTo;
@@ -65,7 +66,7 @@ public class MBRsMain {
             }
             
             if (rsFound == ((rsTo - rsFrom) + 1)) {
-                MBCommon.getWarnMessage("", "هذا الرصاص مصروف مسبقا للمركز, الرجاء التأكد أولا!");
+                MBCommon.getErrorMessage("", "هذا الرصاص مصروف مسبقا للمركز, الرجاء التأكد أولا!");
             } else if (rsFound > 0 && rsFound < ((rsTo - rsFrom) + 1)) {
                 MBCommon.getWarnMessage("", "هنالك رصاص مصروف مسبقا من هذا الرصاص للمركز, الرجاء التأكد أولا!");
             } else if (rsFound == 0) {
@@ -77,7 +78,7 @@ public class MBRsMain {
                 } else if (x == ((rsTo - rsFrom) + 1)) {
                     MBCommon.getInfoMessage("", "تم صرف الرصاص للمركز ينجاح.");
                 } else {
-                    MBCommon.getInfoMessage("", "هنالك رصاص لم يتم صرفه, الرجاء التأكد من الرصاص المصروف!");
+                    MBCommon.getWarnMessage("", "هنالك رصاص لم يتم صرفه, الرجاء التأكد من الرصاص المصروف!");
                 }
             }
             
@@ -90,7 +91,7 @@ public class MBRsMain {
             } else if (x == ((rsTo - rsFrom) + 1)) {
                 MBCommon.getInfoMessage("", "تم صرف الرصاص للمركز ينجاح.");
             } else {
-                MBCommon.getInfoMessage("", "هنالك رصاص لم يتم صرفه, الرجاء التأكد من الرصاص المصروف!");
+                MBCommon.getWarnMessage("", "هنالك رصاص لم يتم صرفه, الرجاء التأكد من الرصاص المصروف!");
             }
         }
 
@@ -129,8 +130,8 @@ public class MBRsMain {
             if (rsFound == 0) {
                 MBCommon.getErrorMessage("", "الرصاص غير موجود في ملف المركز. الرجاء إستلام الرصاص من اللوازم أولا!");
             } else if (rsFound > 0 && rsFound > ((rsTo - rsFrom) + 1)) {
-                MBCommon.getErrorMessage("", "هنالك رصاص غير موجود في ملف الرصاص, الرجاء إستلام الرصاص من اللوازم أولا!");
-            } else {
+                MBCommon.getWarnMessage("", "هنالك رصاص غير موجود في ملف الرصاص, الرجاء إستلام الرصاص من اللوازم أولا!");
+            } else if (rsFound == ((rsTo - rsFrom) + 1)) {
 
                 rsList = new ArrayList<>();
                 rsList = getNullRasasCenterByCenterAndYear("220", MBCommon.getCurrentYear());
@@ -148,10 +149,10 @@ public class MBRsMain {
                     }
 
                     if (rsFound == 0) {
-                        MBCommon.getErrorMessage("", "الرصاص مصروف مسبقا ومسدد, الرجاء التأكد والمحاولة مرة اخرى!");
+                        MBCommon.getErrorMessage("", "هذا الرصاص مصروف ومسدد مسبقا, الرجاء التأكد والمحاولة مرة اخرى!");
                     } else if (rsFound > 0 && rsFound < ((rsTo - rsFrom) + 1)) {
-                        MBCommon.getErrorMessage("", "هنالك رصاص مصروف مسبقا ومسدد, الرجاء التأكد والمحاولة مرة اخرى!");
-                    } else {
+                        MBCommon.getWarnMessage("", "هنالك رصاص مصروف ومسدد مسبقا, الرجاء التأكد والمحاولة مرة اخرى!");
+                    } else if (rsFound == ((rsTo - rsFrom) + 1)) {
 
                         int x = saveRasasSubCenter(rsFrom, rsTo, MBCommon.getCurrentYear(), "220", subCenterNo, new java.util.Date(), "33476");
 
@@ -160,11 +161,11 @@ public class MBRsMain {
                         } else if (x == ((rsTo - rsFrom) + 1)) {
                             MBCommon.getInfoMessage("", "تم صرف الرصاص للمركز ينجاح.");
                         } else {
-                            MBCommon.getInfoMessage("", "هنالك رصاص لم يتم صرفه, الرجاء التأكد من الرصاص المصروف!");
+                            MBCommon.getWarnMessage("", "هنالك رصاص لم يتم صرفه, الرجاء التأكد من الرصاص المصروف!");
                         }
                     }
                 } else {
-                    MBCommon.getErrorMessage("", "هنالك رصاص مصروف مسبقا ومسدد, الرجاء التأكد والمحاولة مرة اخرى!");
+                    MBCommon.getErrorMessage("", "لا يوجد رصاص متاح للصرف, الرجاء التأكد والمحاولة مرة اخرى!");
                 }
             }
         } else {
@@ -278,6 +279,5 @@ public class MBRsMain {
 
     public void setSubCenterNo(String subCenterNo) {
         this.subCenterNo = subCenterNo;
-    }
-    
+    } 
 }
