@@ -37,6 +37,7 @@
      </h:head>
     
     <h:body>
+ 
         <h:form>  
             <p:menubar>
                 <p:submenu label="الإستفسارات">
@@ -56,18 +57,20 @@
                     </p:submenu>
                     
                    <p:menuitem value="الأمن والحماية"/>
-                   <p:menuitem value="خروج"/>
+                   <p:menuitem value="خروج" action="#{mBLogin.logout()}"/>
                 </p:submenu>
             </p:menubar>
             
             <br/>
-            <center>
-                <p:outputLabel id="lblLoggedAndDate" styleClass="lblLoggedAndDate" 
-                               value="#{mBCommon.getCurrentDate()}"/>  
-            </center>
+            
+                <p:outputLabel id="lblLoggedUser" styleClass="lblLoggedUser" 
+                               value="اسم المستخدم : #{mBLogin.loggedUser.userName}"/>  
+                
+                <p:outputLabel id="lblDate" styleClass="lblDate" 
+                               value="تاريخ اليوم : #{mBCommon.getCurrentDate()}"/>  
+            
             
         </h:form> 
-        
     </h:body>
 </ui:composition>
 

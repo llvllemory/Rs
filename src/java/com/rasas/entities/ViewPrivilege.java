@@ -6,15 +6,11 @@
 package com.rasas.entities;
 
 import java.io.Serializable;
-import javax.persistence.Basic;
-import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -26,60 +22,38 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ViewPrivilege.findAll", query = "SELECT v FROM ViewPrivilege v"),
-    @NamedQuery(name = "ViewPrivilege.findByUserId", query = "SELECT v FROM ViewPrivilege v WHERE v.userId = :userId"),
-    @NamedQuery(name = "ViewPrivilege.findByViewId", query = "SELECT v FROM ViewPrivilege v WHERE v.viewId = :viewId"),
-    @NamedQuery(name = "ViewPrivilege.findByPrivilege", query = "SELECT v FROM ViewPrivilege v WHERE v.privilege = :privilege")})
+    @NamedQuery(name = "ViewPrivilege.findByUserId", query = "SELECT v FROM ViewPrivilege v WHERE v.viewPrivilegePK.userId = :userId"),
+    @NamedQuery(name = "ViewPrivilege.findByViewId", query = "SELECT v FROM ViewPrivilege v WHERE v.viewPrivilegePK.viewId = :viewId"),
+    @NamedQuery(name = "ViewPrivilege.findByPrivilege", query = "SELECT v FROM ViewPrivilege v WHERE v.viewPrivilegePK.privilege = :privilege")})
 public class ViewPrivilege implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 10)
-    @Column(name = "USER_ID")
-    private String userId;
-    @Size(max = 30)
-    @Column(name = "VIEW_ID")
-    private String viewId;
-    @Size(max = 6)
-    @Column(name = "PRIVILEGE")
-    private String privilege;
+    @EmbeddedId
+    protected ViewPrivilegePK viewPrivilegePK;
 
     public ViewPrivilege() {
     }
 
-    public ViewPrivilege(String userId) {
-        this.userId = userId;
+    public ViewPrivilege(ViewPrivilegePK viewPrivilegePK) {
+        this.viewPrivilegePK = viewPrivilegePK;
     }
 
-    public String getUserId() {
-        return userId;
+    public ViewPrivilege(String userId, String viewId, String privilege) {
+        this.viewPrivilegePK = new ViewPrivilegePK(userId, viewId, privilege);
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public ViewPrivilegePK getViewPrivilegePK() {
+        return viewPrivilegePK;
     }
 
-    public String getViewId() {
-        return viewId;
-    }
-
-    public void setViewId(String viewId) {
-        this.viewId = viewId;
-    }
-
-    public String getPrivilege() {
-        return privilege;
-    }
-
-    public void setPrivilege(String privilege) {
-        this.privilege = privilege;
+    public void setViewPrivilegePK(ViewPrivilegePK viewPrivilegePK) {
+        this.viewPrivilegePK = viewPrivilegePK;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (userId != null ? userId.hashCode() : 0);
+        hash += (viewPrivilegePK != null ? viewPrivilegePK.hashCode() : 0);
         return hash;
     }
 
@@ -90,7 +64,7 @@ public class ViewPrivilege implements Serializable {
             return false;
         }
         ViewPrivilege other = (ViewPrivilege) object;
-        if ((this.userId == null && other.userId != null) || (this.userId != null && !this.userId.equals(other.userId))) {
+        if ((this.viewPrivilegePK == null && other.viewPrivilegePK != null) || (this.viewPrivilegePK != null && !this.viewPrivilegePK.equals(other.viewPrivilegePK))) {
             return false;
         }
         return true;
@@ -98,7 +72,7 @@ public class ViewPrivilege implements Serializable {
 
     @Override
     public String toString() {
-        return "com.rasas.entities.ViewPrivilege[ userId=" + userId + " ]";
+        return "com.rasas.entities.ViewPrivilege[ viewPrivilegePK=" + viewPrivilegePK + " ]";
     }
     
 }

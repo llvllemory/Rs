@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 
 @ManagedBean
 @RequestScoped
@@ -16,7 +17,7 @@ public class MBLogin implements Serializable{
     private String password;
     private List<Users> usersList = new ArrayList<>();
     private MBUsers mBUsers = new MBUsers();
-    
+    private final FacesContext context = FacesContext.getCurrentInstance();
     public MBLogin(){
         
     }
@@ -47,6 +48,9 @@ public class MBLogin implements Serializable{
                         int x = mBUsers.updateUserLastLogin(usersList.get(0));
 
                         if (x > 0) {
+                            
+                            context.getExternalContext().getSessionMap().put("loggedUser", usersList.get(0));
+                            
                             MBCommon.getInfoMessage("", "أهلا وسهلا بك " + usersList.get(0).getUserName());
                             return "main_page";
                         } else {
@@ -77,11 +81,22 @@ public class MBLogin implements Serializable{
         return "";
     }
 ////////////////////////////////////////////////////////////////////////////////    
-public void logout(){
-    
-}    
+    public String logout() {
+        System.out.println("com.rasas.mbeans.MBLogin.logout()---------->");
 
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        return "login_page";
 
+    } 
+////////////////////////////////////////////////////////////////////////////////
+    public Users getLoggedUser(){
+        System.out.println("com.rasas.mbeans.MBLogin.getLoggedUser()---------->");
+                          
+        Users loggedUser = (Users) context.getExternalContext().getSessionMap().get("loggedUser");
+        
+        return loggedUser;
+    }
+////////////////////////////////////////////////////////////////////////////////
 
 
 //////////////////// Geteers and Setters ///////////////////////////////////////

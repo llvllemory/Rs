@@ -22,8 +22,14 @@
     height: 25px;
 }
 
-.lblLoggedAndDate{
-   margin: 0;
+.lblLoggedUser{
+    float: right;
+    margin-right: 5%;
+}
+
+.lblDate{
+    float: left;
+    margin-left: 5%;
 }
 
 .txtRasas {

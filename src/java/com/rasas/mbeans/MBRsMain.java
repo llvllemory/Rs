@@ -25,6 +25,7 @@ public class MBRsMain implements Serializable{
     
     private List<RsMain> rsList = new ArrayList<>();
     private RsMain rasas;
+    private MBLogin mBLogin = new MBLogin();
     
     EntityManager em;
     EntityManagerFactory emf;
@@ -71,7 +72,7 @@ public class MBRsMain implements Serializable{
                 MBCommon.getWarnMessage("", "هنالك رصاص مصروف مسبقا من هذا الرصاص للمركز, الرجاء التأكد أولا!");
             } else if (rsFound == 0) {
 
-                int x = saveRasasCenter(rsFrom, rsTo, MBCommon.getCurrentYear(), centerNo, new java.util.Date(), "33476");
+                int x = saveRasasCenter(rsFrom, rsTo, MBCommon.getCurrentYear(), centerNo, new java.util.Date());
 
                 if (x == 0) {
                     MBCommon.getErrorMessage("", "فشل في عملية تخزين الرصاص, الرجاء المحاولة مرة اخرى او التأكد من أرقام الرصاص!");
@@ -84,7 +85,7 @@ public class MBRsMain implements Serializable{
             
         }else{
             
-            int x = saveRasasCenter(rsFrom, rsTo, MBCommon.getCurrentYear(), centerNo, new java.util.Date(), "33476");
+            int x = saveRasasCenter(rsFrom, rsTo, MBCommon.getCurrentYear(), centerNo, new java.util.Date());
 
             if (x == 0) {
                 MBCommon.getErrorMessage("", "فشل في عملية تخزين الرصاص, الرجاء المحاولة مرة اخرى او التأكد من أرقام الرصاص!");
@@ -154,7 +155,7 @@ public class MBRsMain implements Serializable{
                         MBCommon.getWarnMessage("", "هنالك رصاص مصروف ومسدد مسبقا, الرجاء التأكد والمحاولة مرة اخرى!");
                     } else if (rsFound == ((rsTo - rsFrom) + 1)) {
 
-                        int x = saveRasasSubCenter(rsFrom, rsTo, MBCommon.getCurrentYear(), "220", subCenterNo, new java.util.Date(), "33476");
+                        int x = saveRasasSubCenter(rsFrom, rsTo, MBCommon.getCurrentYear(), "220", subCenterNo, new java.util.Date());
 
                         if (x == 0) {
                             MBCommon.getErrorMessage("", "فشل في عملية تخزين الرصاص, الرجاء المحاولة مرة اخرى او التأكد من أرقام الرصاص!");
@@ -178,6 +179,7 @@ public class MBRsMain implements Serializable{
     public List<RsMain> getRasasCenterByCenterAndYear(String rsCenterNo, String rsYear){
         System.out.println("com.rasas.mbeans.MBRsMain.getRasasCenterByCenterAndYear()---------->");
 
+        emf.getCache().evictAll();
         TypedQuery<RsMain> query = em.createQuery("SELECT r FROM RsMain r WHERE r.rsCenter = ?1 AND r.rsYear = ?2", RsMain.class)
                 .setParameter(1, rsCenterNo)
                 .setParameter(2, rsYear);
@@ -190,6 +192,7 @@ public class MBRsMain implements Serializable{
     public List<RsMain> getNullRasasCenterByCenterAndYear(String rsCenterNo, String rsYear){
         System.out.println("com.rasas.mbeans.MBRsMain.getRasasCenterByCenterAndYear()---------->");
 
+        emf.getCache().evictAll();
         TypedQuery<RsMain> query = em.createQuery("SELECT r FROM RsMain r WHERE r.rsSubCenter IS NULL AND r.rsCenter = ?1 AND r.rsYear = ?2", RsMain.class)
                 .setParameter(1, rsCenterNo)
                 .setParameter(2, rsYear);
@@ -200,9 +203,10 @@ public class MBRsMain implements Serializable{
     } 
         
 ////////////////////////////////////////////////////////////////////////////////    
-    public int saveRasasCenter(int rsFrom, int RsTo, String rsYear, String rsCenter,Date rsCenterDate, String rsCenterUserId){
+    public int saveRasasCenter(int rsFrom, int RsTo, String rsYear, String rsCenter,Date rsCenterDate){
         System.out.println("com.rasas.mbeans.MBRsMain.saveRasasCenter()---------->");
         
+        emf.getCache().evictAll();
         int rows = 0;
         
         for(int i = rsFrom; i <= rsTo; i++){
@@ -212,7 +216,8 @@ public class MBRsMain implements Serializable{
             rasas.setRsYear(rsYear);
             rasas.setRsCenter(rsCenter);
             rasas.setRsCenterDate(rsCenterDate);
-            rasas.setRsCenterUserId(rsCenterUserId);
+            //rasas.setRsCenterUserId(rsCenterUserId);
+            rasas.setRsCenterUserId(mBLogin.getLoggedUser().getUserId());
             
             em.persist(rasas);
             rows++;
@@ -228,9 +233,10 @@ public class MBRsMain implements Serializable{
         return rows;
     }
 ////////////////////////////////////////////////////////////////////////////////
-    public int saveRasasSubCenter(int rsFrom, int RsTo, String rsYear, String rsCenter, String rsSubCenter, Date rsSubCenterDate, String rsSubCenterUserId){
+    public int saveRasasSubCenter(int rsFrom, int RsTo, String rsYear, String rsCenter, String rsSubCenter, Date rsSubCenterDate){
         System.out.println("com.rasas.mbeans.MBRsMain.saveRasasSubCenter()---------->");
         
+        emf.getCache().evictAll();
         int rows = 0;
         
         for(int i = rsFrom; i <= rsTo; i++){
@@ -238,7 +244,8 @@ public class MBRsMain implements Serializable{
                         + "WHERE rsNo = ?4 AND rsYear = ?5 AND rsCenter = ?6")
                         .setParameter(1, rsSubCenter)
                         .setParameter(2, new java.util.Date())
-                        .setParameter(3, rsSubCenterUserId)
+                        //.setParameter(3, rsSubCenterUserId)
+                        .setParameter(3, mBLogin.getLoggedUser().getUserId())
                         .setParameter(4, i)
                         .setParameter(5, rsYear)
                         .setParameter(6, rsCenter).executeUpdate();

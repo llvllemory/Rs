@@ -59,8 +59,8 @@
                     <br/>
                     <f:facet name="footer">
                         <center>
-                            <p:commandButton id="btnSave" value="صرف الرصاص" action="#{mBRsMain.checkRasasSubCenter()}" disabled="#{mBPrivilege.btnDisabled(component.id)}"/>
-                            <p:commandButton id="btnDelete" value="حذف الرصاص" action="#{mBRsMain.deleteRasasSubCenter()}" disabled="#{mBPrivilege.btnDisabled(component.id)}"/>
+                            <p:commandButton id="btnSave" value="صرف الرصاص" action="#{mBRsMain.checkRasasSubCenter()}" disabled="#{mBViewPrivilege.getBtnPrivilege(component.id)}"/>
+                            <p:commandButton id="btnDelete" value="حذف الرصاص" action="#{mBRsMain.deleteRasasSubCenter()}" disabled="#{mBViewPrivilege.getBtnPrivilege(component.id)}"/>
                         </center>
                     </f:facet>
                     
