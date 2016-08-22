@@ -41,15 +41,15 @@
                     <p:outputLabel id="lblCurrentYear_" value="#{mBCommon.getCurrentYear()}"/>
                     
                     <p:outputLabel id="lblRsFrom" value="من رصاص : "/>
-                    <p:inputText id="txtRsFrom" value="#{mBRsMain.rsFrom}" style="text-align: center;width: 170px;" maxlength="10" required="true"/>
+                    <p:inputText id="txtRsFrom" value="#{mBRsMain.rsFrom}" styleClass="txtRasas" maxlength="10" required="true"/>
                     
                     <p:outputLabel id="lblRsTo" value="الى رصاص : "/>
-                    <p:inputText id="txtRsTo" value="#{mBRsMain.rsTo}" style="text-align: center;width: 170px;" maxlength="10"  required="true"/>
+                    <p:inputText id="txtRsTo" value="#{mBRsMain.rsTo}" styleClass="txtRasas" maxlength="10"  required="true"/>
                     
                     <br/>
                     <f:facet name="footer">
                         <center>
-                            <p:commandButton id="btnSave" value="إستلام الرصاص" action="#{mBRsMain.checkRasasCenter()}" disabled="#{mBPrivilege.btnDisabled(component.id)}"/>
+                            <p:commandButton id="btnSave" value="صرف الرصاص" action="#{mBRsMain.checkRasasCenter()}" disabled="#{mBPrivilege.btnDisabled(component.id)}"/>
                             <p:commandButton id="btnDelete" value="حذف الرصاص" action="#{mBRsMain.deleteRasasCenter()}" disabled="#{mBPrivilege.btnDisabled(component.id)}"/>
                         </center>
                     </f:facet>

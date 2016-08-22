@@ -42,13 +42,20 @@ public class MBLogin implements Serializable{
                 
                 if(usersList.get(0).getPassword().equals(password)){
                     
-                    int x = mBUsers.updateUserLastLogin(usersList.get(0));
-                    
-                    if(x > 0){
-                        MBCommon.getInfoMessage("", "أهلا وسهلا بك " + usersList.get(0).getUserName());
-                        return "main_page";
-                    }else{
-                        MBCommon.getFatalMessage("", "هنالك خطأ في تحديث معلومات المستخدم!");
+                    if(usersList.get(0).getPrivilege() == 1 || usersList.get(0).getPrivilege() == 2){
+                        
+                        int x = mBUsers.updateUserLastLogin(usersList.get(0));
+
+                        if (x > 0) {
+                            MBCommon.getInfoMessage("", "أهلا وسهلا بك " + usersList.get(0).getUserName());
+                            return "main_page";
+                        } else {
+                            MBCommon.getFatalMessage("", "هنالك خطأ في تحديث معلومات المستخدم!");
+                            return "";
+                        }
+                        
+                    }else if(usersList.get(0).getPrivilege() == 3){
+                        MBCommon.getFatalMessage("", "المستخدم موقوف, الرجاء الإتصال مع مدير النظام!");
                         return "";
                     }
                     
@@ -66,6 +73,8 @@ public class MBLogin implements Serializable{
             System.out.println("com.rasas.mbeans.MBLogin.login()-----> e.getMessage()" + e.getMessage());
             return "";
         }
+        
+        return "";
     }
 ////////////////////////////////////////////////////////////////////////////////    
 public void logout(){

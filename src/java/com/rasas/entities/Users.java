@@ -6,7 +6,6 @@
 package com.rasas.entities;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -57,7 +56,7 @@ public class Users implements Serializable {
     @Column(name = "USER_TYPE")
     private String userType;
     @Column(name = "PRIVILEGE")
-    private BigInteger privilege;
+    private int privilege;
     @Size(max = 3)
     @Column(name = "USER_CENTER")
     private String userCenter;
@@ -107,11 +106,11 @@ public class Users implements Serializable {
         this.userType = userType;
     }
 
-    public BigInteger getPrivilege() {
+    public int getPrivilege() {
         return privilege;
     }
 
-    public void setPrivilege(BigInteger privilege) {
+    public void setPrivilege(int privilege) {
         this.privilege = privilege;
     }
 

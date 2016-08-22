@@ -1,6 +1,8 @@
 package com.rasas.mbeans;
 
+import com.rasas.entities.ViewPrivilege;
 import java.io.Serializable;
+import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -10,41 +12,52 @@ import javax.faces.context.FacesContext;
 
 public class MBPrivilege implements Serializable{
     
-    String viewId = "";
-    String privilege = "100000";
-    
+    private String viewId = "";
+    private String status = "true";
+    private MBViewPrivilege mBViewPrivilege;
+ 
     
     public MBPrivilege(){
-        //viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
+        viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
+        mBViewPrivilege = new MBViewPrivilege(); 
     }
     
 ////////////////////////////////////////////////////////////////////////////////
     public String btnDisabled(String componentId){
-        System.out.println("com.rasas.mbeans.MBPrivilege.isDisabled()---------->");
+        System.out.println("com.rasas.mbeans.MBPrivilege.btnDisabled()---------->");
         
-        String status = "";
+        List<ViewPrivilege> viewsPrivilegeList = mBViewPrivilege.getUserPrivilege("33476", viewId);
         
-        String add    = privilege.substring(0, 1);
-        String delete = privilege.substring(1, 2);
-        
-        if (componentId.equals("btnSave")){
-            if (add.equals("0")) {
-                status = "true";
-            } else {
-                status = "false";
-            }
+        for(ViewPrivilege vp: viewsPrivilegeList){
+            System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxx getViewId = " + vp.getViewId() + "  ---- viewId = " + viewId);
             
-            System.out.println("id = " + componentId + ", add = " + add + ", status = " + status);
-        }else if (componentId.equals("btnDelete")){
-            if (delete.equals("0")) {
-                status = "true";
-            } else {
-                status = "false";
-            }
-            
-            System.out.println("id = " + componentId + ", delete = " + add + ", status = " + status);
+            if(vp.getViewId().equals(viewId)){
+                
+                System.out.println("---------------->>>>>>>> getViewId = " + vp.getViewId() + "  ---- viewId = " + viewId);
+                
+                String add = vp.getPrivilege().substring(0, 1);
+                String delete = vp.getPrivilege().substring(1, 2);
+
+                if (componentId.equals("btnSave")) {
+                    if (add.equals("0")) {
+                        status = "true";
+                    } else {
+                        status = "false";
+                    }
+
+                    System.out.println("id = " + componentId + ", add = " + add + ", status = " + status);
+                } else if (componentId.equals("btnDelete")) {
+                    if (delete.equals("0")) {
+                        status = "true";
+                    } else {
+                        status = "false";
+                    }
+
+                    System.out.println("id = " + componentId + ", delete = " + add + ", status = " + status);
+                }
+            }   
         }
-      
         return status;
     }   
+////////////////////////////////////////////////////////////////////////////////    
 }
