@@ -31,6 +31,7 @@ public class MBUsers implements Serializable{
         emf.getCache().evictAll();
         TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u WHERE u.userId = ?1", Users.class)
                 .setParameter(1, userId);
+        
         List usersList = query.getResultList();
         
         return usersList;
