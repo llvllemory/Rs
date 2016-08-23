@@ -1,7 +1,6 @@
 package com.rasas.mbeans;
 
 import com.rasas.entities.RsData;
-import com.rasas.entities.RsMain;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;

@@ -33,7 +33,7 @@
                 <h:panelGrid styleClass="pnl" columns="4" cellpadding="10">
                                        
                     <p:outputLabel id="lblCenterNo" value="المركز : " />
-                    <h:selectOneMenu styleClass = "slctMenu" value="#{mBRsMain.centerNo}">
+                    <h:selectOneMenu styleClass = "slctMenu" value="#{mBRsMain.rsCenter}">
                         <f:selectItem itemLabel="جمرك العقبة" itemValue="220"/>
                     </h:selectOneMenu>
                     
@@ -51,7 +51,7 @@
                         <center>
                             <p:commandButton id="btnSave" value="صرف الرصاص" action="#{mBRsMain.checkRasasCenter()}" disabled="#{mBViewPrivilege.getBtnPrivilege(component.id)}"/>
                             
-                            <p:commandButton id="btnDelete" value="إلغاء صرف الرصاص" action="#{mBRsMain.deleteRasasCenter()}" disabled="#{mBViewPrivilege.getBtnPrivilege(component.id)}"/>
+                            <p:commandButton id="btnDelete" value="إلغاء صرف الرصاص" action="#{mBRsMain.checkRasasCenterToDelete()}" disabled="#{mBViewPrivilege.getBtnPrivilege(component.id)}"/>
                         </center>
                     </f:facet>
                     

@@ -32,16 +32,16 @@ public class RsDataPK implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 3)
-    @Column(name = "RS_SUB_CENTER")
-    private String rsSubCenter;
+    @Column(name = "RS_CENTER")
+    private String rsCenter;
 
     public RsDataPK() {
     }
 
-    public RsDataPK(Integer rsNo, String rsYear, String rsSubCenter) {
+    public RsDataPK(Integer rsNo, String rsYear, String rsCenter) {
         this.rsNo = rsNo;
         this.rsYear = rsYear;
-        this.rsSubCenter = rsSubCenter;
+        this.rsCenter = rsCenter;
     }
 
     public Integer getRsNo() {
@@ -60,12 +60,12 @@ public class RsDataPK implements Serializable {
         this.rsYear = rsYear;
     }
 
-    public String getRsSubCenter() {
-        return rsSubCenter;
+    public String getRsCenter() {
+        return rsCenter;
     }
 
-    public void setRsSubCenter(String rsSubCenter) {
-        this.rsSubCenter = rsSubCenter;
+    public void setRsCenter(String rsCenter) {
+        this.rsCenter = rsCenter;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class RsDataPK implements Serializable {
         int hash = 0;
         hash += (rsNo != null ? rsNo.hashCode() : 0);
         hash += (rsYear != null ? rsYear.hashCode() : 0);
-        hash += (rsSubCenter != null ? rsSubCenter.hashCode() : 0);
+        hash += (rsCenter != null ? rsCenter.hashCode() : 0);
         return hash;
     }
 
@@ -90,7 +90,7 @@ public class RsDataPK implements Serializable {
         if ((this.rsYear == null && other.rsYear != null) || (this.rsYear != null && !this.rsYear.equals(other.rsYear))) {
             return false;
         }
-        if ((this.rsSubCenter == null && other.rsSubCenter != null) || (this.rsSubCenter != null && !this.rsSubCenter.equals(other.rsSubCenter))) {
+        if ((this.rsCenter == null && other.rsCenter != null) || (this.rsCenter != null && !this.rsCenter.equals(other.rsCenter))) {
             return false;
         }
         return true;
@@ -98,7 +98,7 @@ public class RsDataPK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.rasas.entities.RsDataPK[ rsNo=" + rsNo + ", rsYear=" + rsYear + ", rsSubCenter=" + rsSubCenter + " ]";
+        return "com.rasas.entities.RsDataPK[ rsNo=" + rsNo + ", rsYear=" + rsYear + ", rsCenter=" + rsCenter + " ]";
     }
     
 }

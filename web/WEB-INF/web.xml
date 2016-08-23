@@ -18,6 +18,12 @@
             30
         </session-timeout>
     </session-config>
+    
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/faces/login_page.xhtml</location>
+    </error-page>
+
     <welcome-file-list>
         <welcome-file>faces/login_page.xhtml</welcome-file>
     </welcome-file-list>

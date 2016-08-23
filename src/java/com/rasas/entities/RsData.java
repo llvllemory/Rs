@@ -30,44 +30,56 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "RsData.findAll", query = "SELECT r FROM RsData r"),
     @NamedQuery(name = "RsData.findByRsNo", query = "SELECT r FROM RsData r WHERE r.rsDataPK.rsNo = :rsNo"),
     @NamedQuery(name = "RsData.findByRsYear", query = "SELECT r FROM RsData r WHERE r.rsDataPK.rsYear = :rsYear"),
-    @NamedQuery(name = "RsData.findByRsSubCenter", query = "SELECT r FROM RsData r WHERE r.rsDataPK.rsSubCenter = :rsSubCenter"),
-    @NamedQuery(name = "RsData.findByEntryDate", query = "SELECT r FROM RsData r WHERE r.entryDate = :entryDate"),
-    @NamedQuery(name = "RsData.findByUserId", query = "SELECT r FROM RsData r WHERE r.userId = :userId"),
+    @NamedQuery(name = "RsData.findByRsCenter", query = "SELECT r FROM RsData r WHERE r.rsDataPK.rsCenter = :rsCenter"),
+    @NamedQuery(name = "RsData.findByRsSubCenter", query = "SELECT r FROM RsData r WHERE r.rsSubCenter = :rsSubCenter"),
+    @NamedQuery(name = "RsData.findByRsEntryDate", query = "SELECT r FROM RsData r WHERE r.rsEntryDate = :rsEntryDate"),
+    @NamedQuery(name = "RsData.findByRsUserId", query = "SELECT r FROM RsData r WHERE r.rsUserId = :rsUserId"),
+    @NamedQuery(name = "RsData.findByRsTasDocNo", query = "SELECT r FROM RsData r WHERE r.rsTasDocNo = :rsTasDocNo"),
+    @NamedQuery(name = "RsData.findByRsTasDocYear", query = "SELECT r FROM RsData r WHERE r.rsTasDocYear = :rsTasDocYear"),
+    @NamedQuery(name = "RsData.findByRsTasDocType", query = "SELECT r FROM RsData r WHERE r.rsTasDocType = :rsTasDocType"),
     @NamedQuery(name = "RsData.findByRsTasDate", query = "SELECT r FROM RsData r WHERE r.rsTasDate = :rsTasDate"),
     @NamedQuery(name = "RsData.findByRsTasUserId", query = "SELECT r FROM RsData r WHERE r.rsTasUserId = :rsTasUserId"),
-    @NamedQuery(name = "RsData.findByRsTasType", query = "SELECT r FROM RsData r WHERE r.rsTasType = :rsTasType"),
-    @NamedQuery(name = "RsData.findByCarNo", query = "SELECT r FROM RsData r WHERE r.carNo = :carNo"),
-    @NamedQuery(name = "RsData.findByCarNat", query = "SELECT r FROM RsData r WHERE r.carNat = :carNat"),
-    @NamedQuery(name = "RsData.findByCtnNo", query = "SELECT r FROM RsData r WHERE r.ctnNo = :ctnNo")})
+    @NamedQuery(name = "RsData.findByRsCarNo", query = "SELECT r FROM RsData r WHERE r.rsCarNo = :rsCarNo"),
+    @NamedQuery(name = "RsData.findByRsCarNat", query = "SELECT r FROM RsData r WHERE r.rsCarNat = :rsCarNat"),
+    @NamedQuery(name = "RsData.findByRsCtnNo", query = "SELECT r FROM RsData r WHERE r.rsCtnNo = :rsCtnNo")})
 public class RsData implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected RsDataPK rsDataPK;
-    @Column(name = "ENTRY_DATE")
+    @Size(max = 3)
+    @Column(name = "RS_SUB_CENTER")
+    private String rsSubCenter;
+    @Column(name = "RS_ENTRY_DATE")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date entryDate;
+    private Date rsEntryDate;
     @Size(max = 10)
-    @Column(name = "USER_ID")
-    private String userId;
+    @Column(name = "RS_USER_ID")
+    private String rsUserId;
+    @Size(max = 10)
+    @Column(name = "RS_TAS_DOC_NO")
+    private String rsTasDocNo;
+    @Size(max = 4)
+    @Column(name = "RS_TAS_DOC_YEAR")
+    private String rsTasDocYear;
+    @Size(max = 1)
+    @Column(name = "RS_TAS_DOC_TYPE")
+    private String rsTasDocType;
     @Column(name = "RS_TAS_DATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date rsTasDate;
     @Size(max = 10)
     @Column(name = "RS_TAS_USER_ID")
     private String rsTasUserId;
-    @Size(max = 1)
-    @Column(name = "RS_TAS_TYPE")
-    private String rsTasType;
     @Size(max = 10)
-    @Column(name = "CAR_NO")
-    private String carNo;
+    @Column(name = "RS_CAR_NO")
+    private String rsCarNo;
     @Size(max = 3)
-    @Column(name = "CAR_NAT")
-    private String carNat;
+    @Column(name = "RS_CAR_NAT")
+    private String rsCarNat;
     @Size(max = 11)
-    @Column(name = "CTN_NO")
-    private String ctnNo;
+    @Column(name = "RS_CTN_NO")
+    private String rsCtnNo;
 
     public RsData() {
     }
@@ -76,8 +88,8 @@ public class RsData implements Serializable {
         this.rsDataPK = rsDataPK;
     }
 
-    public RsData(Integer rsNo, String rsYear, String rsSubCenter) {
-        this.rsDataPK = new RsDataPK(rsNo, rsYear, rsSubCenter);
+    public RsData(Integer rsNo, String rsYear, String rsCenter) {
+        this.rsDataPK = new RsDataPK(rsNo, rsYear, rsCenter);
     }
 
     public RsDataPK getRsDataPK() {
@@ -88,20 +100,52 @@ public class RsData implements Serializable {
         this.rsDataPK = rsDataPK;
     }
 
-    public Date getEntryDate() {
-        return entryDate;
+    public String getRsSubCenter() {
+        return rsSubCenter;
     }
 
-    public void setEntryDate(Date entryDate) {
-        this.entryDate = entryDate;
+    public void setRsSubCenter(String rsSubCenter) {
+        this.rsSubCenter = rsSubCenter;
     }
 
-    public String getUserId() {
-        return userId;
+    public Date getRsEntryDate() {
+        return rsEntryDate;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setRsEntryDate(Date rsEntryDate) {
+        this.rsEntryDate = rsEntryDate;
+    }
+
+    public String getRsUserId() {
+        return rsUserId;
+    }
+
+    public void setRsUserId(String rsUserId) {
+        this.rsUserId = rsUserId;
+    }
+
+    public String getRsTasDocNo() {
+        return rsTasDocNo;
+    }
+
+    public void setRsTasDocNo(String rsTasDocNo) {
+        this.rsTasDocNo = rsTasDocNo;
+    }
+
+    public String getRsTasDocYear() {
+        return rsTasDocYear;
+    }
+
+    public void setRsTasDocYear(String rsTasDocYear) {
+        this.rsTasDocYear = rsTasDocYear;
+    }
+
+    public String getRsTasDocType() {
+        return rsTasDocType;
+    }
+
+    public void setRsTasDocType(String rsTasDocType) {
+        this.rsTasDocType = rsTasDocType;
     }
 
     public Date getRsTasDate() {
@@ -120,36 +164,28 @@ public class RsData implements Serializable {
         this.rsTasUserId = rsTasUserId;
     }
 
-    public String getRsTasType() {
-        return rsTasType;
+    public String getRsCarNo() {
+        return rsCarNo;
     }
 
-    public void setRsTasType(String rsTasType) {
-        this.rsTasType = rsTasType;
+    public void setRsCarNo(String rsCarNo) {
+        this.rsCarNo = rsCarNo;
     }
 
-    public String getCarNo() {
-        return carNo;
+    public String getRsCarNat() {
+        return rsCarNat;
     }
 
-    public void setCarNo(String carNo) {
-        this.carNo = carNo;
+    public void setRsCarNat(String rsCarNat) {
+        this.rsCarNat = rsCarNat;
     }
 
-    public String getCarNat() {
-        return carNat;
+    public String getRsCtnNo() {
+        return rsCtnNo;
     }
 
-    public void setCarNat(String carNat) {
-        this.carNat = carNat;
-    }
-
-    public String getCtnNo() {
-        return ctnNo;
-    }
-
-    public void setCtnNo(String ctnNo) {
-        this.ctnNo = ctnNo;
+    public void setRsCtnNo(String rsCtnNo) {
+        this.rsCtnNo = rsCtnNo;
     }
 
     @Override

@@ -15,7 +15,7 @@ public class MBLogin implements Serializable{
     
     private String userId;
     private String password;
-    private List<Users> usersList = new ArrayList<>();
+    private List<Users> usersList;
     private MBUsers mBUsers = new MBUsers();
     private final FacesContext context = FacesContext.getCurrentInstance();
     public MBLogin(){
@@ -37,6 +37,7 @@ public class MBLogin implements Serializable{
         }
         
         try {
+            usersList = new ArrayList<>();
             usersList = mBUsers.getUserByUserId(userId);
             
             if (usersList.size() > 0) {
