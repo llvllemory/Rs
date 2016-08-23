@@ -186,7 +186,84 @@ public class MBRsMain implements Serializable{
         }
         return "";
     }
-    
+////////////////////////////////////////////////////////////////////////////////
+    public String checkRasasCenterToDelete(){
+        System.out.println("com.rasas.mbeans.MBRsMain.checkRasasCenterToDelete()---------->");
+        
+        if(rsFrom == 0){
+            MBCommon.getWarnMessage("", "بداية الرصاص يجب ان يكون اكبر من صفر!");
+            return "";
+        }
+        if(rsTo == 0){
+            MBCommon.getWarnMessage("", "نهاية الرصاص يجب ان يكون اكبر من صفر!");
+            return "";
+        }
+        if(rsTo < rsFrom){
+            MBCommon.getWarnMessage("", "يجب ان يكون بداية الرصاص اقل او يساوي نهايته!");
+            return "";
+        }
+        
+        rsMainList = new ArrayList<>();
+        rsMainList = getRasasCenterByCenterAndYear(rsCenter, MBCommon.getCurrentYear());
+        
+        rsFound = 0;
+        for(RsMain rs : rsMainList){
+           for(int i = rsFrom; i <= rsTo; i++){
+               if(rs.getRsMainPK().getRsNo() == i){
+                   rsFound++;
+               }
+           } 
+        }
+        
+        if(rsFound == 0){
+            MBCommon.getErrorMessage("", "الرصاص غير موجود في ملف الرصاص الرئيسي, الرجاء التأكد والمحاولة مرة اخرى!");
+            return "";
+        }else if(rsFound > 0 && rsFound < ((rsTo - rsFrom) + 1)){
+            MBCommon.getWarnMessage("", "هنالك رصاص غير موجود في الملف الرئيسي, الرجاء التأكد والمحاولة مرة اخرى!");
+        }else if(rsFound == ((rsTo - rsFrom) + 1)){
+            
+            rsMainList = new ArrayList<>(); 
+            rsMainList= getNullRasasCenterByCenterAndYear(rsCenter, MBCommon.getCurrentYear());
+
+            int rsNull = 0;
+
+            for (RsMain rs : rsMainList) {
+                for (int i = rsFrom; i <= rsTo; i++) {
+                    if (rs.getRsMainPK().getRsNo() == i) {
+                        rsNull++;
+                    }
+                }
+            }
+
+            if (rsNull == 0) {
+                MBCommon.getErrorMessage("", "إنتبه, هذا الرصاص مصروف ومسدد مسبقا , الرجاء التأكد والمحاولة مرة اخرى أو الإتصال مع مدير النظام!");
+                return "";
+            }else if(rsNull > 0 && rsNull < ((rsTo - rsFrom) + 1)){
+                MBCommon.getWarnMessage("", "إنتبه, هنالك رصاص مصروف ومسدد مسبقا من هذا الرصاص, الرجاء التأكد والمحاولة مرة اخرى أو الإتصال مع مدير النظام!");
+                return "";
+            }else if(rsNull == ((rsTo - rsFrom) + 1)){
+                
+                int x = removeRasasCenter(rsFrom, rsTo, rsCenter, MBCommon.getCurrentYear());
+                
+                if(x == 0){
+                    MBCommon.getErrorMessage("", "لم يتم حذف الرصاص من الملف الرئيسي, الرجاء التأكد والمحاولة مرة اخرى!");
+                }else if(x > 0 && x < ((rsTo - rsFrom) + 1)){
+                    MBCommon.getWarnMessage("", "هنالك رصاص لم يتم حذفه من الملف الرئيسي, الرجاء التأكد والمحاولة مرة اخرى!");
+                }else if( x == ((rsTo - rsFrom) + 1)){
+                    MBCommon.getInfoMessage("", "تم حذف كافة الرصاص من الملف الرئيسي بنجاح.");                    
+                }
+                return "";
+            }
+        }
+        return "";
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+    public String checkRasasSubCenterToDelete(){
+        
+        
+        return "";
+    }
 ////////////////////////////////////////////////////////////////////////////////
     public List<RsMain> getRasasCenterByCenterAndYear(String rsCenterNo, String rsYear){
         System.out.println("com.rasas.mbeans.MBRsMain.getRasasCenterByCenterAndYear()---------->");
@@ -213,8 +290,7 @@ public class MBRsMain implements Serializable{
 
         return rasasList;
     } 
-
-     
+    
 ////////////////////////////////////////////////////////////////////////////////    
     public int saveRasasCenter(int rsFrom, int rsTo, String rsYear, String rsCenter,Date rsCenterDate, String loggedUser){
         System.out.println("com.rasas.mbeans.MBRsMain.saveRasasCenter()---------->");
@@ -243,6 +319,7 @@ public class MBRsMain implements Serializable{
         System.out.println("-----------------RsMain saved rows -----------> " + rows);
         return rows;
     }
+    
 ////////////////////////////////////////////////////////////////////////////////
     public int updateRasasSubCenter(int rsFrom, int rsTo, String rsYear, String rsCenter, String rsSubCenter, Date rsSubCenterDate, String loggedUser){
         System.out.println("com.rasas.mbeans.MBRsMain.updateRasasSubCenter()---------->");
@@ -306,66 +383,7 @@ public class MBRsMain implements Serializable{
         System.out.println("----------------- RsMain updated rows ---------> " + rows);
         return rows;
     }
-    
-////////////////////////////////////////////////////////////////////////////////
-    public String checkRasasCenterToDelete(){
-        System.out.println("com.rasas.mbeans.MBRsMain.checkRasasCenterToDelete()---------->");
-        
-        rsMainList = new ArrayList<>();
-        rsMainList = getRasasCenterByCenterAndYear(rsCenter, MBCommon.getCurrentYear());
-        
-        rsFound = 0;
-        for(RsMain rs : rsMainList){
-           for(int i = rsFrom; i <= rsTo; i++){
-               if(rs.getRsMainPK().getRsNo() == i){
-                   rsFound++;
-               }
-           } 
-        }
-        
-        if(rsFound == 0){
-            MBCommon.getErrorMessage("", "الرصاص غير موجود في ملف الرصاص الرئيسي, الرجاء التأكد والمحاولة مرة اخرى!");
-            return "";
-        }else if(rsFound > 0 && rsFound < ((rsTo - rsFrom) + 1)){
-            MBCommon.getWarnMessage("", "هنالك رصاص غير موجود في الملف الرئيسي, الرجاء التأكد والمحاولة مرة اخرى!");
-        }else if(rsFound == ((rsTo - rsFrom) + 1)){
-            
-            rsMainList = new ArrayList<>(); 
-            rsMainList= getNullRasasCenterByCenterAndYear(rsCenter, MBCommon.getCurrentYear());
-
-            int rsNull = 0;
-
-            for (RsMain rs : rsMainList) {
-                for (int i = rsFrom; i <= rsTo; i++) {
-                    if (rs.getRsMainPK().getRsNo() == i) {
-                        rsNull++;
-                    }
-                }
-            }
-
-            if (rsNull == 0) {
-                MBCommon.getErrorMessage("", "إنتبه, هذا الرصاص مصروف ومسدد مسبقا , الرجاء التأكد والمحاولة مرة اخرى أو الإتصال مع مدير النظام!");
-                return "";
-            }else if(rsNull > 0 && rsNull < ((rsTo - rsFrom) + 1)){
-                MBCommon.getWarnMessage("", "إنتبه, هنالك رصاص مصروف ومسدد مسبقا من هذا الرصاص, الرجاء التأكد والمحاولة مرة اخرى أو الإتصال مع مدير النظام!");
-                return "";
-            }else if(rsNull == ((rsTo - rsFrom) + 1)){
-                
-                int x = removeRasasCenter(rsFrom, rsTo, rsCenter, MBCommon.getCurrentYear());
-                
-                if(x == 0){
-                    MBCommon.getErrorMessage("", "لم يتم حذف الرصاص من الملف الرئيسي, الرجاء التأكد والمحاولة مرة اخرى!");
-                }else if(x > 0 && x < ((rsTo - rsFrom) + 1)){
-                    MBCommon.getWarnMessage("", "هنالك رصاص لم يتم حذفه من الملف الرئيسي, الرجاء التأكد والمحاولة مرة اخرى!");
-                }else if( x == ((rsTo - rsFrom) + 1)){
-                    MBCommon.getInfoMessage("", "تم حذف كافة الرصاص من الملف الرئيسي بنجاح.");                    
-                }
-                return "";
-            }
-        }
-        return "";
-    }
-    
+   
 ////////////////////////////////////////////////////////////////////////////////
     public int removeRasasCenter(int rsFrom, int rsTo, String rsCenter, String rsYear){
         
