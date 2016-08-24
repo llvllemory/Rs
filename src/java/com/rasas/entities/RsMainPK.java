@@ -1,13 +1,22 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.rasas.entities;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-
+/**
+ *
+ * @author Naser
+ */
 @Embeddable
 public class RsMainPK implements Serializable {
 
@@ -17,6 +26,7 @@ public class RsMainPK implements Serializable {
     private Integer rsNo;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 4)
     @Column(name = "RS_YEAR")
     private String rsYear;
     @Basic(optional = false)
@@ -34,7 +44,7 @@ public class RsMainPK implements Serializable {
         this.rsCenter = rsCenter;
     }
 
-    public int getRsNo() {
+    public Integer getRsNo() {
         return rsNo;
     }
 

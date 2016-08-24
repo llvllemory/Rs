@@ -6,6 +6,7 @@
 package com.rasas.entities;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -30,13 +31,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u"),
     @NamedQuery(name = "Users.findByUserId", query = "SELECT u FROM Users u WHERE u.userId = :userId"),
-    @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password"),
     @NamedQuery(name = "Users.findByUserName", query = "SELECT u FROM Users u WHERE u.userName = :userName"),
     @NamedQuery(name = "Users.findByUserType", query = "SELECT u FROM Users u WHERE u.userType = :userType"),
+    @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password"),
     @NamedQuery(name = "Users.findByPrivilege", query = "SELECT u FROM Users u WHERE u.privilege = :privilege"),
-    @NamedQuery(name = "Users.findByUserCenter", query = "SELECT u FROM Users u WHERE u.userCenter = :userCenter"),
     @NamedQuery(name = "Users.findByEntryDate", query = "SELECT u FROM Users u WHERE u.entryDate = :entryDate"),
-    @NamedQuery(name = "Users.findByLastLogin", query = "SELECT u FROM Users u WHERE u.lastLogin = :lastLogin")})
+    @NamedQuery(name = "Users.findByLastLogin", query = "SELECT u FROM Users u WHERE u.lastLogin = :lastLogin"),
+    @NamedQuery(name = "Users.findByUserCenter", query = "SELECT u FROM Users u WHERE u.userCenter = :userCenter"),
+    @NamedQuery(name = "Users.findByUserSubCenter", query = "SELECT u FROM Users u WHERE u.userSubCenter = :userSubCenter")})
 public class Users implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,26 +48,29 @@ public class Users implements Serializable {
     @Size(min = 1, max = 10)
     @Column(name = "USER_ID")
     private String userId;
-    @Size(max = 10)
-    @Column(name = "PASSWORD")
-    private String password;
     @Size(max = 50)
     @Column(name = "USER_NAME")
     private String userName;
     @Size(max = 1)
     @Column(name = "USER_TYPE")
     private String userType;
+    @Size(max = 32)
+    @Column(name = "PASSWORD")
+    private String password;
     @Column(name = "PRIVILEGE")
-    private int privilege;
-    @Size(max = 3)
-    @Column(name = "USER_CENTER")
-    private String userCenter;
+    private Integer privilege;
     @Column(name = "ENTRY_DATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date entryDate;
     @Column(name = "LAST_LOGIN")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastLogin;
+    @Size(max = 3)
+    @Column(name = "USER_CENTER")
+    private String userCenter;
+    @Size(max = 3)
+    @Column(name = "USER_SUB_CENTER")
+    private String userSubCenter;
 
     public Users() {
     }
@@ -80,14 +85,6 @@ public class Users implements Serializable {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getUserName() {
@@ -106,20 +103,20 @@ public class Users implements Serializable {
         this.userType = userType;
     }
 
-    public int getPrivilege() {
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Integer getPrivilege() {
         return privilege;
     }
 
-    public void setPrivilege(int privilege) {
+    public void setPrivilege(Integer privilege) {
         this.privilege = privilege;
-    }
-
-    public String getUserCenter() {
-        return userCenter;
-    }
-
-    public void setUserCenter(String userCenter) {
-        this.userCenter = userCenter;
     }
 
     public Date getEntryDate() {
@@ -136,6 +133,22 @@ public class Users implements Serializable {
 
     public void setLastLogin(Date lastLogin) {
         this.lastLogin = lastLogin;
+    }
+
+    public String getUserCenter() {
+        return userCenter;
+    }
+
+    public void setUserCenter(String userCenter) {
+        this.userCenter = userCenter;
+    }
+
+    public String getUserSubCenter() {
+        return userSubCenter;
+    }
+
+    public void setUserSubCenter(String userSubCenter) {
+        this.userSubCenter = userSubCenter;
     }
 
     @Override

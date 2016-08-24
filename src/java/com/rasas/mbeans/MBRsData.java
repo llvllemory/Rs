@@ -2,6 +2,7 @@ package com.rasas.mbeans;
 
 import com.rasas.entities.RsData;
 import com.rasas.entities.RsDataPK;
+import com.rasas.entities.RsMainPK;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -23,7 +24,7 @@ public class MBRsData {
     private int rsFound;
     
     private List<RsData> rsDataList;
-    private RsData rsDara;
+    private RsData rsData;
     private RsDataPK rsDataPK;
     
     EntityManager em;
@@ -36,93 +37,11 @@ public class MBRsData {
     }
 
 ////////////////////////////////////////////////////////////////////////////////
-    public String checkRasasSubSenterToDelete(){
-        System.out.println("com.rasas.mbeans.MBRsData.checkRasasSubSenterToDelete()---------->");
-        
-        if(rsFrom == 0){
-            MBCommon.getWarnMessage("", "بداية الرصاص يجب ان يكون اكبر من صفر!");
-            return "";
-        }
-        if(rsTo == 0){
-            MBCommon.getWarnMessage("", "نهاية الرصاص يجب ان يكون اكبر من صفر!");
-            return "";
-        }
-        if(rsTo < rsFrom){
-            MBCommon.getWarnMessage("", "يجب ان يكون بداية الرصاص اقل او يساوي نهايته!");
-            return "";
-        }
-        
-        rsDataList = new ArrayList<>();
-        rsDataList = getRasasDataByRsYearAndRsSubCenter(MBCommon.getCurrentYear(), rsSubCenter);
-        
-        rsFound = 0;
-        
-        for(RsData rs : rsDataList){
-            for(int i = rsFrom; i <= rsTo; i++){
-                if(rs.getRsDataPK().getRsNo() == i){
-                    rsFound++;
-                }
-            }
-        }
-        
-        if(rsFound == 0){
-            MBCommon.getErrorMessage("", "الرصاص غير موجود في ملف الرصاص, الرجاء التأكد والمحاولة مرة اخرى!");
-        }else if(rsFound > 0 && rsFound < ((rsTo - rsFrom) + 1)){
-            MBCommon.getWarnMessage("", "هنالك رصاص غير موجود في ملف الرصاص, الرجاء التأكد والمحاولة مرة اخرى!");
-        }else if(rsFound == ((rsTo - rsFrom) + 1)){
-            
-            rsDataList = new ArrayList<>();
-            rsDataList = getNullRasasDataByRsYearAndRsSubCenter(MBCommon.getCurrentYear(), rsSubCenter);
-            
-            rsFound = 0;
-            
-            for(RsData rs: rsDataList){
-                for(int i = rsFrom; i <= rsTo; i++){
-                    if(rs.getRsDataPK().getRsNo() == i){
-                        rsFound++;
-                    }
-                }
-            }
-            
-            if(rsFound == 0){
-                MBCommon.getErrorMessage("", "انتبه, هذا الرصاص مسدد مسبقا ولا يمكن حذفه, الرجاء التأكد والمحاولة مرة اخرى!");
-            }else if(rsFound > 0 && rsFound < ((rsTo - rsFrom) + 1)){
-                MBCommon.getWarnMessage("", "إنتبه, هنالك رصاص مسدد مسبقا ولا يمكن حذفه, الرجاء التأكد والمحاولة مرة اخرى!");
-            }else if(rsFound == ((rsTo - rsFrom) + 1)){
-                
-                int x = removeRsSubCenter(rsFrom, rsTo, MBCommon.getCurrentYear(), rsSubCenter);
-                
-                if(x == 0){
-                    MBCommon.getErrorMessage("", "لم يتم حذف الرصاص, الرجاء المحاولة مرة اخرى أو الأتصال مع مدير النظام!");
-                }else if(x > 0 && x < ((rsTo - rsFrom) + 1)){
-                    MBCommon.getWarnMessage("", "هنالك رصاص لم يتم حذفه, الرجاء التأكد من الرصاص المحذوف أو الأتصال مع مدير النظام!");
-                }else if(x == ((rsTo - rsFrom) + 1)){
-                    MBCommon.getInfoMessage("", "تم حذف الرصاص بنجاح.");
-                    
-                    MBRsMain mBRsMain = new MBRsMain();
-                    int y = mBRsMain.removeRasasCenter(rsFrom, rsTo, "220", MBCommon.getCurrentYear());
-                    
-                    if (y == 0) {
-                        MBCommon.getErrorMessage("", "لم يتم حذف الرصاص من الملف الرئيسي, الرجاء التأكد والمحاولة مرة اخرى!");
-                    } else if (y > 0 && y < ((rsTo - rsFrom) + 1)) {
-                        MBCommon.getWarnMessage("", "هنالك رصاص لم يتم حذفه من الملف الرئيسي, الرجاء التأكد والمحاولة مرة اخرى!");
-                    } else if (y == ((rsTo - rsFrom) + 1)) {
-                        MBCommon.getInfoMessage("", "تم حذف كافة الرصاص من الملف الرئيسي بنجاح.");
-                    }
-                    return "";
-                }
-                return "";
-            }
-            return "";
-        }
-        return "";
-    }
-////////////////////////////////////////////////////////////////////////////////
    public List<RsData> getRasasDataByRsNoAndRsYearAndRsSubCenter(int rsNo, String rsYear, String rsSubCenter){
        System.out.println("com.rasas.mbeans.MBRsData.getRasasDataByRsNoAndRsYearAndRsSubCenter()---------->");
        
        emf.getCache().evictAll();
-       TypedQuery<RsData> query = em.createQuery("SELECT r FROM RsData r WHERE r.rsDataPK.rsNo = ?1 And r.rsDataPK.rsYear = ?2 AND r.rsDataPK.rsSubCenter = ?3", RsData.class)
+       TypedQuery<RsData> query = em.createQuery("SELECT r FROM RsData r WHERE r.rsDataPK.rsNo = ?1 And r.rsDataPK.rsYear = ?2 AND r.rsSubCenter = ?3", RsData.class)
                .setParameter(1, rsNo)
                .setParameter(2, rsYear)
                .setParameter(3, rsSubCenter);
@@ -137,7 +56,7 @@ public class MBRsData {
         System.out.println("com.rasas.mbeans.MBRsData.getRasasDataByRsYearAndRsSubCenter()---------->");
         
         emf.getCache().evictAll();
-        TypedQuery<RsData> query = em.createQuery("SELECT r FROM RsData r WHERE r.rsDataPK.rsYear = ?1 AND r.rsDataPK.rsSubCenter = ?2", RsData.class)
+        TypedQuery<RsData> query = em.createQuery("SELECT r FROM RsData r WHERE r.rsDataPK.rsYear = ?1 AND r.rsSubCenter = ?2", RsData.class)
                 .setParameter(2, rsYear)
                 .setParameter(1, rsSubCenter);
         
@@ -150,7 +69,7 @@ public class MBRsData {
         System.out.println("com.rasas.mbeans.MBRsData.getNullRasasDataByRsYearAndRsSubCenter()---------->");
         
         emf.getCache().evictAll();
-        TypedQuery<RsData> query = em.createQuery("SELECT r FROM RsData r WHERE r.rsTasUserId IS NULL AND r.rsDataPK.rsYear = ?1 AND r.rsDataPK.rsSubCenter = ?2", RsData.class)
+        TypedQuery<RsData> query = em.createQuery("SELECT r FROM RsData r WHERE r.rsTasUserId IS NULL AND r.rsDataPK.rsYear = ?1 AND r.rsSubCenter = ?2", RsData.class)
                 .setParameter(1, rsYear)
                 .setParameter(2, rsSubCenter);
         
@@ -190,20 +109,32 @@ public class MBRsData {
     }
 
 ////////////////////////////////////////////////////////////////////////////////
-    public int removeRsSubCenter(int rsFrom, int rsTo, String rsYear, String rsSubCenter){
+    public int removeRsDataBySubCenterAndRsYearAndRsFromRsTo(int rsFrom, int rsTo, String rsYear, String rsCenter){
         System.out.println("com.rasas.mbeans.MBRsData.removeRsSubCenter()---------->");
         
         emf.getCache().evictAll();
         int rows = 0;
-        
+
         for(int i = rsFrom; i <= rsTo; i++){
             
-            Query query = em.createQuery("DELETE FROM RsData r WHERE r.rsDataPK.rsNo = ?1 AND r.rsDataPK.rsYear = ?2 AND r.rsSubCenter = ?3")
-                    .setParameter(1, i)
-                    .setParameter(2, rsYear)
-                    .setParameter(3, rsSubCenter);
+            rsDataPK = new RsDataPK();
+            rsDataPK.setRsNo(i);
+            rsDataPK.setRsYear(rsYear);
+            rsDataPK.setRsCenter(rsCenter);
             
-            rows += query.executeUpdate();
+            
+            em.remove(rsData);
+            em.getTransaction().commit();
+            rows++;
+            em.getTransaction().begin();
+            
+            
+//            Query query = em.createQuery("DELETE FROM RsData r WHERE r.rsDataPK.rsNo = ?1 AND r.rsDataPK.rsYear = ?2 AND r.rsSubCenter = ?3")
+//                    .setParameter(1, i)
+//                    .setParameter(2, rsYear)
+//                    .setParameter(3, rsSubCenter);
+//            
+//            rows += query.executeUpdate();
         }
         
         System.out.println("----------------- RsData removed rows ---------> " + rows);

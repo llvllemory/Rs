@@ -21,7 +21,7 @@
     
     <error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
-        <location>/faces/login_page.xhtml</location>
+        <location>/faces/error_page.xhtml</location>
     </error-page>
 
     <welcome-file-list>

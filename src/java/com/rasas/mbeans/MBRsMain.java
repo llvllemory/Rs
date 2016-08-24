@@ -25,6 +25,7 @@ public class MBRsMain implements Serializable{
     private String rsCenter;
     private String rsSubCenter;
     private int rsFound;
+    private int isNull;
     
     private List<RsMain> rsMainList;
     private RsMain   rsMain;
@@ -260,8 +261,108 @@ public class MBRsMain implements Serializable{
 
 ////////////////////////////////////////////////////////////////////////////////
     public String checkRasasSubCenterToDelete(){
+        System.out.println("com.rasas.mbeans.MBRsMain.checkRasasSubCenterToDelete()---------->");
         
+        if(rsFrom == 0){
+            MBCommon.getWarnMessage("", "بداية الرصاص يجب ان يكون اكبر من صفر!");
+            return "";
+        }
+        if(rsTo == 0){
+            MBCommon.getWarnMessage("", "نهاية الرصاص يجب ان يكون اكبر من صفر!");
+            return "";
+        }
+        if(rsTo < rsFrom){
+            MBCommon.getWarnMessage("", "يجب ان يكون بداية الرصاص اقل او يساوي نهايته!");
+            return "";
+        }
         
+        rsMainList = new ArrayList<>();
+        rsMainList = getRasasSubCenterBySubCenterAndYear(rsSubCenter, MBCommon.getCurrentYear());
+        
+        if(rsMainList.size() > 0){
+            
+            rsFound = 0;
+            
+            for(RsMain rs: rsMainList){
+                for(int i = rsFrom; i <= rsTo; i++){
+                    if(rs.getRsMainPK().getRsNo() == i){
+                        rsFound++;
+                    }
+                }
+            }
+            
+            if(rsFound == 0){
+                MBCommon.getErrorMessage("", "الرصاص غير مصروف للمركز, الرجاء التأكد والمحاولة مرة اخرى!");
+            }else if(rsFound > 0 && rsFound < ((rsTo - rsFrom) + 1)){
+                MBCommon.getWarnMessage("", "هنالك رصاص غير مصروف للمركز, الرجاء التأكد والمحاولة مرة اخرى!");
+            }else if(rsFound == ((rsTo - rsFrom) + 1)){
+                
+                
+                rsDataList = new ArrayList<>();
+                rsDataList = mBRsData.getRasasDataByRsYearAndRsSubCenter(MBCommon.getCurrentYear(), rsSubCenter);
+                
+                if(rsDataList.size() > 0){
+                    
+                    rsFound = 0;
+                    
+                    for(RsData rs: rsDataList){
+                        for(int i = rsFrom; i <= rsTo; i++){
+                            if(rs.getRsDataPK().getRsNo() == i){
+                                rsFound++;
+                                
+                                if(rs.getRsTasUserId().equals(null)){
+                                    isNull++;
+                                }
+                            }
+                        }
+                    }
+                    
+                    if(rsFound == 0){
+                        MBCommon.getErrorMessage("", "الرصاص غير مصروف للمركز في ملف معلومات الرصاص, الرجاء التأكد والمحاولة مرة اخرى!");
+                    }else if(rsFound > 0 && rsFound < ((rsTo - rsFrom) + 1)){
+                        MBCommon.getWarnMessage("", "هنالك رصاص من هذا الرصاص غير مصروف للمركز في ملف معلومات الرصاص, الرجاء التأكد والمحاولة مرة اخرى!");
+                    }else if(rsFound == ((rsTo - rsFrom) + 1)){
+                        
+                        if(isNull == 0){
+                            MBCommon.getErrorMessage("", "إنتبه, الرصاص مسدد لمعاملات جمركية, الرجاء التأكد والمحاولة مرة اخرى!");
+                        }else if(isNull > 0 ){
+                            MBCommon.getWarnMessage("", "إنتبه, هنالك رصاص مسدد لمعاملات جمركية, الرجاء التأكد والمحاولة مرة اخرى!");
+                        }else if(isNull == ((rsTo - rsFrom) + 1)){
+                            
+                            
+                            int x = mBRsData.removeRsDataBySubCenterAndRsYearAndRsFromRsTo(rsFrom, rsTo, MBCommon.getCurrentYear(), rsCenter);
+                            
+                            if (x == 0) {
+                                MBCommon.getErrorMessage("", "لم يتم حذف الرصاص من ملف معلومات الرصاص, الرجاء التأكد والمحاولة مرة اخرى!");
+                            } else if (x > 0 && x < ((rsTo - rsFrom) + 1)) {
+                                MBCommon.getErrorMessage("", "هنالك رصاص لم يتم حذفه من ملف معلومات الرصاص, الرجاء التأكد والمحاولة مرة اخرى!");
+                            } else if (x == ((rsTo - rsFrom) + 1)) {
+                                
+                                int y = cancelUpdateRasasSubCenter(rsFrom, rsTo, rsCenter, MBCommon.getCurrentYear());
+                                
+                                if (y == 0) {
+                                    MBCommon.getErrorMessage("", "لم يتم حذف تسديد الرصاص من الملف الرئيسي, الرجاء التأكد من الرصاص المحذوف أو الإتصال مع مدير النظام!");
+                                } else if (y > 0 && y < ((rsTo - rsFrom) + 1)) {
+                                    MBCommon.getErrorMessage("", "هنالك رصاص لم يتم حذف تسديده من الملف الرئيسي, الرجاء التأكد من الرصاص المحذوف أو الإتصال مع مدير النظام!");
+                                } else if (y == ((rsTo - rsFrom) + 1)) {
+                                    MBCommon.getInfoMessage("", "تم حذف تسديد الرصاص من الملف الرئيسي");
+                                }
+                                return "";
+                            }
+                            return "";
+                        }
+                        return "";
+                    }
+                    return "";
+                }else{
+                    MBCommon.getErrorMessage("", "لا يوجد رصاص للمركز في ملف معلومات الرصاص, الرجاء التأكد والمحاولة مرة اخرى!");
+                }
+                return "";
+            }
+            return "";
+        }else{
+            MBCommon.getErrorMessage("", "لا يوجد رصاص لهذا المركز في الملف الرئيسي, الرجاء التأكد والمحاولة مرة اخرى!");
+        }
         return "";
     }
 ////////////////////////////////////////////////////////////////////////////////
@@ -290,7 +391,20 @@ public class MBRsMain implements Serializable{
 
         return rasasList;
     } 
-    
+////////////////////////////////////////////////////////////////////////////////
+    public List<RsMain> getRasasSubCenterBySubCenterAndYear(String rsSubCenterNo, String rsYear){
+        System.out.println("com.rasas.mbeans.MBRsMain.getRasasSubCenterByCenterAndYear()---------->");
+
+        emf.getCache().evictAll();
+        TypedQuery<RsMain> query = em.createQuery("SELECT r FROM RsMain r WHERE r.rsSubCenter = ?1 AND r.rsMainPK.rsYear = ?2", RsMain.class)
+                .setParameter(1, rsSubCenterNo)
+                .setParameter(2, rsYear);
+
+        List rasasList = query.getResultList();
+
+        return rasasList;
+    } 
+        
 ////////////////////////////////////////////////////////////////////////////////    
     public int saveRasasCenter(int rsFrom, int rsTo, String rsYear, String rsCenter,Date rsCenterDate, String loggedUser){
         System.out.println("com.rasas.mbeans.MBRsMain.saveRasasCenter()---------->");
@@ -386,6 +500,7 @@ public class MBRsMain implements Serializable{
    
 ////////////////////////////////////////////////////////////////////////////////
     public int removeRasasCenter(int rsFrom, int rsTo, String rsCenter, String rsYear){
+        System.out.println("com.rasas.mbeans.MBRsMain.removeRasasCenter()---------->");
         
         int rows = 0;
         for(int i = rsFrom; i <= rsTo; i++){
@@ -402,10 +517,37 @@ public class MBRsMain implements Serializable{
             em.getTransaction().commit();
             rows++;
             em.getTransaction().begin();
+        }
+      
+        System.out.println("------------- Rasas center removed ------------->" + rows);
+        return rows;
+    }
+    
+////////////////////////////////////////////////////////////////////////////////
+    public int cancelUpdateRasasSubCenter(int rsFrom, int rsTo, String rsCenter, String rsYear){
+        System.out.println("com.rasas.mbeans.MBRsMain.cancelUpdateRasasSubCenter()---------->");
+        
+        int rows = 0;
+         
+        for (int i = rsFrom; i <= rsTo; i++) {
+            rsMainPK = new RsMainPK();
+
+            rsMainPK.setRsNo(i);
+            rsMainPK.setRsYear(rsYear);
+            rsMainPK.setRsCenter(rsCenter);
+
+            rsMain = em.find(RsMain.class, rsMainPK);
+            rsMain.setRsSubCenter(null);
+            rsMain.setRsSubCenterDate(null);
+            rsMain.setRsSubCenterUserId(null);
             
+            em.persist(rsMain);
+            em.getTransaction().commit();
+            rows++;
+            em.getTransaction().begin();
         }
         
-        System.out.println("------------- Rasas center removed ------------->" + rows);
+        System.out.println("---------- Rasas subCenter update canceld ------>" + rows);
         return rows;
     }
 /////////////////////// Getters and Setters ////////////////////////////////////
