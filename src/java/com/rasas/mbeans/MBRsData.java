@@ -2,15 +2,12 @@ package com.rasas.mbeans;
 
 import com.rasas.entities.RsData;
 import com.rasas.entities.RsDataPK;
-import com.rasas.entities.RsMainPK;
-import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 @ManagedBean
@@ -37,14 +34,15 @@ public class MBRsData {
     }
 
 ////////////////////////////////////////////////////////////////////////////////
-   public List<RsData> getRasasDataByRsNoAndRsYearAndRsSubCenter(int rsNo, String rsYear, String rsSubCenter){
-       System.out.println("com.rasas.mbeans.MBRsData.getRasasDataByRsNoAndRsYearAndRsSubCenter()---------->");
+   public List<RsData> getRsDataByRsNoAndRsYearAndRsCenterAndRsSubCenter(int rsNo, String rsYear, String rsCenter, String rsSubCenter){
+       System.out.println("com.rasas.mbeans.MBRsData.getRsDataByRsNoAndRsYearAndRsCenterAndRsSubCenter()----------> " + MBCommon.getCurrentDateTime());
        
        emf.getCache().evictAll();
-       TypedQuery<RsData> query = em.createQuery("SELECT r FROM RsData r WHERE r.rsDataPK.rsNo = ?1 And r.rsDataPK.rsYear = ?2 AND r.rsSubCenter = ?3", RsData.class)
+       TypedQuery<RsData> query = em.createQuery("SELECT r FROM RsData r WHERE r.rsDataPK.rsNo = ?1 And r.rsDataPK.rsYear = ?2 AND r.rsDataPK.rsCenter = ?3 AND r.rsSubCenter = ?4", RsData.class)
                .setParameter(1, rsNo)
                .setParameter(2, rsYear)
-               .setParameter(3, rsSubCenter);
+               .setParameter(3, rsYear)
+               .setParameter(4, rsSubCenter);
        
        List rasasData = query.getResultList();
 
@@ -52,21 +50,21 @@ public class MBRsData {
    }
     
 ////////////////////////////////////////////////////////////////////////////////
-    public List<RsData> getRasasDataByRsYearAndRsSubCenter(String rsYear, String rsSubCenter){
-        System.out.println("com.rasas.mbeans.MBRsData.getRasasDataByRsYearAndRsSubCenter()---------->");
+    public List<RsData> getRsDataByRsYearAndRsSubCenter(String rsYear, String rsSubCenter){
+        System.out.println("com.rasas.mbeans.MBRsData.getRsDataByRsYearAndRsSubCenter()----------> " + MBCommon.getCurrentDateTime());
         
         emf.getCache().evictAll();
         TypedQuery<RsData> query = em.createQuery("SELECT r FROM RsData r WHERE r.rsDataPK.rsYear = ?1 AND r.rsSubCenter = ?2", RsData.class)
-                .setParameter(2, rsYear)
-                .setParameter(1, rsSubCenter);
+                .setParameter(1, rsYear)
+                .setParameter(2, rsSubCenter);
         
         List rasasData = query.getResultList();
         
         return rasasData;
     }
 ////////////////////////////////////////////////////////////////////////////////
-    public List<RsData> getNullRasasDataByRsYearAndRsSubCenter(String rsYear, String rsSubCenter){
-        System.out.println("com.rasas.mbeans.MBRsData.getNullRasasDataByRsYearAndRsSubCenter()---------->");
+    public List<RsData> getNullRsDataByRsYearAndRsSubCenter(String rsYear, String rsSubCenter){
+        System.out.println("com.rasas.mbeans.MBRsData.getNullRsDataByRsYearAndRsSubCenter()----------> " + MBCommon.getCurrentDateTime());
         
         emf.getCache().evictAll();
         TypedQuery<RsData> query = em.createQuery("SELECT r FROM RsData r WHERE r.rsTasUserId IS NULL AND r.rsDataPK.rsYear = ?1 AND r.rsSubCenter = ?2", RsData.class)
@@ -79,7 +77,7 @@ public class MBRsData {
     }
 ////////////////////////////////////////////////////////////////////////////////
     public int saveRsData(List<RsData> rsDataList){
-        System.out.println("com.rasas.mbeans.MBRsData.saveRsData()---------->");
+        System.out.println("com.rasas.mbeans.MBRsData.saveRsData()----------> " + MBCommon.getCurrentDateTime());
         
         emf.getCache().evictAll();
         int rows = 0;
@@ -91,26 +89,26 @@ public class MBRsData {
         
         em.getTransaction().commit();
         
-        System.out.println("----------------- RsData saved rows -----------> " + rows);
+        System.out.println("---------- RsData saved rows ------------------> " + rows + " >> " + MBCommon.getCurrentDateTime());
         return rows;
     }
     
 ////////////////////////////////////////////////////////////////////////////////
     public int updateRsData(RsData rsData){
-        System.out.println("com.rasas.mbeans.MBRsData.updateRsData()---------->");
+        System.out.println("com.rasas.mbeans.MBRsData.updateRsData()----------> " + MBCommon.getCurrentDateTime());
         
         emf.getCache().evictAll();
         int rows = 0;
         
         
         
-        System.out.println("----------------- RsData updated rows ---------> " + rows);
+        System.out.println("---------- RsData updated rows ----------------> " + rows + " >> " + MBCommon.getCurrentDateTime());
         return rows;  
     }
 
 ////////////////////////////////////////////////////////////////////////////////
-    public int removeRsDataBySubCenterAndRsYearAndRsFromRsTo(int rsFrom, int rsTo, String rsYear, String rsCenter){
-        System.out.println("com.rasas.mbeans.MBRsData.removeRsSubCenter()---------->");
+    public int removeRsDataByRsYearAndRsCenter(int rsFrom, int rsTo, String rsYear, String rsCenter){
+        System.out.println("com.rasas.mbeans.MBRsData.removeRsDataByRsYearAndRsCenter()----------> " + MBCommon.getCurrentDateTime());
         
         emf.getCache().evictAll();
         int rows = 0;
@@ -118,10 +116,13 @@ public class MBRsData {
         for(int i = rsFrom; i <= rsTo; i++){
             
             rsDataPK = new RsDataPK();
+            
             rsDataPK.setRsNo(i);
             rsDataPK.setRsYear(rsYear);
             rsDataPK.setRsCenter(rsCenter);
             
+            rsData = new RsData();
+            rsData = em.find(RsData.class, rsDataPK);
             
             em.remove(rsData);
             em.getTransaction().commit();
@@ -137,7 +138,7 @@ public class MBRsData {
 //            rows += query.executeUpdate();
         }
         
-        System.out.println("----------------- RsData removed rows ---------> " + rows);
+        System.out.println("---------- RsData removed rows ----------------> " + rows + " >> " + MBCommon.getCurrentDateTime());
         return rows;
     }
 //////////////////// Getters and Setters ///////////////////////////////////////

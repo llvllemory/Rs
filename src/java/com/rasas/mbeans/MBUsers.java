@@ -26,9 +26,10 @@ public class MBUsers implements Serializable{
 ////////////////////////////////////////////////////////////////////////////////
     
     public List<Users> getUserByUserId(String userId){
-        System.out.println("com.rasas.mbeans.MBUsers.getUserByUserId()---------->");
+        System.out.println("com.rasas.mbeans.MBUsers.getUserByUserId()----------> " + MBCommon.getCurrentDateTime());
         
         emf.getCache().evictAll();
+        
         TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u WHERE u.userId = ?1", Users.class)
                 .setParameter(1, userId);
         
@@ -38,7 +39,7 @@ public class MBUsers implements Serializable{
     }
     
     public int updateUserLastLogin(Users user){
-        System.out.println("com.rasas.mbeans.MBUsers.updateUserLastLogin()---------->");
+        System.out.println("com.rasas.mbeans.MBUsers.updateUserLastLogin()----------> " + MBCommon.getCurrentDateTime());
         
         emf.getCache().evictAll();
         return em.createQuery("UPDATE Users SET lastLogin = ?1 WHERE userId = ?2")

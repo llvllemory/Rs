@@ -15,16 +15,17 @@ public class MBLogin implements Serializable{
     
     private String userId;
     private String password;
-    private List<Users> usersList;
+    private List<Users> usersList = new ArrayList<>();
     private MBUsers mBUsers = new MBUsers();
     private final FacesContext context = FacesContext.getCurrentInstance();
+    
     public MBLogin(){
         
     }
     
 ////////////////////////////////////////////////////////////////////////////////    
     public String login(){
-        System.out.println("com.rasas.mbeans.MBLogin.login()---------->");
+        System.out.println("com.rasas.mbeans.MBLogin.login()----------> " + MBCommon.getCurrentDateTime());
         
         if(userId.equals("")){
             MBCommon.getWarnMessage("", "يجب ادخال اسم المستخدم");
@@ -37,15 +38,15 @@ public class MBLogin implements Serializable{
         }
         
         try {
-            usersList = new ArrayList<>();
+
             usersList = mBUsers.getUserByUserId(userId);
-            
+
             if (usersList.size() > 0) {
                 
                 if(usersList.get(0).getPassword().equals(password)){
-                    
+
                     if(usersList.get(0).getPrivilege() == 1 || usersList.get(0).getPrivilege() == 2){
-                        
+
                         int x = mBUsers.updateUserLastLogin(usersList.get(0));
 
                         if (x > 0) {
@@ -83,7 +84,7 @@ public class MBLogin implements Serializable{
     }
 ////////////////////////////////////////////////////////////////////////////////    
     public String logout() {
-        System.out.println("com.rasas.mbeans.MBLogin.logout()---------->");
+        System.out.println("com.rasas.mbeans.MBLogin.logout()----------> " + MBCommon.getCurrentDateTime());
 
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "login_page";
@@ -91,13 +92,12 @@ public class MBLogin implements Serializable{
     } 
 ////////////////////////////////////////////////////////////////////////////////
     public Users getLoggedUser(){
-        System.out.println("com.rasas.mbeans.MBLogin.getLoggedUser()---------->");
+        System.out.println("com.rasas.mbeans.MBLogin.getLoggedUser()----------> " + MBCommon.getCurrentDateTime());
                           
         Users loggedUser = (Users) context.getExternalContext().getSessionMap().get("loggedUser");
         
         return loggedUser;
     }
-////////////////////////////////////////////////////////////////////////////////
 
 
 //////////////////// Geteers and Setters ///////////////////////////////////////
