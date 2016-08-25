@@ -1,9 +1,11 @@
 package com.rasas.mbeans;
 
+import com.rasas.entities.Centers;
 import com.rasas.entities.RsData;
 import com.rasas.entities.RsDataPK;
 import com.rasas.entities.RsMain;
 import com.rasas.entities.RsMainPK;
+import com.rasas.entities.SubCenters;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,6 +39,8 @@ public class MBRsMain implements Serializable{
     
     private MBLogin mBLogin = new MBLogin();
     private MBRsData mBRsData = new MBRsData();
+    
+    private List<SubCenters> subCentersList = new ArrayList<>();
     
     EntityManager em;
     EntityManagerFactory emf;
@@ -81,7 +85,7 @@ public class MBRsMain implements Serializable{
             if (rsFound == ((rsTo - rsFrom) + 1)) {
                 MBCommon.getErrorMessage("", "هذا الرصاص مصروف مسبقا للمركز, الرجاء التأكد أولا!");
             } else if (rsFound > 0 && rsFound < ((rsTo - rsFrom) + 1)) {
-                MBCommon.getWarnMessage("", "هنالك رصاص مصروف مسبقا من هذا الرصاص للمركز, الرجاء التأكد أولا!");
+                MBCommon.getWarnMessage("", "هنالك رصاص مصروف مسبقا للمركز, الرجاء التأكد أولا!");
             } else if (rsFound == 0) {
 
                 int x = saveRsCenter(rsFrom, rsTo, MBCommon.getCurrentYear(), rsCenter, new java.util.Date(), mBLogin.getLoggedUser().getUserId());
@@ -144,7 +148,7 @@ public class MBRsMain implements Serializable{
             if (rsFound == 0) {
                 MBCommon.getErrorMessage("", "الرصاص غير موجود في ملف المركز. الرجاء إستلام الرصاص من اللوازم أولا!");
             } else if (rsFound > 0 && rsFound < ((rsTo - rsFrom) + 1)) {
-                MBCommon.getWarnMessage("", "هنالك رصاص غير موجود في ملف الرصاص, الرجاء إستلام الرصاص من اللوازم أولا!");
+                MBCommon.getWarnMessage("", "هنالك رصاص غير موجود في ملف المركز, الرجاء إستلام الرصاص من اللوازم أولا!");
             } else if (rsFound == ((rsTo - rsFrom) + 1)) {
             
                 rsMainList = new ArrayList<>();
@@ -187,6 +191,7 @@ public class MBRsMain implements Serializable{
         }
         return "";
     }
+       
 ////////////////////////////////////////////////////////////////////////////////
     public String checkRsCenterToDelete(){
         System.out.println("com.rasas.mbeans.MBRsMain.checkRsCenterToDelete()----------> " + MBCommon.getCurrentDateTime());
@@ -251,7 +256,7 @@ public class MBRsMain implements Serializable{
                 }else if(x > 0 && x < ((rsTo - rsFrom) + 1)){
                     MBCommon.getWarnMessage("", "هنالك رصاص لم يتم حذفه من الملف الرئيسي, الرجاء التأكد والمحاولة مرة اخرى!");
                 }else if( x == ((rsTo - rsFrom) + 1)){
-                    MBCommon.getInfoMessage("", "تم حذف كافة الرصاص من الملف الرئيسي بنجاح.");                    
+                    MBCommon.getInfoMessage("", "تم حذف الرصاص من الملف الرئيسي بنجاح.");                    
                 }
                 return "";
             }
@@ -549,6 +554,37 @@ public class MBRsMain implements Serializable{
         System.out.println("---------- RsMain update canceld rows ---------->" + rows + " >> " + MBCommon.getCurrentDateTime());
         return rows;
     }
+////////////////////////////////////////////////////////////////////////////////
+    public List<Centers> getCenters(){
+        System.out.println("com.rasas.mbeans.MBRsMain.getCenters()----------> " + MBCommon.getCurrentDateTime());
+        
+        TypedQuery<Centers> query = em.createQuery("SELECT c FROM Centers c WHERE c.centerNo = ?1", Centers.class)
+                .setParameter(1, mBLogin.getLoggedUser().getUserCenter());
+        
+        List<Centers> centers = query.getResultList();
+        
+        if(centers.size() > 0){
+            return centers;
+        }else{
+            return null;
+        }
+    }
+    
+////////////////////////////////////////////////////////////////////////////////
+    public List<SubCenters> getSubCentersByCenterNo(){
+        System.out.println("com.rasas.mbeans.MBRsMain.getSubCentersByCenterNo()----------> " + MBCommon.getCurrentDateTime());
+        
+        TypedQuery<SubCenters> query = em.createQuery("SELECT s FROM SubCenters s WHERE s.subCentersPK.centerNo = ?1 AND s.subCenterName IS NOT NULL ORDER BY s.subCentersPK.subCenterNo DESC", SubCenters.class)
+                .setParameter(1, mBLogin.getLoggedUser().getUserCenter());
+        
+        subCentersList = query.getResultList();
+        
+        if(subCentersList.size() > 0){
+            return subCentersList;
+        }else{
+            return null;
+        }
+    }
     
 /////////////////////// Getters and Setters ////////////////////////////////////
 
@@ -582,5 +618,5 @@ public class MBRsMain implements Serializable{
 
     public void setRsSubCenter(String rsSubCenter) {
         this.rsSubCenter = rsSubCenter;
-    } 
+    }  
 }

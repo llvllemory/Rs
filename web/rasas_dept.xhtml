@@ -33,8 +33,8 @@
                 <h:panelGrid styleClass="pnl" columns="4" cellpadding="10">
                                        
                     <p:outputLabel id="lblCenterNo" value="المركز : " />
-                    <h:selectOneMenu styleClass = "slctMenu" value="#{mBRsMain.rsCenter}">
-                        <f:selectItem itemLabel="جمرك العقبة" itemValue="220"/>
+                    <h:selectOneMenu styleClass = "slctMenu" value ="#{mBRsMain.rsCenter}">
+                        <f:selectItems value="#{mBRsMain.centers}" var = "center" itemLabel="#{center.centerNo} -- #{center.centerName}" itemValue="#{center.centerNo}"/>
                     </h:selectOneMenu>
                     
                     <p:outputLabel id="lblCurrentYear" value=" السنة : "/>

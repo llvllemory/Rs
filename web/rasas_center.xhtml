@@ -34,17 +34,9 @@
 
                     
                     <p:outputLabel id="lblSubCenterNo" value="المركز : " />
-                    <h:selectOneMenu styleClass = "slctMenu" value="#{mBRsMain.rsSubCenter}">
-                        <f:selectItem itemLabel="الرقابة الجمركية" itemValue="901"/>
-                        <f:selectItem itemLabel="باب 4" itemValue="902"/>
-                        <f:selectItem itemLabel="ساحة 4" itemValue="903"/>
-                        <f:selectItem itemLabel="ميناء الحاويات" itemValue="904"/>
-                        <f:selectItem itemLabel="محطة الركاب" itemValue="905"/>
-                        <f:selectItem itemLabel="الدرة" itemValue="906"/>
-                        <f:selectItem itemLabel="جنوب وادي عربة" itemValue="907"/>
-                        <f:selectItem itemLabel="وادي عربة" itemValue="908"/>
-                        <f:selectItem itemLabel="وادي اليتم" itemValue="909"/>
-                        <f:selectItem itemLabel="الرابية" itemValue="900"/>
+                    
+                    <h:selectOneMenu id ="slctSubCenters" styleClass = "slctMenu" value ="#{mBRsMain.rsSubCenter}">
+                        <f:selectItems value="#{mBRsMain.subCentersByCenterNo}" var = "subCenter" itemLabel="#{subCenter.subCentersPK.subCenterNo} -- #{subCenter.subCenterName}" itemValue="#{subCenter.subCentersPK.subCenterNo}"/>
                     </h:selectOneMenu>
                     
                     <p:outputLabel id="lblCurrentYear" value=" السنة : "/>

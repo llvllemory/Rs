@@ -37,4 +37,11 @@
     width: 170px;
 }
 
+.tabView{
+    width: 70%;
+}
+
+.ui-tabs .ui-tabs-nav li{
+    float:right!important;
+}
 
