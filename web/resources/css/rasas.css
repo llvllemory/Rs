@@ -5,7 +5,11 @@
     direction: rtl;
 }
 
-#lblTitle {     
+.txtCenter{
+    text-align: center;
+}
+
+.lblTitle {     
     font-size: 30px;
 }
 
@@ -18,7 +22,7 @@
 }
 
 .slctMenu {
-    width: 170px; 
+    width: 190px; 
     height: 25px;
 }
 
@@ -42,6 +46,7 @@
 }
 
 .ui-tabs .ui-tabs-nav li{
-    float:right!important;
+    float: right !important;
 }
+
 

@@ -23,24 +23,67 @@
 		<ui:include src="header.xhtml" />
 	</ui:insert>
         
-        <br/><br/><br/>
-        <h:form id = "frmSecurity">
+        <br/><br/>
+        
         <center>    
-        <p:tabView styleClass="tabView">
+            <p:tabView id = "tabViewUsers" styleClass="tabView">
             
             <p:tab id="tabUsers" title="صيانة المستخدمين" disabled="#{mBViewPrivilege.getSecurityTabsPrivilege('tabUsers')}">
                 
-                <br/>
-                <center>
-                    <p:outputLabel id = "lblTabUsers" value="صيانة ملف مستخدمي النظام"/>
-                </center>
+                <h:panelGrid  columns="2" style = "pnl" >
+                    <h:form id = "frmTabUsers">
+                        <h:panelGrid  columns="2" style = "pnl" cellpadding="5">
+
+                            <p:outputLabel value="الرقم الوظيفي : " />
+                            <p:inputText   value="#{mBUsers.userId}" styleClass="txtCenter" maxlength = "10" placeholder="الرقم الوظيفي" />
+
+                            <p:outputLabel value="اسم الموظف : " />
+                            <p:inputText   value="#{mBUsers.userName}"  maxlength = "50" placeholder="اسم الموظف" />
+
+                            <p:outputLabel value="المركز : "/>
+                            <h:selectOneMenu styleClass = "slctMenu" value ="#{mBUsers.userCenter}">
+                                <f:selectItems value="#{mBRsMain.centers}" var = "center" itemLabel="#{center.centerName}" itemValue="#{center.centerNo}"/>
+                            </h:selectOneMenu>
+
+                            <p:outputLabel value="القسم : "/>
+                            <h:selectOneMenu id ="slctSubCenters" styleClass = "slctMenu" value ="#{mBUsers.userSubCenter}">
+                                <f:selectItems value="#{mBRsMain.subCentersByCenterNo}" var = "subCenter" itemLabel="#{subCenter.subCenterName}" itemValue="#{subCenter.subCentersPK.subCenterNo}"/>
+                            </h:selectOneMenu>
+
+                            <p:outputLabel value="صفة المستخدم : "/>
+                            <h:selectOneMenu styleClass = "slctMenu" value ="#{mBUsers.userType}">
+                                <f:selectItem itemLabel="مستخدم" itemValue="U"/>
+                                <f:selectItem itemLabel="مجموعة" itemValue="G"/>
+                            </h:selectOneMenu>
+
+                            <p:outputLabel value="الصلاحيات"/>
+                            <h:selectOneMenu styleClass = "slctMenu" value ="#{mBUsers.privilege}" >
+                                <f:selectItem itemLabel="مدير للنظام" itemValue="1"/>
+                                <f:selectItem itemLabel="صلاحية على برنامج معين" itemValue="2"/>
+                                <f:selectItem itemLabel="موقوف" itemValue="3"/>
+                            </h:selectOneMenu>
+
+                            <p:outputLabel value="كلمة السر : "/>
+                            <p:password value="#{mBUsers.password}" styleClass="txtCenter" maxlength="10" placeholder="كلمة السر"/>
+
+                            <br/>
+                            <f:facet name="footer">
+                                <center>
+                                    <p:commandButton id="btnSave" value="تسجيل المستخدم"  disabled="#{mBViewPrivilege.getBtnPrivilege(component.id)}"/>
+
+                                    <p:commandButton id="btnEdit" value="تعديل معلومات المستخدم"  disabled="#{mBViewPrivilege.getBtnPrivilege(component.id)}"/>
+
+                                </center>
+                            </f:facet>
+                        </h:panelGrid>
+                    </h:form>
                 
+                    <h:form>
+                        
+                        <p:outputLabel value="22222222222"/>
+                    </h:form>
                 
-                
-                
-                
-                
-                
+                </h:panelGrid>
                 
             </p:tab>
             
@@ -51,7 +94,11 @@
                     <p:outputLabel id = "lblTabGroups" value="صيانة ملف المجموعات"/>
                 </center>
                 
-                
+                <h:form>
+                    <h:panelGrid >
+
+                    </h:panelGrid>
+                </h:form>
                 
                 
             </p:tab>
@@ -75,7 +122,11 @@
                     <p:outputLabel id = "lblTabViews" value="صيانة ملف الشاشات"/>
                 </center>
                 
-                
+                <h:form>
+                    <h:panelGrid >
+
+                    </h:panelGrid>
+                </h:form>
                 
                 
             </p:tab>
@@ -84,7 +135,7 @@
         
         </p:tabView>
         </center>
-        </h:form>
+        
         
         
         
