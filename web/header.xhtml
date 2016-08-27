@@ -38,26 +38,27 @@
     
     <h:body>
  
-        <h:form>  
-            <p:menubar>
-                <p:submenu label="الإستفسارات">
-                    <p:menuitem value="الإستفسار الشامل"/>
+        <h:form id="frmMenuBar">  
+            <p:menubar id="menuBar">
+                <p:submenu id="query" label="الإستفسارات">
+                    <p:menuitem id="query_page" value="الإستفسار الشامل" disabled="#{mBViewPrivilege.getMenuPrivilege('query_page')}"/>
                 </p:submenu>
                 
-                <p:submenu label="الصيـــانة">
-                    <p:submenu label="صيانة الرصاص">
-                        <p:menuitem value="صرف رصاص اللوازم" action="rasas_dept"/>
-                        <p:menuitem value="صرف رصاص لمركز" action="rasas_center"/>
+                <p:submenu id="maintenance" label="الصيـــانة">
+                    <p:submenu id="rasasMaintenance" label="صيانة الرصاص">
+                        <p:menuitem id="rasas_dept" value="صرف رصاص اللوازم" action="rasas_dept" disabled="#{mBViewPrivilege.getMenuPrivilege('rasas_dept')}"/>
+                        <p:menuitem id="rasas_center" value="صرف رصاص لمركز" action="rasas_center" disabled="#{mBViewPrivilege.getMenuPrivilege('rasas_center')}"/>
                     </p:submenu>
                     
-                    <p:submenu label="تسديد الرصاص">
-                        <p:menuitem value="تسديد وثيقة النقل"/>
-                        <p:menuitem value="تسديد تصريح خروج"/>
-                        <p:menuitem value="تسديد الرصاص اليدوي"/>
+                    <p:submenu id="rasasReg" label="تسديد الرصاص">
+                        <p:menuitem id="regPermNote_page" value="تسديد وثيقة النقل" disabled="#{mBViewPrivilege.getMenuPrivilege('regPermNote_page')}"/>
+                        <p:menuitem id="regPerm_page" value="تسديد تصريح خروج" disabled="#{mBViewPrivilege.getMenuPrivilege('regPerm_page')}"/>
+                        <p:menuitem id="regManual_page" value="تسديد الرصاص اليدوي" disabled="#{mBViewPrivilege.getMenuPrivilege('regManual_page')}"/>
                     </p:submenu>
                     
-                    <p:menuitem value="الأمن والحماية" action="security"/>
-                   <p:menuitem value="خروج" action="#{mBLogin.logout()}"/>
+                    <p:menuitem id="change_pass_page" value="تعديل كلمة السر" action="change_pass_page" disabled="#{mBViewPrivilege.getMenuPrivilege('change_pass_page')}"/>
+                    <p:menuitem id="security_page" value="الأمن والحماية" action="security_page" disabled="#{mBViewPrivilege.getMenuPrivilege('security_page')}"/>
+                   <p:menuitem id="exit" value="خروج" action="#{mBLogin.logout()}"/>
                 </p:submenu>
             </p:menubar>
             

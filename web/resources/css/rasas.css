@@ -5,6 +5,10 @@
     direction: rtl;
 }
 
+.ui-button{
+    margin: 10px;
+}
+
 .txtCenter{
     text-align: center;
 }
@@ -13,9 +17,6 @@
     font-size: 30px;
 }
 
-.pnl {
-    direction: rtl;
-}
 
 .frmMain {
     margin-top: 5%;
@@ -43,10 +44,7 @@
 
 .tabView{
     width: 70%;
-}
-
-.ui-tabs .ui-tabs-nav li{
-    float: right !important;
+    
 }
 
 

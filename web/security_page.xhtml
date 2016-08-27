@@ -26,16 +26,15 @@
         <br/><br/>
         
         <center>    
-            <p:tabView id = "tabViewUsers" styleClass="tabView">
+            <p:tabView id = "tabViewSecurity" styleClass="tabView" dir="rtl">
             
-            <p:tab id="tabUsers" title="صيانة المستخدمين" disabled="#{mBViewPrivilege.getSecurityTabsPrivilege('tabUsers')}">
+            <p:tab id="tabUser" title="صيانة المستخدمين">
                 
-                <h:panelGrid  columns="2" style = "pnl" >
-                    <h:form id = "frmTabUsers">
-                        <h:panelGrid  columns="2" style = "pnl" cellpadding="5">
-
+                    <h:panelGrid  id ="pnlUser" columns="2" style = "width: 100%" cellspacing="5" >
+                        <h:form id = "frmTabUsers">
+                        <h:panelGrid  id = "pnlUserInfo" columns="2" style = "width: 100%" cellpadding="5">
                             <p:outputLabel value="الرقم الوظيفي : " />
-                            <p:inputText   value="#{mBUsers.userId}" styleClass="txtCenter" maxlength = "10" placeholder="الرقم الوظيفي" />
+                            <p:inputText   id = "txtUserId" value="#{mBUsers.userId}" styleClass="txtCenter" maxlength = "10" placeholder="الرقم الوظيفي" />
 
                             <p:outputLabel value="اسم الموظف : " />
                             <p:inputText   value="#{mBUsers.userName}"  maxlength = "50" placeholder="اسم الموظف" />
@@ -64,30 +63,33 @@
                             </h:selectOneMenu>
 
                             <p:outputLabel value="كلمة السر : "/>
-                            <p:password value="#{mBUsers.password}" styleClass="txtCenter" maxlength="10" placeholder="كلمة السر"/>
+                            <p:password value="#{mBUsers.password}" styleClass="txtCenter" maxlength="10" redisplay="true" disabled="#{mBUsers.userTxtPasswordPrivilege}" placeholder="كلمة السر"/>
 
                             <br/>
                             <f:facet name="footer">
                                 <center>
-                                    <p:commandButton id="btnSave" value="تسجيل المستخدم"  disabled="#{mBViewPrivilege.getBtnPrivilege(component.id)}"/>
+                                    <p:commandButton id="btnSave" value="تسجيل مستخدم جديد"  action="#{mBUsers.checkNewUserToSave()}" />
 
-                                    <p:commandButton id="btnEdit" value="تعديل معلومات المستخدم"  disabled="#{mBViewPrivilege.getBtnPrivilege(component.id)}"/>
+                                    <p:commandButton id="btnEdit" value="تعديل معلومات المستخدم" action="#{mBUsers.checkUserToUpdate()}" />
 
                                 </center>
                             </f:facet>
                         </h:panelGrid>
-                    </h:form>
-                
-                    <h:form>
-                        
-                        <p:outputLabel value="22222222222"/>
-                    </h:form>
-                
-                </h:panelGrid>
+                        </h:form>
+                        <h:form id="frmUsersList">
+                        <h:panelGrid id="pnlUsersList" columns="1" style = "width: 100%" cellpadding="5" >
+                            <p:outputLabel  value="بحث برقم الموظف : " />
+                            <p:selectOneListbox id="searchUsers" value="#{mBUsers.userId}" filter="true" filterMatchMode="contains" style="width: 300px; height: 250px; margin-top: 0;">
+                                <p:ajax listener="#{mBUsers.loadUserInfo()}" update=":tabViewSecurity:frmTabUsers:pnlUserInfo"/>
+                                <f:selectItems value="#{mBUsers.allUsersByCenter}" var="users" itemLabel="#{users.userId} &ensp;&ensp; #{users.userName}" itemValue="#{users.userId}"/>
+                            </p:selectOneListbox>
+                        </h:panelGrid>
+                        </h:form>    
+                    </h:panelGrid>
                 
             </p:tab>
             
-            <p:tab id="tabGroups" title="صيانة المجموعات" disabled="#{mBViewPrivilege.getSecurityTabsPrivilege('tabGroups')}">
+            <p:tab id="tabGroups" title="صيانة المجموعات">
                 
                 <br/>
                 <center>
@@ -103,7 +105,7 @@
                 
             </p:tab>
             
-            <p:tab id="tabPrivilege" title="صيانة الصلاحيات" disabled="#{mBViewPrivilege.getSecurityTabsPrivilege('tabPrivilege')}">
+            <p:tab id="tabPrivilege" title="صيانة الصلاحيات">
                 
                 <br/>
                 <center>
@@ -115,7 +117,7 @@
                 
             </p:tab>
             
-            <p:tab id="tabViews" title="صيانة الشاشات" disabled="#{mBViewPrivilege.getSecurityTabsPrivilege('tabViews')}">
+            <p:tab id="tabViews" title="صيانة الشاشات" >
                 
                 <br/>
                 <center>

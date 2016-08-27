@@ -1,4 +1,6 @@
-1
+.ui-tabs .ui-tabs-nav li{
+    float: right !important;
+}
 
 CREATE TABLE RASAS.RS_DATA
 (

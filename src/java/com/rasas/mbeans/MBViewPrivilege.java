@@ -16,7 +16,6 @@ import javax.persistence.TypedQuery;
 public class MBViewPrivilege {
     
     private String viewId = "";
-    private String status = "true";
     private MBLogin mBLogin = new MBLogin();
     private MBGroupMembers mBGroupMembers = new MBGroupMembers();
     
@@ -28,26 +27,36 @@ public class MBViewPrivilege {
         em  = emf.createEntityManager();
         em.getTransaction().begin();
     }
+    
+////////////////////////////////////////////////////////////////////////////////
+    ////////////// Privileges
+    ////////////// v: menu item of page 
+    ////////////// a: btnAdd
+    ////////////// d: btnDelete
+    ////////////// u: btnUpdate
+    
+    
 ////////////////////////////////////////////////////////////////////////////////
     public String getBtnPrivilege(String componentId){
         System.out.println("com.rasas.mbeans.MBViewPrivilege.getBtnPrivilege()----------> " + MBCommon.getCurrentDateTime());
         
+        String status = "true";
+        
         viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
         
         String userGroupId = mBGroupMembers.getGroupIdByUserId(mBLogin.getLoggedUser().getUserId());
-       
-        if(mBLogin.getLoggedUser().getPrivilege() == 1){
-            status = "false";
-        }else{
-            
-            List<ViewPrivilege> viewsPrivilegeList = getGroupPrivilege(userGroupId, viewId);
-            
-            for(ViewPrivilege vp: viewsPrivilegeList){
-                if(vp.getViewPrivilegePK().getViewId().equals(viewId)){
-
-                    String add = vp.getViewPrivilegePK().getPrivilege().substring(0, 1);
-                    String delete = vp.getViewPrivilegePK().getPrivilege().substring(1, 2);
-
+        
+        List<ViewPrivilege> viewsPrivilegeList = getGroupPrivilege(userGroupId, viewId);
+        
+        for (ViewPrivilege vp : viewsPrivilegeList) {
+            if (vp.getViewPrivilegePK().getViewId().equals(viewId)) {
+                
+                String view   = vp.getViewPrivilegePK().getPrivilege().substring(0, 1);
+                String add    = vp.getViewPrivilegePK().getPrivilege().substring(1, 2);
+                String delete = vp.getViewPrivilegePK().getPrivilege().substring(2, 3);
+                String update = vp.getViewPrivilegePK().getPrivilege().substring(3, 4);
+                
+                if(view.equals("1")){
                     if (componentId.equals("btnSave")) {
                         if (add.equals("0")) {
                             status = "true";
@@ -55,21 +64,50 @@ public class MBViewPrivilege {
                             status = "false";
                         }
 
-                        System.out.println("viewId = " + componentId + ", add = " + add + ", disable = " + status);
                     } else if (componentId.equals("btnDelete")) {
                         if (delete.equals("0")) {
                             status = "true";
                         } else {
                             status = "false";
                         }
-
-                        System.out.println("viewId = " + componentId + ", delete = " + add + ", disable = " + status);
+                    } else if (componentId.equals("btnUpdate")) {
+                        if (update.equals("0")) {
+                            status = "true";
+                        } else {
+                            status = "false";
+                        }
                     }
-                }   
-            }   
+                }
+            }
         }
+        
+        System.out.println("viewId = " + viewId + ", componentId = " + componentId + ", disabled = " + status);
         return status;
     }   
+
+////////////////////////////////////////////////////////////////////////////////
+    public String getMenuPrivilege(String componentId){
+        System.out.println("com.rasas.mbeans.MBViewPrivilege.getMenuPrivilege()----------> " + MBCommon.getCurrentDateTime());
+        
+        String status = "true";
+        
+        String userGroupId = mBGroupMembers.getGroupIdByUserId(mBLogin.getLoggedUser().getUserId());
+        
+        List<ViewPrivilege> viewsPrivilegeList = getGroupPrivilege(userGroupId, "/" + componentId + ".xhtml");
+        
+        for (ViewPrivilege vp : viewsPrivilegeList) {
+            if (vp.getViewPrivilegePK().getViewId().equals("/" + componentId + ".xhtml")) {
+                String view = vp.getViewPrivilegePK().getPrivilege().substring(0, 1);
+
+                if (view.equals("1")) {
+                    status = "false";
+                }
+            }
+        }
+    
+        System.out.println("componentId = " + componentId + ", disabled = " + status);
+        return status;
+    }
     
 ////////////////////////////////////////////////////////////////////////////////
     public List<ViewPrivilege> getGroupPrivilege(String userId, String viewId){
@@ -83,33 +121,5 @@ public class MBViewPrivilege {
         List viewsPrivilegeList = query.getResultList();
         
         return viewsPrivilegeList;
-    }
-           
-////////////////////////////////////////////////////////////////////////////////
-    public String getSecurityTabsPrivilege(String componentId){
-        System.out.println("com.rasas.mbeans.MBViewPrivilege.getSecurityTabsPrivilege()----------> " + MBCommon.getCurrentDateTime());
-        
-        if(mBLogin.getLoggedUser().getPrivilege() == 1){
-            status = "false";
-            
-            System.out.println("componentId = " + componentId + ", disable = " + status);
-            
-        }else if(mBLogin.getLoggedUser().getPrivilege() != 1){
-            if(componentId.equals("tabUsers")){
-                status = "false";
-            }else if(componentId.equals("tabGroups")){
-                status = "true";
-            }else if(componentId.equals("tabPrivilege")){
-                status = "true";
-            }else if(componentId.equals("tabViews")){
-                status = "true";
-            }
-            
-            System.out.println("componentId = " + componentId + ", disable = " + status);
-            
-        }
-        
-        
-        return status;
     }
 }
