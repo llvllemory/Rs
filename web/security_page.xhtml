@@ -68,9 +68,9 @@
                             <br/>
                             <f:facet name="footer">
                                 <center>
-                                    <p:commandButton id="btnSave" value="تسجيل مستخدم جديد"  action="#{mBUsers.checkNewUserToSave()}" />
+                                    <p:commandButton id="btnSave" value="تسجيل مستخدم جديد"  action="#{mBUsers.checkNewUserToSave()}" update=":tabViewSecurity:frmUsersList:searchUsers"/>
 
-                                    <p:commandButton id="btnEdit" value="تعديل معلومات المستخدم" action="#{mBUsers.checkUserToUpdate()}" />
+                                    <p:commandButton id="btnEdit" value="تعديل معلومات المستخدم" action="#{mBUsers.checkUserToUpdate()}" update=":tabViewSecurity:frmUsersList:searchUsers"/>
 
                                 </center>
                             </f:facet>
@@ -91,16 +91,7 @@
             
             <p:tab id="tabGroups" title="صيانة المجموعات">
                 
-                <br/>
-                <center>
-                    <p:outputLabel id = "lblTabGroups" value="صيانة ملف المجموعات"/>
-                </center>
                 
-                <h:form>
-                    <h:panelGrid >
-
-                    </h:panelGrid>
-                </h:form>
                 
                 
             </p:tab>
@@ -119,16 +110,37 @@
             
             <p:tab id="tabViews" title="صيانة الشاشات" >
                 
-                <br/>
-                <center>
-                    <p:outputLabel id = "lblTabViews" value="صيانة ملف الشاشات"/>
-                </center>
-                
-                <h:form>
-                    <h:panelGrid >
+                <h:panelGrid  id ="pnlViews" columns="2" style = "width: 100%" cellspacing="5" >
+                    
+                        <h:form id = "frmTabView">
+                        <h:panelGrid  id = "pnlViewInfo" columns="2" style = "width: 100%" cellpadding="5">
+                            <p:outputLabel value="رمز الشاشة : " />
+                            <p:inputText   id = "txtViewId" value="#{mBViews.viewId}" styleClass="txtCenter" maxlength = "50" placeholder="رمز الشاشة" />
 
+                            <p:outputLabel value="اسم الشاشة : " />
+                            <p:inputText   value="#{mBViews.viewName}"  maxlength = "100" placeholder="اسم الشاشة" />
+
+                            <br/>
+                            <f:facet name="footer">
+                                <center>
+                                    <p:commandButton id="btnSave" value="إضافة شاشة جديدة" action="#{mBViews.checkToSaveNewView()}" update=":tabViewSecurity:frmViewsList:searchViews"/>
+
+                                    <p:commandButton id="btnUpdate" value="تعديل معلومات الشاشة" />
+                                </center>
+                            </f:facet>
+                        </h:panelGrid>
+                        </h:form>
+                    
+                        <h:form id="frmViewsList">
+                        <h:panelGrid id="pnlViewsList" columns="1" style = "width: 100%" cellpadding="5" >
+                            <p:outputLabel  value="بحث برمز الشاشة : " />
+                            <p:selectOneListbox id="searchViews" value="#{mBViews.viewId}" filter="true" filterMatchMode="contains" style="width: 450px; height: 250px; margin-top: 0; font-size: 10;">
+                                <p:ajax listener="#{mBViews.loadViewInfoByViewId()}" update=":tabViewSecurity:frmTabView:pnlViewInfo"/>
+                                <f:selectItems value="#{mBViews.allViews}" var="views" itemLabel="#{views.viewId} &ensp;&ensp; #{views.viewName}" itemValue="#{views.viewId}"/>
+                            </p:selectOneListbox>
+                        </h:panelGrid>
+                        </h:form>    
                     </h:panelGrid>
-                </h:form>
                 
                 
             </p:tab>
