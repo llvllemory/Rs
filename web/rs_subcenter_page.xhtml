@@ -20,7 +20,7 @@
         <p:growl id="growl" showDetail="true" life="5000"/>
         
         <ui:insert name="header">
-		<ui:include src="header.xhtml" />
+		<ui:include src="rs_header_page.xhtml" />
 	</ui:insert>
         
         <br/><br/>
@@ -36,7 +36,7 @@
                     <p:outputLabel id="lblSubCenterNo" value="المركز : " />
                     
                     <h:selectOneMenu id ="slctSubCenters" styleClass = "slctMenu" value ="#{mBRsMain.rsSubCenter}">
-                        <f:selectItems value="#{mBRsMain.subCentersByCenterNo}" var = "subCenter" itemLabel="#{subCenter.subCentersPK.subCenterNo} -- #{subCenter.subCenterName}" itemValue="#{subCenter.subCentersPK.subCenterNo}"/>
+                        <f:selectItems value="#{mBSubCenters.subCentersByCenterNo}" var = "subCenter" itemLabel="#{subCenter.subCentersPK.subCenterNo} -- #{subCenter.subCenterName}" itemValue="#{subCenter.subCentersPK.subCenterNo}"/>
                     </h:selectOneMenu>
                     
                     <p:outputLabel id="lblCurrentYear" value=" السنة : "/>

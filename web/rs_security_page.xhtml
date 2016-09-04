@@ -20,7 +20,7 @@
         <p:growl id="growl" showDetail="true" life="5000"/>
         
         <ui:insert name="header">
-		<ui:include src="header.xhtml" />
+		<ui:include src="rs_header_page.xhtml" />
 	</ui:insert>
         
         <br/><br/>
@@ -41,12 +41,12 @@
 
                             <p:outputLabel value="المركز : "/>
                             <h:selectOneMenu styleClass = "slctMenu" value ="#{mBUsers.userCenter}">
-                                <f:selectItems value="#{mBRsMain.centers}" var = "center" itemLabel="#{center.centerName}" itemValue="#{center.centerNo}"/>
+                                <f:selectItems value="#{mBCenters.centers}" var = "center" itemLabel="#{center.centerName}" itemValue="#{center.centerNo}"/>
                             </h:selectOneMenu>
 
                             <p:outputLabel value="القسم : "/>
                             <h:selectOneMenu id ="slctSubCenters" styleClass = "slctMenu" value ="#{mBUsers.userSubCenter}">
-                                <f:selectItems value="#{mBRsMain.subCentersByCenterNo}" var = "subCenter" itemLabel="#{subCenter.subCenterName}" itemValue="#{subCenter.subCentersPK.subCenterNo}"/>
+                                <f:selectItems value="#{mBSubCenters.subCentersByCenterNo}" var = "subCenter" itemLabel="#{subCenter.subCenterName}" itemValue="#{subCenter.subCentersPK.subCenterNo}"/>
                             </h:selectOneMenu>
 
                             <p:outputLabel value="صفة المستخدم : "/>
@@ -125,7 +125,7 @@
                                 <center>
                                     <p:commandButton id="btnSave" value="إضافة شاشة جديدة" action="#{mBViews.checkToSaveNewView()}" update=":tabViewSecurity:frmViewsList:searchViews"/>
 
-                                    <p:commandButton id="btnUpdate" value="تعديل معلومات الشاشة" />
+                                    <p:commandButton id="btnUpdate" value="تعديل معلومات الشاشة" action = "#{mBViews.checkToUpdateView()}" update=":tabViewSecurity:frmViewsList:searchViews"/>
                                 </center>
                             </f:facet>
                         </h:panelGrid>

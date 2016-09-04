@@ -20,7 +20,7 @@
         <p:growl id="growl" showDetail="true" life="5000"/>
         
         <ui:insert name="header">
-		<ui:include src="header.xhtml" />
+		<ui:include src="rs_header_page.xhtml" />
 	</ui:insert>
         
         <br/><br/>
@@ -34,7 +34,7 @@
                                        
                     <p:outputLabel id="lblCenterNo" value="المركز : " />
                     <h:selectOneMenu styleClass = "slctMenu" value ="#{mBRsMain.rsCenter}">
-                        <f:selectItems value="#{mBRsMain.centers}" var = "center" itemLabel="#{center.centerNo} -- #{center.centerName}" itemValue="#{center.centerNo}"/>
+                        <f:selectItems value="#{mBCenters.centers}" var = "center" itemLabel="#{center.centerNo} -- #{center.centerName}" itemValue="#{center.centerNo}"/>
                     </h:selectOneMenu>
                     
                     <p:outputLabel id="lblCurrentYear" value=" السنة : "/>

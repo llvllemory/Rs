@@ -36,7 +36,7 @@ public class MBViews {
         System.out.println("com.rasas.mbeans.MBViews.checkToSaveNewView()----------> " + MBCommon.getCurrentDateTime());
         
         if(viewId.equals("")){
-            MBCommon.getErrorMessage("", "يجب إدخال رمز الشاشة, يبدأ ب/ وينتهي ب .xhtml.");
+            MBCommon.getErrorMessage("", "يجب إدخال رمز الشاشة !");
             return "";
         }
         
@@ -58,6 +58,38 @@ public class MBViews {
                 MBCommon.getFatalMessage("", "لم يتم تخزين معلومات الشاشة, الرجاء المحاولة مرة اخرى أو الأتصال مع مدير النظام !");
             }else{
                 MBCommon.getInfoMessage("", "تم تخزين معلومات الشاشة ينجاح .");
+            }
+            return "";
+        }
+        return "";
+    }
+////////////////////////////////////////////////////////////////////////////////
+    public String checkToUpdateView(){
+        System.out.println("com.rasas.mbeans.MBViews.checkToUpdateView()----------> " + MBCommon.getCurrentDateTime());
+        
+        if(viewId.equals("")){
+            MBCommon.getErrorMessage("", "يجب إدخال رمز الشاشة !");
+            return "";
+        }
+        
+        if(viewName.equals("")){
+            MBCommon.getErrorMessage("", "يجب إدخال اسم الشاشة.");
+            return "";
+        }
+        
+        viewsList = new ArrayList<>();
+        viewsList = getViewByViewId(viewId);
+                
+        if(viewsList.size() == 0){
+            MBCommon.getFatalMessage("", "الشاشة المراد تعديلها غير موجودة مسبقا, الرجاء التأكد والمحاولة مرة اخرى !");
+        }else{
+            
+            int x = updateViewInfo();
+            
+            if(x == 0){
+                MBCommon.getFatalMessage("", "لم يتم تعديل معلومات الشاشة, الرجاء المحاولة مرة اخرى أو الأتصال مع مدير النظام !");
+            }else{
+                MBCommon.getInfoMessage("", "تم تعديل معلومات الشاشة ينجاح .");
             }
             return "";
         }
@@ -99,6 +131,17 @@ public class MBViews {
         }else{
             return 1;
         }
+    }
+////////////////////////////////////////////////////////////////////////////////
+    public int updateViewInfo(){
+        System.out.println("com.rasas.mbeans.MBViews.updateViewInfo()----------> " + MBCommon.getCurrentDateTime());
+        
+        emf.getCache().evictAll();
+        int x = em.createQuery("Update Views SET viewName = ?1 WHERE viewId = ?2")
+                .setParameter(1, viewName)
+                .setParameter(2, viewId).executeUpdate();
+  
+        return x;
     }
     
 ////////////////////////////////////////////////////////////////////////////////    

@@ -46,10 +46,10 @@ public class MBViewPrivilege {
         
         String userGroupId = mBGroupMembers.getGroupIdByUserId(mBLogin.getLoggedUser().getUserId());
         
-        List<ViewPrivilege> viewsPrivilegeList = getGroupPrivilege(userGroupId, viewId);
+        List<ViewPrivilege> viewsPrivilegeList = getGroupPrivilege(userGroupId, viewId.substring(1, viewId.length()-6));
         
         for (ViewPrivilege vp : viewsPrivilegeList) {
-            if (vp.getViewPrivilegePK().getViewId().equals(viewId)) {
+            if (vp.getViewPrivilegePK().getViewId().equals(viewId.substring(1, viewId.length()-6))) {
                 
                 String view   = vp.getViewPrivilegePK().getPrivilege().substring(0, 1);
                 String add    = vp.getViewPrivilegePK().getPrivilege().substring(1, 2);
@@ -93,10 +93,10 @@ public class MBViewPrivilege {
         
         String userGroupId = mBGroupMembers.getGroupIdByUserId(mBLogin.getLoggedUser().getUserId());
         
-        List<ViewPrivilege> viewsPrivilegeList = getGroupPrivilege(userGroupId, "/" + componentId + ".xhtml");
+        List<ViewPrivilege> viewsPrivilegeList = getGroupPrivilege(userGroupId, componentId);
         
         for (ViewPrivilege vp : viewsPrivilegeList) {
-            if (vp.getViewPrivilegePK().getViewId().equals("/" + componentId + ".xhtml")) {
+            if (vp.getViewPrivilegePK().getViewId().equals(componentId)) {
                 String view = vp.getViewPrivilegePK().getPrivilege().substring(0, 1);
 
                 if (view.equals("1")) {

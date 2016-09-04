@@ -57,17 +57,17 @@ public class MBUsers implements Serializable{
             return "";
         }
         
-        if(userCenter.equals("")){
+        if(userCenter == null){
             MBCommon.getWarnMessage("","يجب إختيار مركز عمل المستخدم !");
             return "";
         }
         
-        if(userSubCenter.equals("")){
+        if(userSubCenter == null){
             MBCommon.getWarnMessage("","يجب إختيار القسم الذي يتع له المستخدم !");
             return "";
         }
         
-        if(userType.equals("")){
+        if(userType == null){
             MBCommon.getWarnMessage("","يحب إختيار صفة المستخدم !");
             return "";
         }
@@ -115,17 +115,17 @@ public class MBUsers implements Serializable{
             return "";
         }
         
-        if(userCenter.equals("")){
+        if(userCenter == null){
             MBCommon.getWarnMessage("","يجب إختيار مركز عمل المستخدم !");
             return "";
         }
         
-        if(userSubCenter.equals("")){
+        if(userSubCenter == null){
             MBCommon.getWarnMessage("","يجب إختيار القسم الذي يتع له المستخدم !");
             return "";
         }
         
-        if(userType.equals("")){
+        if(userType == null){
             MBCommon.getWarnMessage("","يحب إختيار صفة المستخدم !");
             return "";
         }
@@ -278,7 +278,7 @@ public class MBUsers implements Serializable{
         emf.getCache().evictAll();
         
         mBLogin = new MBLogin();
-        TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u WHERE u.privilege != 3 AND u.userCenter = ?1", Users.class)
+        TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u WHERE u.privilege != 3 AND u.userCenter = ?1 ORDER BY u.userId ASC", Users.class)
                 .setParameter(1, mBLogin.getLoggedUser().getUserCenter());
         
         List<Users> usersList = query.getResultList();

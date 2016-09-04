@@ -64,7 +64,7 @@ public class MBLogin implements Serializable{
                                 context.getExternalContext().getSessionMap().put("loggedUser", usersList.get(0));
 
                                 MBCommon.getInfoMessage("", "أهلا وسهلا بك " + usersList.get(0).getUserName());
-                                return "main_page";
+                                return "rs_main_page";
                             } else {
                                 MBCommon.getFatalMessage("", "هنالك خطأ في تحديث معلومات المستخدم  !");
                                 return "";
@@ -97,7 +97,7 @@ public class MBLogin implements Serializable{
         System.out.println("com.rasas.mbeans.MBLogin.logout()----------> " + MBCommon.getCurrentDateTime());
 
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        return "login_page";
+        return "rs_login_page";
 
     } 
 ////////////////////////////////////////////////////////////////////////////////
