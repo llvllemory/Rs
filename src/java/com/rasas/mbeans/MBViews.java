@@ -33,7 +33,7 @@ public class MBViews {
     
 ////////////////////////////////////////////////////////////////////////////////
     public String checkToSaveNewView(){
-        System.out.println("com.rasas.mbeans.MBViews.checkToSaveNewView()----------> " + MBCommon.getCurrentDateTime());
+        System.out.println("com.rasas.mbeans.MBViews.checkToSaveNewView()");
         
         if(viewId.equals("")){
             MBCommon.getErrorMessage("", "يجب إدخال رمز الشاشة !");
@@ -65,7 +65,7 @@ public class MBViews {
     }
 ////////////////////////////////////////////////////////////////////////////////
     public String checkToUpdateView(){
-        System.out.println("com.rasas.mbeans.MBViews.checkToUpdateView()----------> " + MBCommon.getCurrentDateTime());
+        System.out.println("com.rasas.mbeans.MBViews.checkToUpdateView()");
         
         if(viewId.equals("")){
             MBCommon.getErrorMessage("", "يجب إدخال رمز الشاشة !");
@@ -98,7 +98,7 @@ public class MBViews {
     
 ////////////////////////////////////////////////////////////////////////////////
     public List<Views> getViewByViewId(String viewId){
-        System.out.println("com.rasas.mbeans.MBViews.getViewByViewId()----------> " + MBCommon.getCurrentDateTime());
+        System.out.println("com.rasas.mbeans.MBViews.getViewByViewId()");
         
         emf.getCache().evictAll();
         
@@ -113,7 +113,7 @@ public class MBViews {
 
 ////////////////////////////////////////////////////////////////////////////////    
     public int saveNewView(){
-        System.out.println("com.rasas.mbeans.MBViews.saveNewView()----------> " + MBCommon.getCurrentDateTime());
+        System.out.println("com.rasas.mbeans.MBViews.saveNewView()");
         
         view = new Views();
         view.setViewId(viewId);
@@ -134,7 +134,7 @@ public class MBViews {
     }
 ////////////////////////////////////////////////////////////////////////////////
     public int updateViewInfo(){
-        System.out.println("com.rasas.mbeans.MBViews.updateViewInfo()----------> " + MBCommon.getCurrentDateTime());
+        System.out.println("com.rasas.mbeans.MBViews.updateViewInfo()");
         
         emf.getCache().evictAll();
         int x = em.createQuery("Update Views SET viewName = ?1 WHERE viewId = ?2")
@@ -146,7 +146,7 @@ public class MBViews {
     
 ////////////////////////////////////////////////////////////////////////////////    
     public List<Views> getAllViews(){
-        System.out.println("com.rasas.mbeans.MBViews.getAllViews()----------> " + MBCommon.getCurrentDateTime());
+        System.out.println("com.rasas.mbeans.MBViews.getAllViews()");
         
         emf.getCache().evictAll();
         
@@ -164,7 +164,7 @@ public class MBViews {
 
 ////////////////////////////////////////////////////////////////////////////////
     public void loadViewInfoByViewId(){
-        System.out.println("com.rasas.mbeans.MBViews.loadViewInfoByViewId() ----------> " + MBCommon.getCurrentDateTime());
+        System.out.println("com.rasas.mbeans.MBViews.loadViewInfoByViewId()");
         
         emf.getCache().evictAll();
         

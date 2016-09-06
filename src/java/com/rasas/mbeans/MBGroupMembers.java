@@ -25,7 +25,7 @@ public class MBGroupMembers {
     
 ////////////////////////////////////////////////////////////////////////////////
     public String getGroupIdByUserId(String userId){
-        System.out.println("com.rasas.mbeans.MBGroupMembers.getGroupIdByUserId()----------> " + MBCommon.getCurrentDateTime());
+        System.out.println("com.rasas.mbeans.MBGroupMembers.getGroupIdByUserId()");
         
         TypedQuery<GroupMembers> query = em.createQuery("SELECT g FROM GroupMembers g WHERE g.groupMembersPK.userId = ?1", GroupMembers.class)
                 .setParameter(1, userId);

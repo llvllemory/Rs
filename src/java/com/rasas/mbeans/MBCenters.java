@@ -27,7 +27,7 @@ public class MBCenters {
     
 ////////////////////////////////////////////////////////////////////////////////
     public String getCenterNameByCenterNo(String centerNo){
-        System.out.println("com.rasas.mbeans.MBCenters.getCenterNameByCenterNo()----------> " + MBCommon.getCurrentDateTime());
+        System.out.println("com.rasas.mbeans.MBCenters.getCenterNameByCenterNo()");
         
         Centers center = em.find(Centers.class, centerNo);
         
@@ -40,7 +40,7 @@ public class MBCenters {
     
 ////////////////////////////////////////////////////////////////////////////////
     public List<Centers> getCenters(){
-        System.out.println("com.rasas.mbeans.MBCenters.getCenters()----------> " + MBCommon.getCurrentDateTime());
+        System.out.println("com.rasas.mbeans.MBCenters.getCenters()");
         
         TypedQuery<Centers> query = em.createQuery("SELECT c FROM Centers c WHERE c.centerNo = ?1", Centers.class)
                 .setParameter(1, mBLogin.getLoggedUser().getUserCenter());

@@ -34,8 +34,8 @@ public class MBRsData {
     }
 
 ////////////////////////////////////////////////////////////////////////////////
-   public List<RsData> getRsDataByRsNoAndRsYearAndRsCenterAndRsSubCenter(int rsNo, String rsYear, String rsCenter, String rsSubCenter){
-       System.out.println("com.rasas.mbeans.MBRsData.getRsDataByRsNoAndRsYearAndRsCenterAndRsSubCenter()----------> " + MBCommon.getCurrentDateTime());
+   public List<RsData> getRsDataByRsNoAndRsCenterAndRsYearAndRsSubCenter(int rsNo, String rsCenter, String rsYear, String rsSubCenter){
+       System.out.println("com.rasas.mbeans.MBRsData.getRsDataByRsNoAndRsCenterAndRsYearAndRsSubCenter()----------> " + MBCommon.getCurrentDateTime());
        
        emf.getCache().evictAll();
        TypedQuery<RsData> query = em.createQuery("SELECT r FROM RsData r WHERE r.rsDataPK.rsNo = ?1 And r.rsDataPK.rsYear = ?2 AND r.rsDataPK.rsCenter = ?3 AND r.rsSubCenter = ?4", RsData.class)
@@ -50,8 +50,8 @@ public class MBRsData {
    }
     
 ////////////////////////////////////////////////////////////////////////////////
-    public List<RsData> getRsDataByRsYearAndRsSubCenter(String rsYear, String rsSubCenter){
-        System.out.println("com.rasas.mbeans.MBRsData.getRsDataByRsYearAndRsSubCenter()----------> " + MBCommon.getCurrentDateTime());
+    public List<RsData> getRsDataByRsSubCenterAndRsYear(String rsSubCenter, String rsYear){
+        System.out.println("com.rasas.mbeans.MBRsData.getRsDataByRsSubCenterAndRsYear()----------> " + MBCommon.getCurrentDateTime());
         
         emf.getCache().evictAll();
         TypedQuery<RsData> query = em.createQuery("SELECT r FROM RsData r WHERE r.rsDataPK.rsYear = ?1 AND r.rsSubCenter = ?2", RsData.class)
@@ -63,8 +63,8 @@ public class MBRsData {
         return rasasData;
     }
 ////////////////////////////////////////////////////////////////////////////////
-    public List<RsData> getNullRsDataByRsYearAndRsSubCenter(String rsYear, String rsSubCenter){
-        System.out.println("com.rasas.mbeans.MBRsData.getNullRsDataByRsYearAndRsSubCenter()----------> " + MBCommon.getCurrentDateTime());
+    public List<RsData> getNullRsDataByRsSubCenterAndRsYear(String rsSubCenter, String rsYear){
+        System.out.println("com.rasas.mbeans.MBRsData.getNullRsDataByRsSubCenterAndRsYear()----------> " + MBCommon.getCurrentDateTime());
         
         emf.getCache().evictAll();
         TypedQuery<RsData> query = em.createQuery("SELECT r FROM RsData r WHERE r.rsTasUserId IS NULL AND r.rsDataPK.rsYear = ?1 AND r.rsSubCenter = ?2", RsData.class)
@@ -88,7 +88,7 @@ public class MBRsData {
         }
         
         em.getTransaction().commit();
-        
+
         System.out.println("---------- RsData saved rows ------------------> " + rows + " >> " + MBCommon.getCurrentDateTime());
         return rows;
     }
@@ -107,8 +107,8 @@ public class MBRsData {
     }
 
 ////////////////////////////////////////////////////////////////////////////////
-    public int removeRsDataByRsYearAndRsCenter(int rsFrom, int rsTo, String rsYear, String rsCenter){
-        System.out.println("com.rasas.mbeans.MBRsData.removeRsDataByRsYearAndRsCenter()----------> " + MBCommon.getCurrentDateTime());
+    public int removeRsDataByRsCenterAndRsYear(int rsFrom, int rsTo, String rsCenter, String rsYear){
+        System.out.println("com.rasas.mbeans.MBRsData.removeRsDataByRsCenterAndRsYear()----------> " + MBCommon.getCurrentDateTime());
         
         emf.getCache().evictAll();
         int rows = 0;

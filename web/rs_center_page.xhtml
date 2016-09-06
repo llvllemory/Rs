@@ -38,7 +38,9 @@
                     </h:selectOneMenu>
                     
                     <p:outputLabel id="lblCurrentYear" value=" السنة : "/>
-                    <p:outputLabel id="lblCurrentYear_" value="#{mBCommon.getCurrentYear()}"/>
+                    <h:selectOneMenu styleClass = "slctMenu" value="#{mBRsMain.rsYear}">
+                        <f:selectItems value="#{mBRsMain.yearsList}" var="rsYearList" itemLabel="#{rsYearList}" itemValue="#{rsYearList}"/>
+                    </h:selectOneMenu>
                     
                     <p:outputLabel id="lblRsFrom" value="من رصاص : "/>
                     <p:inputText id="txtRsFrom" value="#{mBRsMain.rsFrom}" styleClass="txtRasas" maxlength="10" required="true"/>

@@ -45,7 +45,7 @@ public class MBUsers implements Serializable{
 
 ////////////////////////////////////////////////////////////////////////////////
     public String checkNewUserToSave(){
-        System.out.println("com.rasas.mbeans.MBUsers.checkNewUserToSave()----------> " + MBCommon.getCurrentDateTime());
+        System.out.println("com.rasas.mbeans.MBUsers.checkNewUserToSave()");
         
         if(userId.equals("")){
             MBCommon.getWarnMessage("","يجب إدخال اسم المستخدم !");
@@ -103,7 +103,7 @@ public class MBUsers implements Serializable{
     }
 ////////////////////////////////////////////////////////////////////////////////
     public String checkUserToUpdate(){
-        System.out.println("com.rasas.mbeans.MBUsers.checkUserToUpdate()----------> " + MBCommon.getCurrentDateTime());
+        System.out.println("com.rasas.mbeans.MBUsers.checkUserToUpdate()");
         
         if(userId.equals("")){
             MBCommon.getWarnMessage("","يجب إدخال اسم المستخدم !");
@@ -160,7 +160,7 @@ public class MBUsers implements Serializable{
     }
 ////////////////////////////////////////////////////////////////////////////////
     public String checkUserToUpdatePassword(){
-        System.out.println("com.rasas.mbeans.MBUsers.checkUserToUpdatePassword()----------> " + MBCommon.getCurrentDateTime());
+        System.out.println("com.rasas.mbeans.MBUsers.checkUserToUpdatePassword()");
         
         if(oldPassword.equals("")){
             MBCommon.getErrorMessage("","يجب إدخال كلمة السر القديمة!");
@@ -193,7 +193,7 @@ public class MBUsers implements Serializable{
             if(x == 1){
                 MBCommon.getInfoMessage("", "تم تعديل كلمة السر بنجاح !");
                 mBLogin.logout();
-                return "login_page";
+                return "rs_login_page";
             }else{
                 MBCommon.getFatalMessage("", "لم يتم تعديل كلمة السر, الرجاء الإتصال مع مدير النظام !");
             }
@@ -207,7 +207,7 @@ public class MBUsers implements Serializable{
     
 ////////////////////////////////////////////////////////////////////////////////    
     public List<Users> getUserByUserId(String userId){
-        System.out.println("com.rasas.mbeans.MBUsers.getUserByUserId()----------> " + MBCommon.getCurrentDateTime());
+        System.out.println("com.rasas.mbeans.MBUsers.getUserByUserId()");
         
         emf.getCache().evictAll();
         
@@ -221,7 +221,7 @@ public class MBUsers implements Serializable{
     
 ////////////////////////////////////////////////////////////////////////////////    
     public void loadUserInfo(){
-        System.out.println("com.rasas.mbeans.MBUsers.getUserByUserId()----------> " + MBCommon.getCurrentDateTime());
+        System.out.println("com.rasas.mbeans.MBUsers.getUserByUserId()");
         
         emf.getCache().evictAll();
         
@@ -250,10 +250,10 @@ public class MBUsers implements Serializable{
         
 ////////////////////////////////////////////////////////////////////////////////    
     public int updateUserLastLogin(Users user){
-        System.out.println("com.rasas.mbeans.MBUsers.updateUserLastLogin()----------> " + MBCommon.getCurrentDateTime());
+        System.out.println("com.rasas.mbeans.MBUsers.updateUserLastLogin()");
         
         emf.getCache().evictAll();
-        return em.createQuery("UPDATE Users SET lastLogin = ?1 WHERE userId = ?2")
+        return em.createQuery("UPDATE Users u SET u.lastLogin = ?1 WHERE u.userId = ?2")
                 .setParameter(1, new java.util.Date())
                 .setParameter(2, user.getUserId()).executeUpdate();
          
@@ -262,10 +262,10 @@ public class MBUsers implements Serializable{
     
 ////////////////////////////////////////////////////////////////////////////////    
     public int updateUserPassword(String userId, String password){
-        System.out.println("com.rasas.mbeans.MBUsers.updateUserPassword()----------> " + MBCommon.getCurrentDateTime());
+        System.out.println("com.rasas.mbeans.MBUsers.updateUserPassword()");
         
         emf.getCache().evictAll();
-        return em.createQuery("UPDATE Users SET password = ?1 WHERE userId = ?2")
+        return em.createQuery("UPDATE Users u SET u.password = ?1 WHERE u.userId = ?2")
                 .setParameter(1, password)
                 .setParameter(2, userId).executeUpdate();
          
@@ -273,15 +273,26 @@ public class MBUsers implements Serializable{
     
 ////////////////////////////////////////////////////////////////////////////////
     public List<Users> getAllUsersByCenter(){
-        System.out.println("com.rasas.mbeans.MBUsers.getAllUsersByCenter()----------> " + MBCommon.getCurrentDateTime());
+        System.out.println("com.rasas.mbeans.MBUsers.getAllUsersByCenter()");
         
         emf.getCache().evictAll();
         
         mBLogin = new MBLogin();
-        TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u WHERE u.privilege != 3 AND u.userCenter = ?1 ORDER BY u.userId ASC", Users.class)
+        List<Users> usersList = new ArrayList<>();
+        
+        if(mBLogin.getLoggedUser().getPrivilege() == 1){
+            
+            TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u ORDER BY u.userId ASC", Users.class);
+            usersList = query.getResultList();
+            
+        }else{
+            
+            TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u WHERE u.privilege != 3 AND u.userCenter = ?1 ORDER BY u.userId ASC", Users.class)
                 .setParameter(1, mBLogin.getLoggedUser().getUserCenter());
         
-        List<Users> usersList = query.getResultList();
+            usersList = query.getResultList();
+            
+        }
         
         if(usersList.size() > 0){
             return usersList;
@@ -292,7 +303,7 @@ public class MBUsers implements Serializable{
     
 ////////////////////////////////////////////////////////////////////////////////
     public int saveNewUser(){
-        System.out.println("com.rasas.mbeans.MBUsers.saveNewUser() ----------> " + MBCommon.getCurrentDateTime());
+        System.out.println("com.rasas.mbeans.MBUsers.saveNewUser()");
         
         emf.getCache().evictAll();
         
@@ -322,11 +333,11 @@ public class MBUsers implements Serializable{
     
 ////////////////////////////////////////////////////////////////////////////////
     public int updateUserInfo(){
-        System.out.println("com.rasas.mbeans.MBUsers.updateUserInfo()----------> " + MBCommon.getCurrentDateTime());
+        System.out.println("com.rasas.mbeans.MBUsers.updateUserInfo()");
         
         emf.getCache().evictAll();
         
-        int u = em.createQuery("UPDATE Users SET userName = ?1, userCenter = ?2, userSubCenter = ?3, userType = ?4, privilege = ?5, password = ?6 WHERE userId = ?7")
+        int u = em.createQuery("UPDATE Users u SET u.userName = ?1, u.userCenter = ?2, u.userSubCenter = ?3, u.userType = ?4, u.privilege = ?5, u.password = ?6 WHERE u.userId = ?7")
                 .setParameter(1, userName)
                 .setParameter(2, userCenter)
                 .setParameter(3, userSubCenter)

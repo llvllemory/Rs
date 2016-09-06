@@ -15,6 +15,7 @@ import javax.faces.bean.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 @ManagedBean
@@ -26,6 +27,7 @@ public class MBRsMain implements Serializable{
     private int rsTo;
     private String rsCenter;
     private String rsSubCenter;
+    private String rsYear;
     private int rsFound;
     private int isNull;
     
@@ -60,6 +62,11 @@ public class MBRsMain implements Serializable{
             return "";
         }
         
+        if(rsYear == null){
+            MBCommon.getWarnMessage("", "يجب إختيار سنة الرصاص !");
+            return "";
+        }
+        
         if(rsFrom == 0){
             MBCommon.getWarnMessage("", "بداية الرصاص يجب ان يكون اكبر من صفر!");
             return "";
@@ -74,7 +81,7 @@ public class MBRsMain implements Serializable{
         }
         
         rsMainList = new ArrayList<>();
-        rsMainList = getRsCenterByRsCenterAndRsYear(rsCenter, MBCommon.getCurrentYear());
+        rsMainList = getRsCenterByRsCenterAndRsYear(rsCenter, rsYear);
         
         if(rsMainList.size() > 0){
             
@@ -93,12 +100,14 @@ public class MBRsMain implements Serializable{
                 MBCommon.getWarnMessage("", "هنالك رصاص مصروف مسبقا للمركز, الرجاء التأكد أولا!");
             } else if (rsFound == 0) {
 
-                int x = saveRsCenter(rsFrom, rsTo, MBCommon.getCurrentYear(), rsCenter, new java.util.Date(), mBLogin.getLoggedUser().getUserId());
+                int x = saveRsCenter(rsFrom, rsTo, rsCenter, rsYear, new java.util.Date(), mBLogin.getLoggedUser().getUserId());
 
                 if (x == 0) {
                     MBCommon.getErrorMessage("", "فشل في عملية تخزين الرصاص, الرجاء المحاولة مرة اخرى او التأكد من أرقام الرصاص!");
                 } else if (x == ((rsTo - rsFrom) + 1)) {
                     MBCommon.getInfoMessage("", "تم صرف الرصاص للمركز ينجاح.");
+                    rsFrom = 0;
+                    return "rs_center_page";
                 } else {
                     MBCommon.getWarnMessage("", "هنالك رصاص لم يتم صرفه, الرجاء التأكد من الرصاص المصروف!");
                 }
@@ -106,18 +115,20 @@ public class MBRsMain implements Serializable{
             
         }else{
             
-            int x = saveRsCenter(rsFrom, rsTo, MBCommon.getCurrentYear(), rsCenter, new java.util.Date(), mBLogin.getLoggedUser().getUserId());
+            int x = saveRsCenter(rsFrom, rsTo, rsCenter, rsYear, new java.util.Date(), mBLogin.getLoggedUser().getUserId());
 
             if (x == 0) {
                 MBCommon.getErrorMessage("", "فشل في عملية تخزين الرصاص, الرجاء المحاولة مرة اخرى او التأكد من أرقام الرصاص!");
             } else if (x == ((rsTo - rsFrom) + 1)) {
                 MBCommon.getInfoMessage("", "تم صرف الرصاص للمركز ينجاح.");
+                rsFrom = 0;
+                return "rs_center_page";
             } else {
                 MBCommon.getWarnMessage("", "هنالك رصاص لم يتم صرفه, الرجاء التأكد من الرصاص المصروف!");
             }
         }
 
-        return "";
+        return "rs_center_page";
     }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -126,6 +137,11 @@ public class MBRsMain implements Serializable{
         
         if(rsSubCenter == null){
             MBCommon.getWarnMessage("", "يجب إختيار المركز !");
+            return "";
+        }
+        
+        if(rsYear == null){
+            MBCommon.getWarnMessage("", "يجب إختيار سنة الرصاص !");
             return "";
         }
         
@@ -143,7 +159,7 @@ public class MBRsMain implements Serializable{
         }
         
         rsMainList = new ArrayList<>();
-        rsMainList = getRsCenterByRsCenterAndRsYear(mBLogin.getLoggedUser().getUserCenter(), MBCommon.getCurrentYear());
+        rsMainList = getRsCenterByRsCenterAndRsYear(mBLogin.getLoggedUser().getUserCenter(), rsYear);
 
         if (rsMainList.size() > 0) {
             rsFound = 0;
@@ -162,7 +178,7 @@ public class MBRsMain implements Serializable{
             } else if (rsFound == ((rsTo - rsFrom) + 1)) {
             
                 rsMainList = new ArrayList<>();
-                rsMainList = getNullRsCenterByRsCenterAndRsYear(mBLogin.getLoggedUser().getUserCenter(), MBCommon.getCurrentYear());
+                rsMainList = getNullRsCenterByRsCenterAndRsYear(mBLogin.getLoggedUser().getUserCenter(), rsYear);
 
                 if (rsMainList.size() > 0) {
 
@@ -182,7 +198,7 @@ public class MBRsMain implements Serializable{
                         MBCommon.getWarnMessage("", "هنالك رصاص مصروف ومسدد مسبقا, الرجاء التأكد والمحاولة مرة اخرى!");
                     } else if (rsFound == ((rsTo - rsFrom) + 1)) {
 
-                        int x = updateRsSubCenter(rsFrom, rsTo, MBCommon.getCurrentYear(), mBLogin.getLoggedUser().getUserCenter(), rsSubCenter, new java.util.Date(), mBLogin.getLoggedUser().getUserId());
+                        int x = updateRsSubCenter(rsFrom, rsTo, mBLogin.getLoggedUser().getUserCenter(), rsYear, rsSubCenter, new java.util.Date(), mBLogin.getLoggedUser().getUserId());
 
                         if (x == 0) {
                             MBCommon.getErrorMessage("", "فشل في عملية تخزين الرصاص, الرجاء المحاولة مرة اخرى او التأكد من أرقام الرصاص!");
@@ -211,6 +227,11 @@ public class MBRsMain implements Serializable{
             return "";
         }
         
+        if(rsYear == null){
+            MBCommon.getWarnMessage("", "يجب إختيار سنة الرصاص !");
+            return "";
+        }
+        
         if(rsFrom == 0){
             MBCommon.getWarnMessage("", "بداية الرصاص يجب ان يكون اكبر من صفر!");
             return "";
@@ -225,7 +246,7 @@ public class MBRsMain implements Serializable{
         }
         
         rsMainList = new ArrayList<>();
-        rsMainList = getRsCenterByRsCenterAndRsYear(rsCenter, MBCommon.getCurrentYear());
+        rsMainList = getRsCenterByRsCenterAndRsYear(rsCenter, rsYear);
         
         rsFound = 0;
         for(RsMain rs : rsMainList){
@@ -244,7 +265,7 @@ public class MBRsMain implements Serializable{
         }else if(rsFound == ((rsTo - rsFrom) + 1)){
             
             rsMainList = new ArrayList<>(); 
-            rsMainList= getNullRsCenterByRsCenterAndRsYear(rsCenter, MBCommon.getCurrentYear());
+            rsMainList= getNullRsCenterByRsCenterAndRsYear(rsCenter, rsYear);
 
             int rsNull = 0;
 
@@ -264,7 +285,7 @@ public class MBRsMain implements Serializable{
                 return "";
             }else if(rsNull == ((rsTo - rsFrom) + 1)){
                 
-                int x = removeRsCenter(rsFrom, rsTo, rsCenter, MBCommon.getCurrentYear());
+                int x = removeRsCenter(rsFrom, rsTo, rsCenter, rsYear);
                 
                 if(x == 0){
                     MBCommon.getErrorMessage("", "لم يتم حذف الرصاص من الملف الرئيسي, الرجاء التأكد والمحاولة مرة اخرى!");
@@ -288,6 +309,11 @@ public class MBRsMain implements Serializable{
             return "";
         }
         
+        if(rsYear == null){
+            MBCommon.getWarnMessage("", "يجب إختيار سنة الرصاص !");
+            return "";
+        }
+        
         if(rsFrom == 0){
             MBCommon.getWarnMessage("", "بداية الرصاص يجب ان يكون اكبر من صفر!");
             return "";
@@ -302,7 +328,7 @@ public class MBRsMain implements Serializable{
         }
         
         rsMainList = new ArrayList<>();
-        rsMainList = getRsSubCenterByRsSubCenterAndRsYear(rsSubCenter, MBCommon.getCurrentYear());
+        rsMainList = getRsSubCenterByRsSubCenterAndRsYear(rsSubCenter, rsYear);
         
         if(rsMainList.size() > 0){
             
@@ -323,7 +349,7 @@ public class MBRsMain implements Serializable{
             }else if(rsFound == ((rsTo - rsFrom) + 1)){
                 
                 rsDataList = new ArrayList<>();
-                rsDataList = mBRsData.getRsDataByRsYearAndRsSubCenter(MBCommon.getCurrentYear(), rsSubCenter);
+                rsDataList = mBRsData.getRsDataByRsSubCenterAndRsYear(rsSubCenter, rsYear);
                 
                 if(rsDataList.size() > 0){
                     
@@ -354,7 +380,7 @@ public class MBRsMain implements Serializable{
                         }else if(isNull == ((rsTo - rsFrom) + 1)){
                             
                             
-                            int x = mBRsData.removeRsDataByRsYearAndRsCenter(rsFrom, rsTo, MBCommon.getCurrentYear(), mBLogin.getLoggedUser().getUserCenter());
+                            int x = mBRsData.removeRsDataByRsCenterAndRsYear(rsFrom, rsTo, mBLogin.getLoggedUser().getUserCenter(), rsYear);
                             
                             if (x == 0) {
                                 MBCommon.getErrorMessage("", "لم يتم حذف الرصاص من ملف معلومات الرصاص, الرجاء التأكد والمحاولة مرة اخرى!");
@@ -362,7 +388,7 @@ public class MBRsMain implements Serializable{
                                 MBCommon.getErrorMessage("", "هنالك رصاص لم يتم حذفه من ملف معلومات الرصاص, الرجاء التأكد والمحاولة مرة اخرى!");
                             } else if (x == ((rsTo - rsFrom) + 1)) {
                                 
-                                int y = cancelUpdateRsSubCenter(rsFrom, rsTo, mBLogin.getLoggedUser().getUserCenter(), MBCommon.getCurrentYear());
+                                int y = cancelUpdateRsSubCenter(rsFrom, rsTo, mBLogin.getLoggedUser().getUserCenter(), rsYear);
                                 
                                 if (y == 0) {
                                     MBCommon.getErrorMessage("", "لم يتم حذف تسديد الرصاص من الملف الرئيسي, الرجاء التأكد من الرصاص المحذوف أو الإتصال مع مدير النظام!");
@@ -389,7 +415,22 @@ public class MBRsMain implements Serializable{
         }
         return "";
     }
+    
 ////////////////////////////////////////////////////////////////////////////////
+    public List<String> getYearsList(){
+        System.out.println("com.rasas.mbeans.MBRsMain.getYearsList()");
+        
+        List<String> yearsList = new ArrayList<>();
+        
+        int year = Integer.valueOf(MBCommon.getCurrentYear());
+        
+        yearsList.add(String.valueOf(year));
+        yearsList.add(String.valueOf(year - 1));
+        
+        return yearsList;
+    }
+    
+////////////////////////////////////////////////////////////////////////////////    
     public List<RsMain> getRsCenterByRsCenterAndRsYear(String rsCenter, String rsYear){
         System.out.println("com.rasas.mbeans.MBRsMain.getRsCenterByRsCenterAndRsYear()----------> " + MBCommon.getCurrentDateTime());
 
@@ -430,7 +471,7 @@ public class MBRsMain implements Serializable{
     } 
         
 ////////////////////////////////////////////////////////////////////////////////    
-    public int saveRsCenter(int rsFrom, int rsTo, String rsYear, String rsCenter,Date rsCenterDate, String loggedUser){
+    public int saveRsCenter(int rsFrom, int rsTo, String rsCenter, String rsYear, Date rsCenterDate, String loggedUser){
         System.out.println("com.rasas.mbeans.MBRsMain.saveRsCenter() ----------> " + MBCommon.getCurrentDateTime());
         
         emf.getCache().evictAll();
@@ -450,16 +491,21 @@ public class MBRsMain implements Serializable{
             
             em.persist(rsMain);
             rows++;
+            
+            if(rows % 1000 == 0){
+                em.flush();
+                em.clear();
+            }
         }
 
         em.getTransaction().commit();
-
+        
         System.out.println("---------- RsMain saved rows ------------------> " + rows + " >> " + MBCommon.getCurrentDateTime()); 
         return rows;
     }
     
 ////////////////////////////////////////////////////////////////////////////////
-    public int updateRsSubCenter(int rsFrom, int rsTo, String rsYear, String rsCenter, String rsSubCenter, Date rsSubCenterDate, String loggedUser){
+    public int updateRsSubCenter(int rsFrom, int rsTo, String rsCenter, String rsYear, String rsSubCenter, Date rsSubCenterDate, String loggedUser){
         System.out.println("com.rasas.mbeans.MBRsMain.updateRsSubCenter()----------> " + MBCommon.getCurrentDateTime());
         
         emf.getCache().evictAll();
@@ -525,23 +571,14 @@ public class MBRsMain implements Serializable{
 ////////////////////////////////////////////////////////////////////////////////
     public int removeRsCenter(int rsFrom, int rsTo, String rsCenter, String rsYear){
         System.out.println("com.rasas.mbeans.MBRsMain.removeRsCenter()----------> " + MBCommon.getCurrentDateTime());
-        
-        int rows = 0;
-        for(int i = rsFrom; i <= rsTo; i++){
-            rsMainPK = new RsMainPK();
-            
-            rsMainPK.setRsNo(i);
-            rsMainPK.setRsYear(rsYear);
-            rsMainPK.setRsCenter(rsCenter);
-            
-            rsMain = em.find(RsMain.class, rsMainPK);
-            
-            
-            em.remove(rsMain);
-            em.getTransaction().commit();
-            rows++;
-            em.getTransaction().begin();
-        }
+
+        Query query = em.createQuery("DELETE FROM RsMain r WHERE r.rsMainPK.rsCenter = ?1 AND r.rsMainPK.rsYear = ?2 AND r.rsMainPK.rsNo BETWEEN ?3 AND ?4")
+                .setParameter(1, rsCenter)
+                .setParameter(2, rsYear)
+                .setParameter(3, rsFrom)
+                .setParameter(4, rsTo);
+                
+        int rows = query.executeUpdate();
       
         System.out.println("---------- RsMain removed rows ----------------->" + rows + " >> " + MBCommon.getCurrentDateTime());
         return rows;
@@ -552,24 +589,14 @@ public class MBRsMain implements Serializable{
         System.out.println("com.rasas.mbeans.MBRsMain.cancelUpdateRsSubCenter()----------> " + MBCommon.getCurrentDateTime());
         
         int rows = 0;
-         
-        for (int i = rsFrom; i <= rsTo; i++) {
-            rsMainPK = new RsMainPK();
-
-            rsMainPK.setRsNo(i);
-            rsMainPK.setRsYear(rsYear);
-            rsMainPK.setRsCenter(rsCenter);
-
-            rsMain = em.find(RsMain.class, rsMainPK);
-            rsMain.setRsSubCenter(null);
-            rsMain.setRsSubCenterDate(null);
-            rsMain.setRsSubCenterUserId(null);
-            
-            em.persist(rsMain);
-            em.getTransaction().commit();
-            rows++;
-            em.getTransaction().begin();
-        }
+        
+        Query query = em.createQuery("Update RsMain r SET r.rsSubCenter = null, r.rsSubCenterDate = null, r.rsSubCenterUserId = null WHERE r.rsMainPK.rsCenter = ?1 AND r.rsMainPK.rsYear = ?2 AND r.rsMainPK.rsNo BETWEEN ?3 AND ?4")
+                .setParameter(1, rsCenter)
+                .setParameter(2, rsYear)
+                .setParameter(3, rsFrom)
+                .setParameter(4, rsTo);
+        
+        rows = query.executeUpdate();
         
         System.out.println("---------- RsMain update canceld rows ---------->" + rows + " >> " + MBCommon.getCurrentDateTime());
         return rows;
@@ -608,4 +635,12 @@ public class MBRsMain implements Serializable{
     public void setRsSubCenter(String rsSubCenter) {
         this.rsSubCenter = rsSubCenter;
     }  
+
+    public String getRsYear() {
+        return rsYear;
+    }
+
+    public void setRsYear(String rsYear) {
+        this.rsYear = rsYear;
+    }
 }

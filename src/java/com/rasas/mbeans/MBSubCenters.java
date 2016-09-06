@@ -28,9 +28,10 @@ public class MBSubCenters {
     
 ////////////////////////////////////////////////////////////////////////////////
     public String getSubCenterByCenterNoAndSubCenterNo(String centerNo, String subCenterNo){
-        System.out.println("com.rasas.mbeans.MBSubCenters.getSubCenterBySubCenterNo() ----------> " + MBCommon.getCurrentDateTime());
+        System.out.println("com.rasas.mbeans.MBSubCenters.getSubCenterBySubCenterNo()");
         
         SubCentersPK subCentersPK = new SubCentersPK();
+        
         subCentersPK.setCenterNo(centerNo);
         subCentersPK.setSubCenterNo(subCenterNo);
         
@@ -45,7 +46,7 @@ public class MBSubCenters {
     
 ////////////////////////////////////////////////////////////////////////////////
     public List<SubCenters> getSubCentersByCenterNo(){
-        System.out.println("com.rasas.mbeans.MBRsMain.getSubCentersByCenterNo()----------> " + MBCommon.getCurrentDateTime());
+        System.out.println("com.rasas.mbeans.MBRsMain.getSubCentersByCenterNo()");
         
         TypedQuery<SubCenters> query = em.createQuery("SELECT s FROM SubCenters s WHERE s.subCentersPK.centerNo = ?1 AND s.subCenterName IS NOT NULL ORDER BY s.subCentersPK.subCenterNo DESC", SubCenters.class)
                 .setParameter(1, mBLogin.getLoggedUser().getUserCenter());
@@ -57,7 +58,5 @@ public class MBSubCenters {
         }else{
             return null;
         }
-    }
-    
-    
+    }  
 }
