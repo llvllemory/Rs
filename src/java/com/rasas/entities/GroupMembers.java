@@ -7,14 +7,19 @@ package com.rasas.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -26,14 +31,23 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "GroupMembers.findAll", query = "SELECT g FROM GroupMembers g"),
-    @NamedQuery(name = "GroupMembers.findByGroupId", query = "SELECT g FROM GroupMembers g WHERE g.groupMembersPK.groupId = :groupId"),
-    @NamedQuery(name = "GroupMembers.findByUserId", query = "SELECT g FROM GroupMembers g WHERE g.groupMembersPK.userId = :userId"),
+    @NamedQuery(name = "GroupMembers.findByGroupId", query = "SELECT g FROM GroupMembers g WHERE g.groupId = :groupId"),
+    @NamedQuery(name = "GroupMembers.findByUserId", query = "SELECT g FROM GroupMembers g WHERE g.userId = :userId"),
     @NamedQuery(name = "GroupMembers.findByEntryDate", query = "SELECT g FROM GroupMembers g WHERE g.entryDate = :entryDate")})
 public class GroupMembers implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected GroupMembersPK groupMembersPK;
+    
+    @Id
+    @Size(max = 10)
+    @Column(name = "GROUP_ID")
+    private String groupId;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 10)
+    @Column(name = "USER_ID")
+    private String userId;
+    
     @Column(name = "ENTRY_DATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date entryDate;
@@ -41,20 +55,24 @@ public class GroupMembers implements Serializable {
     public GroupMembers() {
     }
 
-    public GroupMembers(GroupMembersPK groupMembersPK) {
-        this.groupMembersPK = groupMembersPK;
+    public GroupMembers(String userId) {
+        this.userId = userId;
     }
 
-    public GroupMembers(String groupId, String userId) {
-        this.groupMembersPK = new GroupMembersPK(groupId, userId);
+    public String getGroupId() {
+        return groupId;
     }
 
-    public GroupMembersPK getGroupMembersPK() {
-        return groupMembersPK;
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
 
-    public void setGroupMembersPK(GroupMembersPK groupMembersPK) {
-        this.groupMembersPK = groupMembersPK;
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public Date getEntryDate() {
@@ -68,7 +86,7 @@ public class GroupMembers implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (groupMembersPK != null ? groupMembersPK.hashCode() : 0);
+        hash += (userId != null ? userId.hashCode() : 0);
         return hash;
     }
 
@@ -79,7 +97,7 @@ public class GroupMembers implements Serializable {
             return false;
         }
         GroupMembers other = (GroupMembers) object;
-        if ((this.groupMembersPK == null && other.groupMembersPK != null) || (this.groupMembersPK != null && !this.groupMembersPK.equals(other.groupMembersPK))) {
+        if ((this.userId == null && other.userId != null) || (this.userId != null && !this.userId.equals(other.userId))) {
             return false;
         }
         return true;
@@ -87,7 +105,7 @@ public class GroupMembers implements Serializable {
 
     @Override
     public String toString() {
-        return "com.rasas.entities.GroupMembers[ groupMembersPK=" + groupMembersPK + " ]";
+        return "com.rasas.entities.GroupMembers[ userId=" + userId + " ]";
     }
     
 }

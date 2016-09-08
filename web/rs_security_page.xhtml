@@ -26,11 +26,12 @@
         <br/><br/>
         
         <center>    
-            <p:tabView id = "tabViewSecurity" styleClass="tabView" dir="rtl">
-            
+            <p:tabView id = "tabViewSecurity" styleClass="tabView" dir="rtl" cache="false">
+                
             <p:tab id="tabUser" title="صيانة المستخدمين">
                 
-                    <h:panelGrid  id ="pnlUser" columns="2" style = "width: 100%" cellspacing="5" >
+                    <h:panelGrid  id ="pnlUser" columns="2" style = "width: 100%; margin-top: 5%" cellspacing="5" >
+                        
                         <h:form id = "frmTabUsers">
                         <h:panelGrid  id = "pnlUserInfo" columns="2" style = "width: 100%" cellpadding="5">
                             <p:outputLabel value="الرقم الوظيفي : " />
@@ -69,13 +70,12 @@
                             <f:facet name="footer">
                                 <center>
                                     <p:commandButton id="btnSave" value="تسجيل مستخدم جديد"  action="#{mBUsers.checkNewUserToSave()}" update=":tabViewSecurity:frmUsersList:searchUsers"/>
-
                                     <p:commandButton id="btnEdit" value="تعديل معلومات المستخدم" action="#{mBUsers.checkUserToUpdate()}" update=":tabViewSecurity:frmUsersList:searchUsers"/>
-
                                 </center>
                             </f:facet>
                         </h:panelGrid>
                         </h:form>
+                        
                         <h:form id="frmUsersList">
                         <h:panelGrid id="pnlUsersList" columns="1" style = "width: 100%" cellpadding="5" >
                             <p:outputLabel  value="بحث برقم الموظف : " />
@@ -91,9 +91,41 @@
             
             <p:tab id="tabGroups" title="صيانة المجموعات">
                 
-                
-                
-                
+                <h:form id="frmGroupsList">
+
+                    <h:panelGrid  columns="2" style = "width: 30%; margin-top: 5%;" cellspacing="5" >
+
+                        <p:outputLabel  value="اسم المجموعة : " />
+                        <h:selectOneMenu styleClass = "slctMenu" value ="#{mBGroupMembers.groupId}">
+                            <p:ajax  update=":tabViewSecurity:frmGroupsList:pnlGroupMembersList tabViewSecurity:frmGroupsList:pnlGroupsMembersList"/>
+                            <f:selectItems value="#{mBUsers.allGroups}" var="allGroups" itemLabel="#{allGroups.userName}" itemValue="#{allGroups.userId}"/>
+
+                        </h:selectOneMenu>
+
+                    </h:panelGrid>
+                    <br/>
+                    <h:panelGrid  id ="pnlGroups" columns="3" style = "width: 70%;" cellspacing="5" >
+                        
+                        <h:panelGrid id="pnlGroupMembersList" columns="1" style = "width: 50%;" cellpadding="5" >
+                            <p:outputLabel  value="أعضاء المجموعة" />
+                            <p:selectOneListbox id="groupMembers" value="#{mBGroupMembers.groupUser}" filter="true" filterMatchMode="contains" style="width: 100px; height: 250px; margin-top: 0;">
+                                <f:selectItems value="#{mBGroupMembers.allGroupMembers}"  var="groupMembers" itemLabel="#{groupMembers.userId} &ensp;&ensp; #{groupMembers.userId}"  itemValue="#{groupMembers.userId}"/>
+                            </p:selectOneListbox>
+                        </h:panelGrid>
+
+                        <h:panelGrid id="pnlBtns" columns="1"  style ="width: 80%;text-align: center;" cellpadding="5" >
+                            <p:commandButton id="btnAdd" value="إضافة للمجموعة" action="#{mBGroupMembers.checkUserInGroupToAdd()}" update=":tabViewSecurity:frmGroupsList:pnlGroupMembersList tabViewSecurity:frmGroupsList:pnlGroupsMembersList"/>
+                        </h:panelGrid>
+
+                        <h:panelGrid id="pnlGroupsMembersList" columns="1" style = "width: 80%;" cellpadding="5" >
+                            <p:outputLabel  value="اسماء المستخدمين" />
+                            <p:selectOneListbox id="groupsMembers" value="#{mBGroupMembers.groupsUser}" filter="true" filterMatchMode="contains" style="width: 300px; height: 250px; margin-top: 0;" >
+                                <f:selectItems value="#{mBGroupMembers.allMembers}"  var="groupsMembers" itemLabel="#{groupsMembers.userId} &ensp;&ensp; #{groupsMembers.userName}"  itemValue="#{groupsMembers.userId}"/>
+                            </p:selectOneListbox>
+                        </h:panelGrid>
+
+                    </h:panelGrid>
+                </h:form>
             </p:tab>
             
             <p:tab id="tabPrivilege" title="صيانة الصلاحيات">
@@ -110,7 +142,7 @@
             
             <p:tab id="tabViews" title="صيانة الشاشات" >
                 
-                <h:panelGrid  id ="pnlViews" columns="2" style = "width: 100%" cellspacing="5" >
+                <h:panelGrid  id ="pnlViews" columns="2" style = "width: 100%; margin-top: 5%" cellspacing="5" >
                     
                         <h:form id = "frmTabView">
                         <h:panelGrid  id = "pnlViewInfo" columns="2" style = "width: 100%" cellpadding="5">

@@ -42,19 +42,14 @@ public class MBLogin implements Serializable{
         
         try {
             mBUsers = new MBUsers();
-            System.out.println("--------------------------------- 1");
             usersList = mBUsers.getUserByUserId(userId);
-            System.out.println("--------------------------------- 2" + userId);
             if (usersList.size() > 0) {
 
                 if (usersList.get(0).getPassword().equals(password)) {
-                    System.out.println("--------------------------------- 3");
                     if (usersList.get(0).getPrivilege() == 1 || usersList.get(0).getPrivilege() == 2) {
-                        System.out.println("--------------------------------- 4");
                         String userGroupId = mBGroupMembers.getGroupIdByUserId(userId);
 
                         if (userGroupId.equals("")) {
-                            System.out.println("--------------------------------- 5");
                             MBCommon.getFatalMessage("", "المستخدم لا ينتمي لأي مجموعة, الرجاء التأكد من معلومات المستخدم أو الإتصال مع مدير النظام !");
                             return "";
                         } else {
@@ -62,7 +57,6 @@ public class MBLogin implements Serializable{
                             int x = mBUsers.updateUserLastLogin(usersList.get(0));
 
                             if (x > 0) {
-                                System.out.println("--------------------------------- 6");
                                 context.getExternalContext().getSessionMap().put("loggedUser", usersList.get(0));
 
                                 MBCommon.getInfoMessage("", "أهلا وسهلا بك " + usersList.get(0).getUserName());
@@ -74,25 +68,21 @@ public class MBLogin implements Serializable{
                         }
 
                     } else if (usersList.get(0).getPrivilege() == 3) {
-                        System.out.println("--------------------------------- 7");
                         MBCommon.getFatalMessage("", "المستخدم موقوف, الرجاء الإتصال مع مدير النظام !");
                         return "";
                     }
 
                 } else {
-                    System.out.println("--------------------------------- 8");
                     MBCommon.getErrorMessage("", "خطأ في اسم المستخدم أو كلمة السر !");
                     return "";
                 }
 
             } else {
-                System.out.println("--------------------------------- 9");
                 MBCommon.getErrorMessage("", "خطأ في اسم المستخدم أو كلمة السر !");
                 return "";
             }
 
         } catch (Exception e) {
-            System.out.println("--------------------------------- 10");
             System.out.println("com.rasas.mbeans.MBLogin.login()-----> e.getMessage()" + e.getMessage());
             System.out.println("com.rasas.mbeans.MBLogin.login()-----> e.getMessage()" + e.getCause());
             return "";

@@ -31,6 +31,7 @@ public class MBUsers implements Serializable{
     private String userTxtPasswordPrivilege = "false";
     
     private List<Users> usersList;
+    
     private MBLogin mBLogin;
     
     EntityManager em;
@@ -210,12 +211,12 @@ public class MBUsers implements Serializable{
         System.out.println("com.rasas.mbeans.MBUsers.getUserByUserId()");
         
         emf.getCache().evictAll();
+        usersList = new ArrayList<>();
         
         TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u WHERE u.userId = ?1", Users.class)
                 .setParameter(1, userId);
         
-        List<Users> usersList = query.getResultList();
-        
+        usersList = query.getResultList();
         return usersList;
     }
     
@@ -224,11 +225,12 @@ public class MBUsers implements Serializable{
         System.out.println("com.rasas.mbeans.MBUsers.getUserByUserId()");
         
         emf.getCache().evictAll();
+        usersList = new ArrayList<>();
         
         TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u WHERE u.userId = ?1", Users.class)
                 .setParameter(1, userId);
         
-        List<Users> usersList = query.getResultList();
+        usersList = query.getResultList();
         
         if(usersList.size() > 0){
             userId = usersList.get(0).getUserId();
@@ -278,7 +280,7 @@ public class MBUsers implements Serializable{
         emf.getCache().evictAll();
         
         mBLogin = new MBLogin();
-        List<Users> usersList = new ArrayList<>();
+        usersList = new ArrayList<>();
         
         if(mBLogin.getLoggedUser().getPrivilege() == 1){
             
@@ -349,6 +351,25 @@ public class MBUsers implements Serializable{
         emf.getCache().evictAll();
         return u;
     }
+
+////////////////////////////////////////////////////////////////////////////////
+    public List<Users> getAllGroups(){
+        System.out.println("com.rasas.mbeans.MBUsers.getAllGroups()");
+        
+        emf.getCache().evictAll();
+        usersList = new ArrayList<>();
+        
+        TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u WHERE u.userType = 'G'", Users.class);
+        
+        usersList = query.getResultList();
+        
+        if(usersList.size() > 0){
+            return usersList;
+        }else{
+            return null;
+        }
+    }
+            
 //////////////////// Getters and Setters ///////////////////////////////////////
 
     public String getUserId() {
