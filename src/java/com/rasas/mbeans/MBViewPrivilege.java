@@ -46,11 +46,11 @@ public class MBViewPrivilege {
         
         String userGroupId = mBGroupMembers.getGroupIdByUserId(mBLogin.getLoggedUser().getUserId());
         
-        List<ViewPrivilege> viewsPrivilegeList = getGroupPrivilege(userGroupId, viewId.substring(1, viewId.length()-6));
-        
+        List<ViewPrivilege> viewsPrivilegeList = getGroupPrivilege(userGroupId, viewId.substring(7, viewId.length()-6));
+        System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxx " + viewsPrivilegeList.get(0).getViewPrivilegePK().getViewId());
         for (ViewPrivilege vp : viewsPrivilegeList) {
-            if (vp.getViewPrivilegePK().getViewId().equals(viewId.substring(1, viewId.length()-6))) {
-                
+            if (vp.getViewPrivilegePK().getViewId().equals(viewId.substring(7, viewId.length()-6))) {
+                System.out.println("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy " + vp.getViewPrivilegePK().getViewId());
                 String view   = vp.getViewPrivilegePK().getPrivilege().substring(0, 1);
                 String add    = vp.getViewPrivilegePK().getPrivilege().substring(1, 2);
                 String delete = vp.getViewPrivilegePK().getPrivilege().substring(2, 3);

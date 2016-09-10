@@ -24,7 +24,7 @@ public class MBGroupMembers {
     private String groupsUser;
 
     private List<GroupMembers> groupIdList;
-    private List<GroupMembers> groupMemberList;
+    private List<GroupMembers> groupMembersList;
         
     EntityManager em;
     EntityManagerFactory emf;
@@ -50,11 +50,11 @@ public class MBGroupMembers {
         }
         
         
-        groupMemberList = new ArrayList<>();
-        groupMemberList = getGroubMemberByUserId(groupsUser);
+        groupMembersList = new ArrayList<>();
+        groupMembersList = getGroubMemberByUserId(groupsUser);
         
-        if(groupMemberList.size() > 0){
-            if(groupMemberList.get(0).getGroupId().equals(groupsUser)){
+        if(groupMembersList.size() > 0){
+            if(groupMembersList.get(0).getGroupId().equals(groupId)){
                 MBCommon.getErrorMessage("", "الموظف ينتمي لنفس المجموعة, الرجاء التأكد والمحاولة مرة اخرى !");
             }else{
                
@@ -94,10 +94,10 @@ public class MBGroupMembers {
             return "";
         }
         
-        groupMemberList = new ArrayList<>();
-        groupMemberList = getGroubMemberByUserId(groupUser);
+        groupMembersList = new ArrayList<>();
+        groupMembersList = getGroubMemberByUserId(groupUser);
         
-        if(groupMemberList.size() > 0){
+        if(groupMembersList.size() > 0){
             
             int x = deleteGroupUserByUserId(groupUser);
             
@@ -154,9 +154,9 @@ public class MBGroupMembers {
  
         TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u WHERE u.userType = 'U' AND u.privilege <> 3 ORDER BY u.userId ASC", Users.class);
         
-        List<Users> allMembers = query.getResultList();
+        List<Users> usersList = query.getResultList();
         
-        return allMembers;
+        return usersList;
     }
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -164,13 +164,14 @@ public class MBGroupMembers {
         System.out.println("com.rasas.mbeans.MBGroupMembers.getAllGroupMembers()");
         
         emf.getCache().evictAll();
- 
+        groupMembersList = new ArrayList<>();
+        
         TypedQuery<GroupMembers> query = em.createQuery("SELECT g From GroupMembers g WHERE g.groupId = ?1 ORDER BY g.userId ASC", GroupMembers.class)
                 .setParameter(1, groupId);
         
-        List<GroupMembers> allGroupMembers = query.getResultList();
-
-        return allGroupMembers;
+        groupMembersList = query.getResultList();
+        
+        return groupMembersList;
     }
     
 ////////////////////////////////////////////////////////////////////////////////

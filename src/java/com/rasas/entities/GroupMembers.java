@@ -11,10 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -37,17 +35,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class GroupMembers implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
-    @Id
     @Size(max = 10)
     @Column(name = "GROUP_ID")
     private String groupId;
+    @Id
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 10)
     @Column(name = "USER_ID")
     private String userId;
-    
     @Column(name = "ENTRY_DATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date entryDate;

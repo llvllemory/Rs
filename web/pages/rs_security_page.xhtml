@@ -107,9 +107,10 @@
                     <h:panelGrid  id ="pnlGroups" columns="3" style = "width: 70%;" cellspacing="5" >
                         
                         <h:panelGrid id="pnlGroupMembersList" columns="1" style = "width: 50%;" cellpadding="5" >
+                            
                             <p:outputLabel  value="أعضاء المجموعة" />
-                            <p:selectOneListbox id="groupMembers" value="#{mBGroupMembers.groupUser}" filter="true" filterMatchMode="contains" style="width: 100px; height: 250px; margin-top: 0;">
-                                <f:selectItems value="#{mBGroupMembers.allGroupMembers}"  var="groupMembers" itemLabel="#{groupMembers.userId} &ensp;&ensp; #{groupMembers.userId}"  itemValue="#{groupMembers.userId}"/>
+                            <p:selectOneListbox id="groupMembers" value="#{mBGroupMembers.groupUser}" filter="true" filterMatchMode="contains" style="width: 150px; height: 250px; margin-top: 0;" >
+                                <f:selectItems value="#{mBGroupMembers.allGroupMembers}"  var="groupMembers" itemLabel="#{groupMembers.userId}"  itemValue="#{groupMembers.userId}"/>
                             </p:selectOneListbox>
                         </h:panelGrid>
 
@@ -118,6 +119,7 @@
                         </h:panelGrid>
 
                         <h:panelGrid id="pnlGroupsMembersList" columns="1" style = "width: 80%;" cellpadding="5" >
+                            
                             <p:outputLabel  value="اسماء المستخدمين" />
                             <p:selectOneListbox id="groupsMembers" value="#{mBGroupMembers.groupsUser}" filter="true" filterMatchMode="contains" style="width: 300px; height: 250px; margin-top: 0;" >
                                 <f:selectItems value="#{mBGroupMembers.allMembers}"  var="groupsMembers" itemLabel="#{groupsMembers.userId} &ensp;&ensp; #{groupsMembers.userName}"  itemValue="#{groupsMembers.userId}"/>
