@@ -6,11 +6,13 @@
 package com.rasas.entities;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -24,12 +26,15 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ViewPrivilege.findAll", query = "SELECT v FROM ViewPrivilege v"),
     @NamedQuery(name = "ViewPrivilege.findByUserId", query = "SELECT v FROM ViewPrivilege v WHERE v.viewPrivilegePK.userId = :userId"),
     @NamedQuery(name = "ViewPrivilege.findByViewId", query = "SELECT v FROM ViewPrivilege v WHERE v.viewPrivilegePK.viewId = :viewId"),
-    @NamedQuery(name = "ViewPrivilege.findByPrivilege", query = "SELECT v FROM ViewPrivilege v WHERE v.viewPrivilegePK.privilege = :privilege")})
+    @NamedQuery(name = "ViewPrivilege.findByPrivilege", query = "SELECT v FROM ViewPrivilege v WHERE v.privilege = :privilege")})
 public class ViewPrivilege implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected ViewPrivilegePK viewPrivilegePK;
+    @Size(max = 6)
+    @Column(name = "PRIVILEGE")
+    private String privilege;
 
     public ViewPrivilege() {
     }
@@ -38,8 +43,8 @@ public class ViewPrivilege implements Serializable {
         this.viewPrivilegePK = viewPrivilegePK;
     }
 
-    public ViewPrivilege(String userId, String viewId, String privilege) {
-        this.viewPrivilegePK = new ViewPrivilegePK(userId, viewId, privilege);
+    public ViewPrivilege(String userId, String viewId) {
+        this.viewPrivilegePK = new ViewPrivilegePK(userId, viewId);
     }
 
     public ViewPrivilegePK getViewPrivilegePK() {
@@ -48,6 +53,14 @@ public class ViewPrivilege implements Serializable {
 
     public void setViewPrivilegePK(ViewPrivilegePK viewPrivilegePK) {
         this.viewPrivilegePK = viewPrivilegePK;
+    }
+
+    public String getPrivilege() {
+        return privilege;
+    }
+
+    public void setPrivilege(String privilege) {
+        this.privilege = privilege;
     }
 
     @Override

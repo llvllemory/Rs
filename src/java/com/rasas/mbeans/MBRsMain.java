@@ -159,7 +159,7 @@ public class MBRsMain implements Serializable{
         }
         
         rsMainList = new ArrayList<>();
-        rsMainList = getRsCenterByRsCenterAndRsYear(mBLogin.getLoggedUser().getUserCenter(), rsYear);
+        rsMainList = getRsCenterByRsCenterAndRsYear(mBLogin.getLoggedUser().getUserCenter().getCenterNo(), rsYear);
 
         if (rsMainList.size() > 0) {
             rsFound = 0;
@@ -178,7 +178,7 @@ public class MBRsMain implements Serializable{
             } else if (rsFound == ((rsTo - rsFrom) + 1)) {
             
                 rsMainList = new ArrayList<>();
-                rsMainList = getNullRsCenterByRsCenterAndRsYear(mBLogin.getLoggedUser().getUserCenter(), rsYear);
+                rsMainList = getNullRsCenterByRsCenterAndRsYear(mBLogin.getLoggedUser().getUserCenter().getCenterNo(), rsYear);
 
                 if (rsMainList.size() > 0) {
 
@@ -198,7 +198,7 @@ public class MBRsMain implements Serializable{
                         MBCommon.getWarnMessage("", "هنالك رصاص مصروف ومسدد مسبقا, الرجاء التأكد والمحاولة مرة اخرى!");
                     } else if (rsFound == ((rsTo - rsFrom) + 1)) {
 
-                        int x = updateRsSubCenter(rsFrom, rsTo, mBLogin.getLoggedUser().getUserCenter(), rsYear, rsSubCenter, new java.util.Date(), mBLogin.getLoggedUser().getUserId());
+                        int x = updateRsSubCenter(rsFrom, rsTo, mBLogin.getLoggedUser().getUserCenter().getCenterNo(), rsYear, rsSubCenter, new java.util.Date(), mBLogin.getLoggedUser().getUserId());
 
                         if (x == 0) {
                             MBCommon.getErrorMessage("", "فشل في عملية تخزين الرصاص, الرجاء المحاولة مرة اخرى او التأكد من أرقام الرصاص!");
@@ -380,7 +380,7 @@ public class MBRsMain implements Serializable{
                         }else if(isNull == ((rsTo - rsFrom) + 1)){
                             
                             
-                            int x = mBRsData.removeRsDataByRsCenterAndRsYear(rsFrom, rsTo, mBLogin.getLoggedUser().getUserCenter(), rsYear);
+                            int x = mBRsData.removeRsDataByRsCenterAndRsYear(rsFrom, rsTo, mBLogin.getLoggedUser().getUserCenter().getCenterNo(), rsYear);
                             
                             if (x == 0) {
                                 MBCommon.getErrorMessage("", "لم يتم حذف الرصاص من ملف معلومات الرصاص, الرجاء التأكد والمحاولة مرة اخرى!");
@@ -388,7 +388,7 @@ public class MBRsMain implements Serializable{
                                 MBCommon.getErrorMessage("", "هنالك رصاص لم يتم حذفه من ملف معلومات الرصاص, الرجاء التأكد والمحاولة مرة اخرى!");
                             } else if (x == ((rsTo - rsFrom) + 1)) {
                                 
-                                int y = cancelUpdateRsSubCenter(rsFrom, rsTo, mBLogin.getLoggedUser().getUserCenter(), rsYear);
+                                int y = cancelUpdateRsSubCenter(rsFrom, rsTo, mBLogin.getLoggedUser().getUserCenter().getCenterNo(), rsYear);
                                 
                                 if (y == 0) {
                                     MBCommon.getErrorMessage("", "لم يتم حذف تسديد الرصاص من الملف الرئيسي, الرجاء التأكد من الرصاص المحذوف أو الإتصال مع مدير النظام!");

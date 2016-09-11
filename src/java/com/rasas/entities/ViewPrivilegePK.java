@@ -26,22 +26,16 @@ public class ViewPrivilegePK implements Serializable {
     private String userId;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 30)
+    @Size(min = 1, max = 50)
     @Column(name = "VIEW_ID")
     private String viewId;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 6)
-    @Column(name = "PRIVILEGE")
-    private String privilege;
 
     public ViewPrivilegePK() {
     }
 
-    public ViewPrivilegePK(String userId, String viewId, String privilege) {
+    public ViewPrivilegePK(String userId, String viewId) {
         this.userId = userId;
         this.viewId = viewId;
-        this.privilege = privilege;
     }
 
     public String getUserId() {
@@ -60,20 +54,11 @@ public class ViewPrivilegePK implements Serializable {
         this.viewId = viewId;
     }
 
-    public String getPrivilege() {
-        return privilege;
-    }
-
-    public void setPrivilege(String privilege) {
-        this.privilege = privilege;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (userId != null ? userId.hashCode() : 0);
         hash += (viewId != null ? viewId.hashCode() : 0);
-        hash += (privilege != null ? privilege.hashCode() : 0);
         return hash;
     }
 
@@ -90,15 +75,12 @@ public class ViewPrivilegePK implements Serializable {
         if ((this.viewId == null && other.viewId != null) || (this.viewId != null && !this.viewId.equals(other.viewId))) {
             return false;
         }
-        if ((this.privilege == null && other.privilege != null) || (this.privilege != null && !this.privilege.equals(other.privilege))) {
-            return false;
-        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "com.rasas.entities.ViewPrivilegePK[ userId=" + userId + ", viewId=" + viewId + ", privilege=" + privilege + " ]";
+        return "com.rasas.entities.ViewPrivilegePK[ userId=" + userId + ", viewId=" + viewId + " ]";
     }
     
 }

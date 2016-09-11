@@ -6,14 +6,21 @@
 package com.rasas.entities;
 
 import java.io.Serializable;
+import java.util.Collection;
+import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -24,35 +31,39 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "SubCenters.findAll", query = "SELECT s FROM SubCenters s"),
-    @NamedQuery(name = "SubCenters.findByCenterNo", query = "SELECT s FROM SubCenters s WHERE s.subCentersPK.centerNo = :centerNo"),
-    @NamedQuery(name = "SubCenters.findBySubCenterNo", query = "SELECT s FROM SubCenters s WHERE s.subCentersPK.subCenterNo = :subCenterNo"),
+    @NamedQuery(name = "SubCenters.findBySubCenterNo", query = "SELECT s FROM SubCenters s WHERE s.subCenterNo = :subCenterNo"),
     @NamedQuery(name = "SubCenters.findBySubCenterName", query = "SELECT s FROM SubCenters s WHERE s.subCenterName = :subCenterName")})
 public class SubCenters implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected SubCentersPK subCentersPK;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 3)
+    @Column(name = "SUB_CENTER_NO")
+    private String subCenterNo;
     @Size(max = 100)
     @Column(name = "SUB_CENTER_NAME")
     private String subCenterName;
+    @JoinColumn(name = "CENTER_NO", referencedColumnName = "CENTER_NO")
+    @ManyToOne
+    private Centers centerNo;
+    @OneToMany(mappedBy = "userSubCenter")
+    private Collection<Users> usersCollection;
 
     public SubCenters() {
     }
 
-    public SubCenters(SubCentersPK subCentersPK) {
-        this.subCentersPK = subCentersPK;
+    public SubCenters(String subCenterNo) {
+        this.subCenterNo = subCenterNo;
     }
 
-    public SubCenters(String centerNo, String subCenterNo) {
-        this.subCentersPK = new SubCentersPK(centerNo, subCenterNo);
+    public String getSubCenterNo() {
+        return subCenterNo;
     }
 
-    public SubCentersPK getSubCentersPK() {
-        return subCentersPK;
-    }
-
-    public void setSubCentersPK(SubCentersPK subCentersPK) {
-        this.subCentersPK = subCentersPK;
+    public void setSubCenterNo(String subCenterNo) {
+        this.subCenterNo = subCenterNo;
     }
 
     public String getSubCenterName() {
@@ -63,10 +74,27 @@ public class SubCenters implements Serializable {
         this.subCenterName = subCenterName;
     }
 
+    public Centers getCenterNo() {
+        return centerNo;
+    }
+
+    public void setCenterNo(Centers centerNo) {
+        this.centerNo = centerNo;
+    }
+
+    @XmlTransient
+    public Collection<Users> getUsersCollection() {
+        return usersCollection;
+    }
+
+    public void setUsersCollection(Collection<Users> usersCollection) {
+        this.usersCollection = usersCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (subCentersPK != null ? subCentersPK.hashCode() : 0);
+        hash += (subCenterNo != null ? subCenterNo.hashCode() : 0);
         return hash;
     }
 
@@ -77,7 +105,7 @@ public class SubCenters implements Serializable {
             return false;
         }
         SubCenters other = (SubCenters) object;
-        if ((this.subCentersPK == null && other.subCentersPK != null) || (this.subCentersPK != null && !this.subCentersPK.equals(other.subCentersPK))) {
+        if ((this.subCenterNo == null && other.subCenterNo != null) || (this.subCenterNo != null && !this.subCenterNo.equals(other.subCenterNo))) {
             return false;
         }
         return true;
@@ -85,7 +113,7 @@ public class SubCenters implements Serializable {
 
     @Override
     public String toString() {
-        return "com.rasas.entities.SubCenters[ subCentersPK=" + subCentersPK + " ]";
+        return "com.rasas.entities.SubCenters[ subCenterNo=" + subCenterNo + " ]";
     }
     
 }

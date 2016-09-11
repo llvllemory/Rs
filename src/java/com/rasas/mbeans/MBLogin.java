@@ -42,23 +42,16 @@ public class MBLogin implements Serializable{
         
         try {
             
-            System.out.println("1");
             mBUsers = new MBUsers();
-            System.out.println("2");
             usersList = new ArrayList<>();
-            System.out.println("3");
             mBGroupMembers = new MBGroupMembers();
-            System.out.println("4");
+            
             usersList = mBUsers.getUserByUserId(userId);
-            System.out.println("5" + usersList.size() + usersList.toString());
+            
             if (usersList.size() > 0) {
-                System.out.println("6");
                 if (usersList.get(0).getPassword().equals(password)) {
-                    System.out.println("7");
                     if (usersList.get(0).getPrivilege() == 1 || usersList.get(0).getPrivilege() == 2) {
-                        System.out.println("8");
                         String userGroupId = mBGroupMembers.getGroupIdByUserId(userId);
-                        System.out.println("9");
                         if (userGroupId.equals("")) {
                             MBCommon.getFatalMessage("", "المستخدم لا ينتمي لأي مجموعة, الرجاء التأكد من معلومات المستخدم أو الإتصال مع مدير النظام !");
                             return "";
@@ -99,6 +92,7 @@ public class MBLogin implements Serializable{
         }
         return "";
     }
+    
 ////////////////////////////////////////////////////////////////////////////////    
     public String logout() {
         System.out.println("com.rasas.mbeans.MBLogin.logout()");
@@ -107,6 +101,7 @@ public class MBLogin implements Serializable{
         return "/rs_login_page";
 
     } 
+    
 ////////////////////////////////////////////////////////////////////////////////
     public Users getLoggedUser(){
         System.out.println("com.rasas.mbeans.MBLogin.getLoggedUser()");
@@ -116,9 +111,7 @@ public class MBLogin implements Serializable{
         return loggedUser;
     }
 
-
 //////////////////// Geteers and Setters ///////////////////////////////////////
-
     public String getUserId() {
         return userId;
     }

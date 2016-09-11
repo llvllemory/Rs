@@ -43,7 +43,7 @@ public class MBCenters {
         System.out.println("com.rasas.mbeans.MBCenters.getCenters()");
         
         TypedQuery<Centers> query = em.createQuery("SELECT c FROM Centers c WHERE c.centerNo = ?1", Centers.class)
-                .setParameter(1, mBLogin.getLoggedUser().getUserCenter());
+                .setParameter(1, mBLogin.getLoggedUser().getUserCenter().getCenterNo());
         
         List<Centers> centers = query.getResultList();
         

@@ -6,20 +6,26 @@
 package com.rasas.entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -36,9 +42,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password"),
     @NamedQuery(name = "Users.findByPrivilege", query = "SELECT u FROM Users u WHERE u.privilege = :privilege"),
     @NamedQuery(name = "Users.findByEntryDate", query = "SELECT u FROM Users u WHERE u.entryDate = :entryDate"),
-    @NamedQuery(name = "Users.findByLastLogin", query = "SELECT u FROM Users u WHERE u.lastLogin = :lastLogin"),
-    @NamedQuery(name = "Users.findByUserCenter", query = "SELECT u FROM Users u WHERE u.userCenter = :userCenter"),
-    @NamedQuery(name = "Users.findByUserSubCenter", query = "SELECT u FROM Users u WHERE u.userSubCenter = :userSubCenter")})
+    @NamedQuery(name = "Users.findByLastLogin", query = "SELECT u FROM Users u WHERE u.lastLogin = :lastLogin")})
 public class Users implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -65,12 +69,16 @@ public class Users implements Serializable {
     @Column(name = "LAST_LOGIN")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastLogin;
-    @Size(max = 3)
-    @Column(name = "USER_CENTER")
-    private String userCenter;
-    @Size(max = 3)
-    @Column(name = "USER_SUB_CENTER")
-    private String userSubCenter;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "users")
+    private GroupMembers groupMembers;
+    @OneToMany(mappedBy = "groupId")
+    private Collection<GroupMembers> groupMembersCollection;
+    @JoinColumn(name = "USER_CENTER", referencedColumnName = "CENTER_NO")
+    @ManyToOne
+    private Centers userCenter;
+    @JoinColumn(name = "USER_SUB_CENTER", referencedColumnName = "SUB_CENTER_NO")
+    @ManyToOne
+    private SubCenters userSubCenter;
 
     public Users() {
     }
@@ -135,19 +143,36 @@ public class Users implements Serializable {
         this.lastLogin = lastLogin;
     }
 
-    public String getUserCenter() {
+    public GroupMembers getGroupMembers() {
+        return groupMembers;
+    }
+
+    public void setGroupMembers(GroupMembers groupMembers) {
+        this.groupMembers = groupMembers;
+    }
+
+    @XmlTransient
+    public Collection<GroupMembers> getGroupMembersCollection() {
+        return groupMembersCollection;
+    }
+
+    public void setGroupMembersCollection(Collection<GroupMembers> groupMembersCollection) {
+        this.groupMembersCollection = groupMembersCollection;
+    }
+
+    public Centers getUserCenter() {
         return userCenter;
     }
 
-    public void setUserCenter(String userCenter) {
+    public void setUserCenter(Centers userCenter) {
         this.userCenter = userCenter;
     }
 
-    public String getUserSubCenter() {
+    public SubCenters getUserSubCenter() {
         return userSubCenter;
     }
 
-    public void setUserSubCenter(String userSubCenter) {
+    public void setUserSubCenter(SubCenters userSubCenter) {
         this.userSubCenter = userSubCenter;
     }
 

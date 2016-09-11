@@ -1,5 +1,7 @@
 package com.rasas.mbeans;
 
+import com.rasas.entities.Centers;
+import com.rasas.entities.SubCenters;
 import com.rasas.entities.Users;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,9 +20,9 @@ public class MBUsers implements Serializable{
     
     private String userId;
     private String userName;
-    private String password = "123";
-    private String userType = "U";
-    private int privilege = 2;
+    private String password;
+    private String userType;
+    private int privilege;
     private String userCenter;
     private String userSubCenter;
     
@@ -28,7 +30,7 @@ public class MBUsers implements Serializable{
     private String newPassword;
     private String retypeNewPassword;
     
-    private String userTxtPasswordPrivilege = "false";
+    private String userTxtPasswordEdit = "false";
     
     private List<Users> usersList;
     
@@ -48,39 +50,58 @@ public class MBUsers implements Serializable{
     public String checkNewUserToSave(){
         System.out.println("com.rasas.mbeans.MBUsers.checkNewUserToSave()");
         
-        if(userId.equals("")){
-            MBCommon.getWarnMessage("","يجب إدخال اسم المستخدم !");
-            return "";
-        }
-        
-        if(userName.equals("")){
-            MBCommon.getWarnMessage("", "يجب إدخال اسم المستخدم !");
-            return "";
-        }
-        
-        if(userCenter == null){
-            MBCommon.getWarnMessage("","يجب إختيار مركز عمل المستخدم !");
-            return "";
-        }
-        
-        if(userSubCenter == null){
-            MBCommon.getWarnMessage("","يجب إختيار القسم الذي يتع له المستخدم !");
-            return "";
-        }
-        
         if(userType == null){
-            MBCommon.getWarnMessage("","يحب إختيار صفة المستخدم !");
+            MBCommon.getWarnMessage("", "يحب إختيار صفة المستخدم !");
             return "";
-        }
-        
-        if(privilege == 0){
-            MBCommon.getWarnMessage("","يجب إختيار صلاحيات المستخدم !");
-            return "";
-        }
-        
-        if(password.equals("")){
-            MBCommon.getWarnMessage("","يجب إدخال كلمة السر !");
-            return "";
+            
+        }else if(userType.equals("U")){
+            
+            if (userId.equals("")) {
+                MBCommon.getWarnMessage("", "يجب إدخال رمز المستخدم !");
+                return "";
+            }
+
+            if (userName.equals("")) {
+                MBCommon.getWarnMessage("", "يجب إدخال اسم المستخدم !");
+                return "";
+            }
+
+            if (userCenter == null) {
+                MBCommon.getWarnMessage("", "يجب إختيار مركز عمل المستخدم !");
+                return "";
+            }
+
+            if (userSubCenter == null) {
+                MBCommon.getWarnMessage("", "يجب إختيار القسم الذي يتع له المستخدم !");
+                return "";
+            }
+
+            if (privilege == 0) {
+                MBCommon.getWarnMessage("", "يجب إختيار صلاحيات المستخدم !");
+                return "";
+            }
+
+            if (password.equals("")) {
+                MBCommon.getWarnMessage("", "يجب إدخال كلمة السر !");
+                return "";
+            }
+            
+        }else if(userType.equals("G")){
+            
+            if (userId.equals("")) {
+                MBCommon.getWarnMessage("", "يجب إدخال رمز المستخدم !");
+                return "";
+            }
+
+            if (userName.equals("")) {
+                MBCommon.getWarnMessage("", "يجب إدخال اسم المستخدم !");
+                return "";
+            }
+
+            if (userCenter == null) {
+                MBCommon.getWarnMessage("", "يجب إختيار مركز عمل المستخدم !");
+                return "";
+            }
         }
         
         usersList = new ArrayList<>();
@@ -106,39 +127,58 @@ public class MBUsers implements Serializable{
     public String checkUserToUpdate(){
         System.out.println("com.rasas.mbeans.MBUsers.checkUserToUpdate()");
         
-        if(userId.equals("")){
-            MBCommon.getWarnMessage("","يجب إدخال اسم المستخدم !");
-            return "";
-        }
-        
-        if(userName.equals("")){
-            MBCommon.getWarnMessage("", "يجب إدخال اسم المستخدم !");
-            return "";
-        }
-        
-        if(userCenter == null){
-            MBCommon.getWarnMessage("","يجب إختيار مركز عمل المستخدم !");
-            return "";
-        }
-        
-        if(userSubCenter == null){
-            MBCommon.getWarnMessage("","يجب إختيار القسم الذي يتع له المستخدم !");
-            return "";
-        }
-        
         if(userType == null){
-            MBCommon.getWarnMessage("","يحب إختيار صفة المستخدم !");
+            MBCommon.getWarnMessage("", "يحب إختيار صفة المستخدم !");
             return "";
-        }
-        
-        if(privilege == 0){
-            MBCommon.getWarnMessage("","يجب إختيار صلاحيات المستخدم !");
-            return "";
-        }
-        
-        if(password.equals("")){
-            MBCommon.getWarnMessage("","يجب إدخال كلمة السر !");
-            return "";
+            
+        }else if(userType.equals("U")){
+            
+            if (userId.equals("")) {
+                MBCommon.getWarnMessage("", "يجب إدخال رمز المستخدم !");
+                return "";
+            }
+
+            if (userName.equals("")) {
+                MBCommon.getWarnMessage("", "يجب إدخال اسم المستخدم !");
+                return "";
+            }
+
+            if (userCenter == null) {
+                MBCommon.getWarnMessage("", "يجب إختيار مركز عمل المستخدم !");
+                return "";
+            }
+
+            if (userSubCenter == null) {
+                MBCommon.getWarnMessage("", "يجب إختيار القسم الذي يتع له المستخدم !");
+                return "";
+            }
+
+            if (privilege == 0) {
+                MBCommon.getWarnMessage("", "يجب إختيار صلاحيات المستخدم !");
+                return "";
+            }
+
+            if (password.equals("")) {
+                MBCommon.getWarnMessage("", "يجب إدخال كلمة السر !");
+                return "";
+            }
+            
+        }else if(userType.equals("G")){
+            
+            if (userId.equals("")) {
+                MBCommon.getWarnMessage("", "يجب إدخال رمز المستخدم !");
+                return "";
+            }
+
+            if (userName.equals("")) {
+                MBCommon.getWarnMessage("", "يجب إدخال اسم المستخدم !");
+                return "";
+            }
+
+            if (userCenter == null) {
+                MBCommon.getWarnMessage("", "يجب إختيار مركز عمل المستخدم !");
+                return "";
+            }
         }
         
         usersList = new ArrayList<>();
@@ -194,7 +234,7 @@ public class MBUsers implements Serializable{
             if(x == 1){
                 MBCommon.getInfoMessage("", "تم تعديل كلمة السر بنجاح !");
                 mBLogin.logout();
-                return "rs_login_page";
+                return "/rs_login_page";
             }else{
                 MBCommon.getFatalMessage("", "لم يتم تعديل كلمة السر, الرجاء الإتصال مع مدير النظام !");
             }
@@ -217,6 +257,7 @@ public class MBUsers implements Serializable{
                 .setParameter(1, userId);
         
         usersList = query.getResultList();
+        
         return usersList;
     }
     
@@ -233,20 +274,33 @@ public class MBUsers implements Serializable{
         usersList = query.getResultList();
         
         if(usersList.size() > 0){
-            userId = usersList.get(0).getUserId();
-            userName = usersList.get(0).getUserName();
-            password = usersList.get(0).getPassword();
-            userType = usersList.get(0).getUserType();
-            privilege = usersList.get(0).getPrivilege();
-            userCenter = usersList.get(0).getUserCenter();
-            userSubCenter = usersList.get(0).getUserSubCenter();
+            
+            if (usersList.get(0).getUserType().equals("U")) {
+                
+                userId = usersList.get(0).getUserId();
+                userName = usersList.get(0).getUserName();
+                password = usersList.get(0).getPassword();
+                userType = usersList.get(0).getUserType();
+                privilege = usersList.get(0).getPrivilege();
+                userCenter = usersList.get(0).getUserCenter().getCenterNo();
+                userSubCenter = usersList.get(0).getUserSubCenter().getSubCenterNo();
+                
+            } else if (usersList.get(0).getUserType().equals("G")) {
+                
+                userId = usersList.get(0).getUserId();
+                userName = usersList.get(0).getUserName();
+                password = usersList.get(0).getPassword();
+                userType = usersList.get(0).getUserType();
+                userCenter = usersList.get(0).getUserCenter().getCenterNo();
+                
+            }
         }
         
         mBLogin = new MBLogin();
         if(userId.equals(mBLogin.getLoggedUser().getUserId())){
-            userTxtPasswordPrivilege = "false";
+            userTxtPasswordEdit = "false";
         }else{
-            userTxtPasswordPrivilege = "true";
+            userTxtPasswordEdit = "true";
         }
     }
         
@@ -310,16 +364,36 @@ public class MBUsers implements Serializable{
         emf.getCache().evictAll();
         
         Users user = new Users();
-        user.setUserId(userId);
-        user.setUserName(userName);
-        user.setPassword(password);
-        user.setUserType(userType);
-        user.setPrivilege(privilege);
-        user.setUserCenter(userCenter);
-        user.setUserSubCenter(userSubCenter);
-        user.setEntryDate(new java.util.Date());
+        Centers center = new Centers();
         
+        if (userType.equals("U")) {
         
+            SubCenters subCenter = new SubCenters();
+
+            center.setCenterNo(userCenter);
+            subCenter.setSubCenterNo(userSubCenter);
+
+            user.setUserId(userId);
+            user.setUserName(userName);
+            user.setPassword(password);
+            user.setUserType(userType);
+            user.setPrivilege(privilege);
+            user.setUserCenter(center);
+            user.setUserSubCenter(subCenter);
+            user.setEntryDate(new java.util.Date());
+            
+        } else if (userType.equals("G")) {
+            
+            center.setCenterNo(userCenter);
+            
+            user.setUserId(userId);
+            user.setUserName(userName);
+            user.setUserType(userType);
+            user.setUserCenter(center);
+            user.setEntryDate(new java.util.Date());
+
+        }
+
         em.persist(user);
         em.getTransaction().commit();
         
@@ -339,10 +413,17 @@ public class MBUsers implements Serializable{
         
         emf.getCache().evictAll();
         
+        Users user = new Users();
+        Centers center = new Centers();
+        SubCenters subCenter = new SubCenters();
+        
+        center.setCenterNo(userCenter);
+        subCenter.setSubCenterNo(userSubCenter);
+        
         int u = em.createQuery("UPDATE Users u SET u.userName = ?1, u.userCenter = ?2, u.userSubCenter = ?3, u.userType = ?4, u.privilege = ?5, u.password = ?6 WHERE u.userId = ?7")
                 .setParameter(1, userName)
-                .setParameter(2, userCenter)
-                .setParameter(3, userSubCenter)
+                .setParameter(2, center)
+                .setParameter(3, subCenter)
                 .setParameter(4, userType)
                 .setParameter(5, privilege)
                 .setParameter(6, password)
@@ -428,12 +509,12 @@ public class MBUsers implements Serializable{
         this.userSubCenter = userSubCenter;
     }
 
-    public String getUserTxtPasswordPrivilege() {
-        return userTxtPasswordPrivilege;
+    public String getUserTxtPasswordEdit() {
+        return userTxtPasswordEdit;
     }
 
-    public void setUserTxtPasswordPrivilege(String userTxtPasswordPrivilege) {
-        this.userTxtPasswordPrivilege = userTxtPasswordPrivilege;
+    public void setUserTxtPasswordEdit(String userTxtPasswordPrivilege) {
+        this.userTxtPasswordEdit = userTxtPasswordPrivilege;
     }
 
     public String getOldPassword() {

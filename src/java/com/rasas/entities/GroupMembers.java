@@ -11,8 +11,11 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,15 +32,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "GroupMembers.findAll", query = "SELECT g FROM GroupMembers g"),
-    @NamedQuery(name = "GroupMembers.findByGroupId", query = "SELECT g FROM GroupMembers g WHERE g.groupId = :groupId"),
     @NamedQuery(name = "GroupMembers.findByUserId", query = "SELECT g FROM GroupMembers g WHERE g.userId = :userId"),
     @NamedQuery(name = "GroupMembers.findByEntryDate", query = "SELECT g FROM GroupMembers g WHERE g.entryDate = :entryDate")})
 public class GroupMembers implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Size(max = 10)
-    @Column(name = "GROUP_ID")
-    private String groupId;
     @Id
     @Basic(optional = false)
     @NotNull
@@ -47,20 +46,19 @@ public class GroupMembers implements Serializable {
     @Column(name = "ENTRY_DATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date entryDate;
+    
+    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", insertable = false, updatable = false)
+    @OneToOne(optional = false)
+    private Users users;
+    @JoinColumn(name = "GROUP_ID", referencedColumnName = "USER_ID")
+    @ManyToOne
+    private Users groupId;
 
     public GroupMembers() {
     }
 
     public GroupMembers(String userId) {
         this.userId = userId;
-    }
-
-    public String getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
     }
 
     public String getUserId() {
@@ -77,6 +75,22 @@ public class GroupMembers implements Serializable {
 
     public void setEntryDate(Date entryDate) {
         this.entryDate = entryDate;
+    }
+
+    public Users getUsers() {
+        return users;
+    }
+
+    public void setUsers(Users users) {
+        this.users = users;
+    }
+
+    public Users getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Users groupId) {
+        this.groupId = groupId;
     }
 
     @Override
