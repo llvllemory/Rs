@@ -282,8 +282,8 @@ public class MBUsers implements Serializable{
                 password = usersList.get(0).getPassword();
                 userType = usersList.get(0).getUserType();
                 privilege = usersList.get(0).getPrivilege();
-                userCenter = usersList.get(0).getUserCenter().getCenterNo();
-                userSubCenter = usersList.get(0).getUserSubCenter().getSubCenterNo();
+                userCenter = usersList.get(0).getUserCenter();
+                userSubCenter = usersList.get(0).getUserSubCenter();
                 
             } else if (usersList.get(0).getUserType().equals("G")) {
                 
@@ -291,7 +291,7 @@ public class MBUsers implements Serializable{
                 userName = usersList.get(0).getUserName();
                 password = usersList.get(0).getPassword();
                 userType = usersList.get(0).getUserType();
-                userCenter = usersList.get(0).getUserCenter().getCenterNo();
+                userCenter = usersList.get(0).getUserCenter();
                 
             }
         }
@@ -364,34 +364,25 @@ public class MBUsers implements Serializable{
         emf.getCache().evictAll();
         
         Users user = new Users();
-        Centers center = new Centers();
         
         if (userType.equals("U")) {
-        
-            SubCenters subCenter = new SubCenters();
-
-            center.setCenterNo(userCenter);
-            subCenter.setSubCenterNo(userSubCenter);
 
             user.setUserId(userId);
             user.setUserName(userName);
             user.setPassword(password);
             user.setUserType(userType);
             user.setPrivilege(privilege);
-            user.setUserCenter(center);
-            user.setUserSubCenter(subCenter);
+            user.setUserCenter(userCenter);
+            user.setUserSubCenter(userSubCenter);
             user.setEntryDate(new java.util.Date());
             
         } else if (userType.equals("G")) {
             
-            center.setCenterNo(userCenter);
-            
             user.setUserId(userId);
             user.setUserName(userName);
             user.setUserType(userType);
-            user.setUserCenter(center);
+            user.setUserCenter(userCenter);
             user.setEntryDate(new java.util.Date());
-
         }
 
         em.persist(user);
@@ -414,16 +405,11 @@ public class MBUsers implements Serializable{
         emf.getCache().evictAll();
         
         Users user = new Users();
-        Centers center = new Centers();
-        SubCenters subCenter = new SubCenters();
-        
-        center.setCenterNo(userCenter);
-        subCenter.setSubCenterNo(userSubCenter);
         
         int u = em.createQuery("UPDATE Users u SET u.userName = ?1, u.userCenter = ?2, u.userSubCenter = ?3, u.userType = ?4, u.privilege = ?5, u.password = ?6 WHERE u.userId = ?7")
                 .setParameter(1, userName)
-                .setParameter(2, center)
-                .setParameter(3, subCenter)
+                .setParameter(2, userCenter)
+                .setParameter(3, userSubCenter)
                 .setParameter(4, userType)
                 .setParameter(5, privilege)
                 .setParameter(6, password)

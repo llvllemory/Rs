@@ -42,8 +42,8 @@ public class MBSubCenters {
     public List<SubCenters> getSubCentersByCenterNo(){
         System.out.println("com.rasas.mbeans.MBRsMain.getSubCentersByCenterNo()");
         
-        TypedQuery<SubCenters> query = em.createQuery("SELECT s FROM SubCenters s WHERE s.centerNo.centerNo = ?1 AND s.subCenterName IS NOT NULL ORDER BY s.subCenterNo DESC", SubCenters.class)
-                .setParameter(1, mBLogin.getLoggedUser().getUserCenter().getCenterNo());
+        TypedQuery<SubCenters> query = em.createQuery("SELECT s FROM SubCenters s WHERE s.centerNo = ?1 AND s.subCenterName IS NOT NULL ORDER BY s.subCenterNo DESC", SubCenters.class)
+                .setParameter(1, mBLogin.getLoggedUser().getUserCenter());
         
         List<SubCenters> subCentersList = query.getResultList();
         

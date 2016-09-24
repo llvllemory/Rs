@@ -54,7 +54,7 @@ public class MBGroupMembers {
         groupMembersList = getGroubMemberByUserId(groupsUser);
         
         if(groupMembersList.size() > 0){
-            if(groupMembersList.get(0).getGroupId().getUserId().equals(groupId)){
+            if(groupMembersList.get(0).getGroupId().equals(groupId)){
                 MBCommon.getErrorMessage("", "الموظف ينتمي لنفس المجموعة, الرجاء التأكد والمحاولة مرة اخرى !");
             }else{
                
@@ -126,7 +126,7 @@ public class MBGroupMembers {
         groupIdList = query.getResultList();
         
         if(groupIdList.size() > 0){
-           return groupIdList.get(0).getGroupId().getUserId();
+           return groupIdList.get(0).getGroupId();
         }else{
             return "";
         }
@@ -166,7 +166,7 @@ public class MBGroupMembers {
         emf.getCache().evictAll();
         groupMembersList = new ArrayList<>();
         
-        TypedQuery<GroupMembers> query = em.createQuery("SELECT g From GroupMembers g WHERE g.groupId.userId = ?1 ORDER BY g.userId ASC", GroupMembers.class)
+        TypedQuery<GroupMembers> query = em.createQuery("SELECT g From GroupMembers g WHERE g.groupId = ?1 ORDER BY g.userId ASC", GroupMembers.class)
                 .setParameter(1, groupId);
         
         groupMembersList = query.getResultList();
@@ -194,12 +194,8 @@ public class MBGroupMembers {
         
         emf.getCache().evictAll();
         
-        Users group = new Users();
-        
-        group.setUserId(groupId);
-        
         int rows = em.createQuery("UPDATE GroupMembers g SET g.groupId = ?1, g.entryDate = ?2 WHERE g.userId = ?3")
-                        .setParameter(1, group)
+                        .setParameter(1, groupId)
                         .setParameter(2, new java.util.Date())
                         .setParameter(3, groupsUser).executeUpdate();
         

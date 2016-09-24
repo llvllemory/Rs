@@ -114,7 +114,7 @@ public class MBViewPrivilege {
         System.out.println("com.rasas.mbeans.MBViewPrivilege.getGroupPrivilege()");
         
         emf.getCache().evictAll();
-        TypedQuery<ViewPrivilege> query = em.createQuery("SELECT v FROM ViewPrivilege v WHERE v.viewPrivilegePK.userId = ?1 AND v.viewPrivilegePK.viewId = ?2", ViewPrivilege.class)
+        TypedQuery<ViewPrivilege> query = em.createQuery("SELECT v FROM ViewPrivilege v WHERE v.viewPrivilegePK.groupId = ?1 AND v.viewPrivilegePK.viewId = ?2", ViewPrivilege.class)
                 .setParameter(1, userId)
                 .setParameter(2, viewId);
         

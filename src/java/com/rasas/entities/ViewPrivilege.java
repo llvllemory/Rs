@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ViewPrivilege.findAll", query = "SELECT v FROM ViewPrivilege v"),
-    @NamedQuery(name = "ViewPrivilege.findByUserId", query = "SELECT v FROM ViewPrivilege v WHERE v.viewPrivilegePK.userId = :userId"),
+    @NamedQuery(name = "ViewPrivilege.findByGroupId", query = "SELECT v FROM ViewPrivilege v WHERE v.viewPrivilegePK.groupId = :groupId"),
     @NamedQuery(name = "ViewPrivilege.findByViewId", query = "SELECT v FROM ViewPrivilege v WHERE v.viewPrivilegePK.viewId = :viewId"),
     @NamedQuery(name = "ViewPrivilege.findByPrivilege", query = "SELECT v FROM ViewPrivilege v WHERE v.privilege = :privilege")})
 public class ViewPrivilege implements Serializable {
@@ -43,8 +43,8 @@ public class ViewPrivilege implements Serializable {
         this.viewPrivilegePK = viewPrivilegePK;
     }
 
-    public ViewPrivilege(String userId, String viewId) {
-        this.viewPrivilegePK = new ViewPrivilegePK(userId, viewId);
+    public ViewPrivilege(String groupId, String viewId) {
+        this.viewPrivilegePK = new ViewPrivilegePK(groupId, viewId);
     }
 
     public ViewPrivilegePK getViewPrivilegePK() {

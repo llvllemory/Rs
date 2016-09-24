@@ -22,8 +22,8 @@ public class ViewPrivilegePK implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 10)
-    @Column(name = "USER_ID")
-    private String userId;
+    @Column(name = "GROUP_ID")
+    private String groupId;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -33,17 +33,17 @@ public class ViewPrivilegePK implements Serializable {
     public ViewPrivilegePK() {
     }
 
-    public ViewPrivilegePK(String userId, String viewId) {
-        this.userId = userId;
+    public ViewPrivilegePK(String groupId, String viewId) {
+        this.groupId = groupId;
         this.viewId = viewId;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getGroupId() {
+        return groupId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
 
     public String getViewId() {
@@ -57,7 +57,7 @@ public class ViewPrivilegePK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (userId != null ? userId.hashCode() : 0);
+        hash += (groupId != null ? groupId.hashCode() : 0);
         hash += (viewId != null ? viewId.hashCode() : 0);
         return hash;
     }
@@ -69,7 +69,7 @@ public class ViewPrivilegePK implements Serializable {
             return false;
         }
         ViewPrivilegePK other = (ViewPrivilegePK) object;
-        if ((this.userId == null && other.userId != null) || (this.userId != null && !this.userId.equals(other.userId))) {
+        if ((this.groupId == null && other.groupId != null) || (this.groupId != null && !this.groupId.equals(other.groupId))) {
             return false;
         }
         if ((this.viewId == null && other.viewId != null) || (this.viewId != null && !this.viewId.equals(other.viewId))) {
@@ -80,7 +80,7 @@ public class ViewPrivilegePK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.rasas.entities.ViewPrivilegePK[ userId=" + userId + ", viewId=" + viewId + " ]";
+        return "com.rasas.entities.ViewPrivilegePK[ groupId=" + groupId + ", viewId=" + viewId + " ]";
     }
     
 }
