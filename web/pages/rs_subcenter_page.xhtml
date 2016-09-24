@@ -23,46 +23,49 @@
 		<ui:include src="rs_header_page.xhtml" />
 	</ui:insert>
         
-        <br/><br/>
-        <center>
-            <p:outputLabel id = "lblTitle" style ="font-size: 30px;" value="صرف رصاص لمركز"/>
-        </center>
-
-        <h:form styleClass="frmMain" >
+        <div id="container">
+            
             <center>
-                <h:panelGrid styleClass = "pnl" columns="4" cellpadding="10">
-
-                    
-                    <p:outputLabel id="lblSubCenterNo" value="المركز : " />
-                    
-                    <h:selectOneMenu id ="slctSubCenters" styleClass = "slctMenu" value ="#{mBRsMain.rsSubCenter}">
-                        <f:selectItems value="#{mBSubCenters.subCentersByCenterNo}" var = "subCenter" itemLabel="#{subCenter.subCenterNo} -- #{subCenter.subCenterName}" itemValue="#{subCenter.subCenterNo}"/>
-                    </h:selectOneMenu>
-                    
-                    <p:outputLabel id="lblCurrentYear" value=" السنة : "/>
-
-                    <h:selectOneMenu styleClass = "slctMenu" value="#{mBRsMain.rsYear}" >
-                        <f:selectItems value="#{mBRsMain.yearsList}" var="rsYearList" itemLabel="#{rsYearList}" itemValue="#{rsYearList}"/>
-                    </h:selectOneMenu>
-                                 
-                                 
-                    <p:outputLabel id="lblRsFrom" value="من رصاص : "/>
-                    <p:inputText id="txtRsFrom" value="#{mBRsMain.rsFrom}" styleClass="txtRasas" maxlength="10" required="true"/>
-                    
-                    <p:outputLabel id="lblRsTo" value="الى رصاص : "/>
-                    <p:inputText id="txtRsTo" value="#{mBRsMain.rsTo}" styleClass="txtRasas" maxlength="10"  required="true"/>
-                    
-                    <br/>
-                    <f:facet name="footer">
-                        <center>
-                            <p:commandButton id="btnSave" value="صرف الرصاص" action="#{mBRsMain.checkRsSubCenter()}" disabled="#{mBViewPrivilege.getBtnPrivilege(component.id)}" />
-                            <p:commandButton id="btnDelete" value="إلغاء صرف الرصاص" action="#{mBRsMain.checkRsSubCenterToDelete()}" disabled="#{mBViewPrivilege.getBtnPrivilege(component.id)}"/>
-                        </center>
-                    </f:facet>
-                    
-                </h:panelGrid>
+                <p:outputLabel id = "lblTitle" style ="font-size: 30px;" value="صرف رصاص لمركز"/>
             </center>
-        </h:form>
+
+            <h:form styleClass="frmMain" >
+                <center>
+                    <h:panelGrid styleClass = "pnl" columns="4" cellpadding="10">
+
+
+                        <p:outputLabel id="lblSubCenterNo" value="المركز : " />
+
+                        <h:selectOneMenu id ="slctSubCenters" styleClass = "slctMenu" value ="#{mBRsMain.rsSubCenter}">
+                            <f:selectItems value="#{mBSubCenters.subCentersByCenterNo}" var = "subCenter" itemLabel="#{subCenter.subCenterNo} -- #{subCenter.subCenterName}" itemValue="#{subCenter.subCenterNo}"/>
+                        </h:selectOneMenu>
+
+                        <p:outputLabel id="lblCurrentYear" value=" السنة : "/>
+
+                        <h:selectOneMenu styleClass = "slctMenu" value="#{mBRsMain.rsYear}" >
+                            <f:selectItems value="#{mBRsMain.yearsList}" var="rsYearList" itemLabel="#{rsYearList}" itemValue="#{rsYearList}"/>
+                        </h:selectOneMenu>
+
+
+                        <p:outputLabel id="lblRsFrom" value="من رصاص : "/>
+                        <p:inputText id="txtRsFrom" value="#{mBRsMain.rsFrom}" styleClass="txtRasas" maxlength="10" required="true"/>
+
+                        <p:outputLabel id="lblRsTo" value="الى رصاص : "/>
+                        <p:inputText id="txtRsTo" value="#{mBRsMain.rsTo}" styleClass="txtRasas" maxlength="10"  required="true"/>
+
+                        <br/>
+                        <f:facet name="footer">
+                            <center>
+                                <p:commandButton id="btnSave" value="صرف الرصاص" action="#{mBRsMain.checkRsSubCenter()}" disabled="#{mBViewPrivilege.getBtnPrivilege(component.id)}" />
+                                <p:commandButton id="btnDelete" value="إلغاء صرف الرصاص" action="#{mBRsMain.checkRsSubCenterToDelete()}" disabled="#{mBViewPrivilege.getBtnPrivilege(component.id)}"/>
+                            </center>
+                        </f:facet>
+
+                    </h:panelGrid>
+                </center>
+            </h:form>
+            
+        </div>    
     </h:body>
 </html>
 

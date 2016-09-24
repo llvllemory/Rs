@@ -23,34 +23,35 @@
 		<ui:include src="rs_header_page.xhtml" />
 	</ui:insert>
         
-        <br/><br/>
-        <center>
-            <p:outputLabel id = "lblTitle" style ="font-size: 30px;" value="تعديل كلمة السر"/>
-        </center>
-
-        <h:form styleClass="frmMain" >
+        <div id="container">
             <center>
-                <h:panelGrid styleClass = "pnl" columns="2" cellpadding="10">
-
-                    
-                    <p:outputLabel id="oldPassword" value="كلمة السر القديمة : " />
-                    <p:password value="#{mBUsers.oldPassword}" placeholder="كلمة السر القديمة" />
-                 
-                    <p:outputLabel id="newPassword1" value="كلمة السر الجديدة : " />
-                    <p:password value="#{mBUsers.newPassword}" placeholder="كلمة السر الجديدة " />
-                    <p:outputLabel id="newPassword2" value="إعادة كتابة كلمة السر "/>
-                    <p:password value="#{mBUsers.retypeNewPassword}" placeholder= "إعادة كتابة كلمة السر "/>
-                    
-                    <br/>
-                    <f:facet name="footer">
-                        <center>
-                            <p:commandButton id="btnUpdate" value="تعديل كلمة السر"  action="#{mBUsers.checkUserToUpdatePassword()}" disabled="#{mBViewPrivilege.getBtnPrivilege(component.id)}" />
-                        </center>
-                    </f:facet>
-                    
-                </h:panelGrid>
+                <p:outputLabel id = "lblTitle" style ="font-size: 30px;" value="تعديل كلمة السر"/>
             </center>
-        </h:form>
+
+            <h:form styleClass="frmMain" >
+                <center>
+                    <h:panelGrid styleClass = "pnl" columns="2" cellpadding="10">
+
+
+                        <p:outputLabel id="oldPassword" value="كلمة السر القديمة : " />
+                        <p:password value="#{mBUsers.oldPassword}" placeholder="كلمة السر القديمة" />
+
+                        <p:outputLabel id="newPassword1" value="كلمة السر الجديدة : " />
+                        <p:password value="#{mBUsers.newPassword}" placeholder="كلمة السر الجديدة " />
+                        <p:outputLabel id="newPassword2" value="إعادة كتابة كلمة السر "/>
+                        <p:password value="#{mBUsers.retypeNewPassword}" placeholder= "إعادة كتابة كلمة السر "/>
+
+                        <br/>
+                        <f:facet name="footer">
+                            <center>
+                                <p:commandButton id="btnUpdate" value="تعديل كلمة السر"  action="#{mBUsers.checkUserToUpdatePassword()}" disabled="#{mBViewPrivilege.getBtnPrivilege(component.id)}" />
+                            </center>
+                        </f:facet>
+
+                    </h:panelGrid>
+                </center>
+            </h:form>
+        </div>
     </h:body>
 </html>
 
