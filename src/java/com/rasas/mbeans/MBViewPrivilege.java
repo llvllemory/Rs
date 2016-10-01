@@ -3,7 +3,11 @@ package com.rasas.mbeans;
 import com.rasas.advancedObjects.PrivilegesAdvancedObject;
 import com.rasas.advancedObjects.ViewPrivilegesAdvancedObject;
 import com.rasas.entities.ViewPrivilege;
+import com.rasas.entities.ViewPrivilegePK;
+import com.rasas.entities.Views;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -57,41 +61,46 @@ public class MBViewPrivilege {
         
         String userGroupId = mBGroupMembers.getGroupIdByUserId(mBLogin.getLoggedUser().getUserId());
         
-        List<ViewPrivilege> viewsPrivilegeList = getGroupPrivilege(userGroupId, viewId.substring(7, viewId.length()-6));
+        if(userGroupId.equals("ADMIN")){
+            status = "false";
+        }else{
+            
+            List<ViewPrivilege> viewsPrivilegeList = getGroupPrivilege(userGroupId, viewId.substring(7, viewId.length() - 6));
 
-        for (ViewPrivilege vp : viewsPrivilegeList) {
-            if (vp.getViewPrivilegePK().getViewId().equals(viewId.substring(7, viewId.length()-6))) {
+            for (ViewPrivilege vp : viewsPrivilegeList) {
+                if (vp.getViewPrivilegePK().getViewId().equals(viewId.substring(7, viewId.length() - 6))) {
 
-                String view   = vp.getPrivilege().substring(0, 1);
-                String add    = vp.getPrivilege().substring(1, 2);
-                String delete = vp.getPrivilege().substring(2, 3);
-                String update = vp.getPrivilege().substring(3, 4);
-                
-                if(view.equals("1")){
-                    if (componentId.equals("btnSave")) {
-                        if (add.equals("0")) {
-                            status = "true";
-                        } else {
-                            status = "false";
-                        }
+                    String view = vp.getPrivilege().substring(0, 1);
+                    String add = vp.getPrivilege().substring(1, 2);
+                    String delete = vp.getPrivilege().substring(2, 3);
+                    String update = vp.getPrivilege().substring(3, 4);
 
-                    } else if (componentId.equals("btnDelete")) {
-                        if (delete.equals("0")) {
-                            status = "true";
-                        } else {
-                            status = "false";
-                        }
-                    } else if (componentId.equals("btnUpdate")) {
-                        if (update.equals("0")) {
-                            status = "true";
-                        } else {
-                            status = "false";
+                    if (view.equals("1")) {
+                        if (componentId.equals("btnSave")) {
+                            if (add.equals("0")) {
+                                status = "true";
+                            } else {
+                                status = "false";
+                            }
+
+                        } else if (componentId.equals("btnDelete")) {
+                            if (delete.equals("0")) {
+                                status = "true";
+                            } else {
+                                status = "false";
+                            }
+                        } else if (componentId.equals("btnUpdate")) {
+                            if (update.equals("0")) {
+                                status = "true";
+                            } else {
+                                status = "false";
+                            }
                         }
                     }
                 }
             }
         }
-        
+       
         System.out.println("viewId = " + viewId + ", componentId = " + componentId + ", disabled = " + status);
         return status;
     }   
@@ -104,18 +113,22 @@ public class MBViewPrivilege {
         
         String userGroupId = mBGroupMembers.getGroupIdByUserId(mBLogin.getLoggedUser().getUserId());
         
-        List<ViewPrivilege> viewsPrivilegeList = getGroupPrivilege(userGroupId, componentId);
-        
-        for (ViewPrivilege vp : viewsPrivilegeList) {
-            if (vp.getViewPrivilegePK().getViewId().equals(componentId)) {
-                String view = vp.getPrivilege().substring(0, 1);
+        if (userGroupId.equals("ADMIN")) {
+            status = "false";
+        } else {
 
-                if (view.equals("1")) {
-                    status = "false";
+            List<ViewPrivilege> viewsPrivilegeList = getGroupPrivilege(userGroupId, componentId);
+
+            for (ViewPrivilege vp : viewsPrivilegeList) {
+                if (vp.getViewPrivilegePK().getViewId().equals(componentId)) {
+                    String view = vp.getPrivilege().substring(0, 1);
+
+                    if (view.equals("1")) {
+                        status = "false";
+                    }
                 }
             }
         }
-    
         System.out.println("componentId = " + componentId + ", disabled = " + status);
         return status;
     }
@@ -138,10 +151,29 @@ public class MBViewPrivilege {
     public void loadViewsPrivilegeListByGroupId(){
         System.out.println("com.rasas.mbeans.MBViewPrivilege.loadViewsPrivilegeListByGroupId()");
         
+        TypedQuery<Views> vQuery = em.createQuery("SELECT v FROM Views v", Views.class); 
+        List<Views> allViewsList = vQuery.getResultList();
+        
         TypedQuery<ViewPrivilege> query = em.createQuery("SELECT v FROM ViewPrivilege v WHERE v.viewPrivilegePK.groupId = ?1", ViewPrivilege.class)
                 .setParameter(1, groupId); 
-        
         List<ViewPrivilege> viewsPrivilegeList = query.getResultList();
+        
+        
+        for(Views v: allViewsList){
+            ViewPrivilege tempViewPrivilege = new ViewPrivilege();
+            ViewPrivilegePK tempViewPrivilegePK = new ViewPrivilegePK();
+            
+            tempViewPrivilegePK.setGroupId(groupId);
+            tempViewPrivilegePK.setViewId(v.getViewId());
+            
+            tempViewPrivilege.setViewPrivilegePK(tempViewPrivilegePK);
+            tempViewPrivilege.setPrivilege("000000");
+            
+            if(!viewsPrivilegeList.contains(tempViewPrivilege)){
+                viewsPrivilegeList.add(tempViewPrivilege);
+            }
+        }
+
         
         for(ViewPrivilege v: viewsPrivilegeList){
     
@@ -193,6 +225,16 @@ public class MBViewPrivilege {
             
             viewPrivilegesAdvancedObject.setPrivilege(privilegesAdvancedObject);
             viewPrivilegesAdvancedObjectList.add(viewPrivilegesAdvancedObject);
+            
+            
+            //// Sorting the List by viewId
+            Collections.sort(viewPrivilegesAdvancedObjectList, new Comparator<ViewPrivilegesAdvancedObject>() {
+
+                @Override
+                public int compare(ViewPrivilegesAdvancedObject object_1, ViewPrivilegesAdvancedObject object_2) {
+                    return object_2.getViewId().compareTo(object_1.getViewId());
+                }
+            });
         }
     }   
     
@@ -250,7 +292,4 @@ public class MBViewPrivilege {
     public void setViewPrivilegesAdvancedObjectList(List<ViewPrivilegesAdvancedObject> viewPrivilegesAdvancedObjectList) {
         this.viewPrivilegesAdvancedObjectList = viewPrivilegesAdvancedObjectList;
     }
-    
-    
-    
 }

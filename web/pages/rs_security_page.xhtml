@@ -86,10 +86,12 @@
                             <h:form id = "frmTabUsersList">
                                 <h:panelGrid id="pnlUsersList" columns="1" style = "width: 100%" cellpadding="5" >
                                     <p:outputLabel  value="بحث برقم الموظف : " />
+                                    
                                     <p:selectOneListbox id="searchUsers" value="#{mBUsers.userId}" filter="true" filterMatchMode="contains" style="width: 300px; height: 250px; margin-top: 0;">
                                         <p:ajax listener="#{mBUsers.loadUserInfo()}" update=":tabViewSecurity:frmTabUsers:pnlUserInfo"/>
                                         <f:selectItems value="#{mBUsers.allUsersByCenter}" var="users" itemLabel="#{users.userId} &ensp;&ensp; #{users.userName}" itemValue="#{users.userId}"/>
                                     </p:selectOneListbox>
+                                        
                                 </h:panelGrid>
                             </h:form>                       
 
@@ -99,7 +101,7 @@
                     <p:tab id="tabGroups" title="صيانة المجموعات">
                         <h:form id="frmGroupsList">
 
-                            <h:panelGrid  columns="2" style = "width: 30%; margin-top: 5%;" cellspacing="5" >
+                            <h:panelGrid  columns="2" style = "width: 50%; margin-top: 5%;" cellspacing="5" >
                                 <p:outputLabel  value="اسم المجموعة : " />
                                 <h:selectOneMenu styleClass = "slctMenu" value ="#{mBGroupMembers.groupId}">
                                     <p:ajax  update=":tabViewSecurity:frmGroupsList:pnlGroupMembersList tabViewSecurity:frmGroupsList:pnlGroupsMembersList"/>
@@ -115,9 +117,9 @@
 
                                 <h:panelGrid id="pnlGroupMembersList" columns="1" style = "width: 50%;" cellpadding="5" >
                                     <p:outputLabel  value="أعضاء المجموعة" />
-                                    
-                                    
-                                    <p:dataTable var="groupMembers" value="#{mBGroupMembers.allGroupMembers}" scrollable="true" scrollHeight="230" 
+
+
+                                    <p:dataTable var="groupMembers" value="#{mBGroupMembers.allGroupMembers}" scrollable="true" scrollHeight="240" 
                                                  emptyMessage="لا يوجد أعضاء في المجموعة" style="width: 300px; margin-top: 0;">
                                         <p:column>
                                             <h:outputText value="#{groupMembers.userId} &ensp;&ensp; #{groupMembers.users.userName}" />
@@ -138,55 +140,6 @@
 
                             </h:panelGrid>
 
-                        </h:form>
-                    </p:tab>
-
-                    <p:tab id="tabPrivilege" title="صيانة الصلاحيات">
-                        <h:form id="frmPrivilegeList">
-
-                            <h:panelGrid  columns="2" style = "width: 30%; margin-top: 5%;" cellspacing="5" >
-                                <p:outputLabel  value="اسم المجموعة : " />
-                                <h:selectOneMenu styleClass = "slctMenu" value ="#{mBViewPrivilege.groupId}">
-                                    <p:ajax listener="#{mBViewPrivilege.loadViewsPrivilegeListByGroupId()}" update=":tabViewSecurity:frmPrivilegeList:pnlViewsPrivilegeList"/>
-                                    <f:selectItem itemLabel="إختر المجموعة"/>
-                                    <f:selectItems value="#{mBUsers.allGroups}" var="allGroups" itemLabel="#{allGroups.userName}" itemValue="#{allGroups.userId}"/>
-
-                                </h:selectOneMenu>
-                            </h:panelGrid>
-
-                            <br/>
-
-                            <h:panelGrid  id ="pnlViewsPrivilegeList" columns="1" style = "width: 70%;" cellspacing="5" >
-                                <p:outputLabel  value="الصلاحيات على الشاشات" />
-
-                                <p:dataTable id="dta" value="#{mBViewPrivilege.viewPrivilegesAdvancedObjectList}" var="viewPrivilege" 
-                                             rows="15" paginator="false" paginatorPosition="bottom" scrollable="true" scrollHeight="200"> 
-                                    
-                                        
-                                        <p:column headerText="اسم الشاشة" width="150">
-                                            <p:outputLabel value="#{viewPrivilege.viewId}" />    
-                                        </p:column>
-                                        <p:column headerText="مشاهدة" width="20">
-                                            <h:selectBooleanCheckbox value="#{viewPrivilege.privilege.view}" />
-                                        </p:column>    
-                                        <p:column headerText="إضافة" width="20">
-                                            <h:selectBooleanCheckbox value="#{viewPrivilege.privilege.add}" />
-                                        </p:column>    
-                                        <p:column headerText="حذف" width="20">
-                                            <h:selectBooleanCheckbox value="#{viewPrivilege.privilege.delete}" />
-                                        </p:column>    
-                                        <p:column headerText="تعديل" width="20">
-                                            <h:selectBooleanCheckbox value="#{viewPrivilege.privilege.update}" />
-                                        </p:column>
-         
-                                    
-
-                                </p:dataTable>
-                            </h:panelGrid>
-
-                            <h:panelGrid id="pnlBtns" columns="1"  style ="width: 80%;text-align: center;" cellpadding="5" >
-                                <p:commandButton id="btnAdd" value="تخزين" action="#{mBViewPrivilege.saveViewsPrivileges()}"/>
-                            </h:panelGrid>
                         </h:form>
                     </p:tab>
 
@@ -219,6 +172,52 @@
                             </h:form>
                         </h:panelGrid>
                     </p:tab>
+
+                    <p:tab id="tabPrivilege" title="صيانة الصلاحيات">
+                        <h:form id="frmPrivilegeList">
+
+                            <h:panelGrid  columns="2" style = "width: 50%; margin-top: 5%;" cellspacing="5" >
+                                <p:outputLabel  value="اسم المجموعة : " />
+                                <h:selectOneMenu styleClass = "slctMenu" value ="#{mBViewPrivilege.groupId}">
+                                    <p:ajax listener="#{mBViewPrivilege.loadViewsPrivilegeListByGroupId()}" update=":tabViewSecurity:frmPrivilegeList:pnlViewsPrivilegeList"/>
+                                    <f:selectItem itemLabel="إختر المجموعة"/>
+                                    <f:selectItems value="#{mBUsers.allGroups}" var="allGroups" itemLabel="#{allGroups.userName}" itemValue="#{allGroups.userId}"/>
+                                </h:selectOneMenu>
+                            </h:panelGrid>
+
+                            <br/>
+
+                            <h:panelGrid  id ="pnlViewsPrivilegeList" columns="1" style = "width: 70%;" cellspacing="5" >
+                                <p:outputLabel  value="الصلاحيات على الشاشات" />
+
+                                <p:dataTable id="dta" value="#{mBViewPrivilege.viewPrivilegesAdvancedObjectList}" var="viewPrivilege" 
+                                             rows="15" paginator="false" paginatorPosition="bottom" scrollable="true" scrollHeight="200"> 
+                                    
+                                    <p:column headerText="اسم الشاشة" width="150">
+                                        <p:outputLabel value="#{viewPrivilege.viewId}" />    
+                                    </p:column>
+                                    <p:column headerText="مشاهدة" width="20">
+                                        <p:selectBooleanCheckbox value="#{viewPrivilege.privilege.view}" />
+                                    </p:column>    
+                                    <p:column headerText="إضافة" width="20">
+                                        <p:selectBooleanCheckbox value="#{viewPrivilege.privilege.add}" />
+                                    </p:column>    
+                                    <p:column headerText="حذف" width="20">
+                                        <p:selectBooleanCheckbox value="#{viewPrivilege.privilege.delete}" />
+                                    </p:column>    
+                                    <p:column headerText="تعديل" width="20">
+                                        <p:selectBooleanCheckbox value="#{viewPrivilege.privilege.update}" />
+                                    </p:column>
+
+                                </p:dataTable>
+                            </h:panelGrid>
+
+                            <h:panelGrid id="pnlBtns" columns="1"  style ="width: 80%;text-align: center;" cellpadding="5" >
+                                <p:commandButton id="btnAdd" value="تخزين" action="#{mBViewPrivilege.saveViewsPrivileges()}"/>
+                            </h:panelGrid>
+                        </h:form>
+                    </p:tab>
+
                 </p:tabView>
             </center>
         </div>

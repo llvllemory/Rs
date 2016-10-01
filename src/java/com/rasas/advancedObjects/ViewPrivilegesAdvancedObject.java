@@ -6,6 +6,7 @@ public class ViewPrivilegesAdvancedObject implements Serializable{
     
     private String groupId;
     private String viewId;
+    private String viewName;
     private PrivilegesAdvancedObject privilege;
     
     
@@ -30,6 +31,14 @@ public class ViewPrivilegesAdvancedObject implements Serializable{
 
     public void setViewId(String viewId) {
         this.viewId = viewId;
+    }
+
+    public String getViewName() {
+        return viewName;
+    }
+
+    public void setViewName(String viewName) {
+        this.viewName = viewName;
     }
 
     public PrivilegesAdvancedObject getPrivilege() {
