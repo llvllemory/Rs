@@ -1,6 +1,9 @@
 package com.rasas.mbeans;
 
+import com.rasas.advancedObjects.PrivilegesAdvancedObject;
+import com.rasas.advancedObjects.ViewPrivilegesAdvancedObject;
 import com.rasas.entities.ViewPrivilege;
+import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -15,9 +18,17 @@ import javax.persistence.TypedQuery;
 
 public class MBViewPrivilege {
     
+    
+    private String groupId;
+    private String privilege;
+    
     private String viewId = "";
     private MBLogin mBLogin = new MBLogin();
     private MBGroupMembers mBGroupMembers = new MBGroupMembers();
+    
+    private PrivilegesAdvancedObject privilegesAdvancedObject;
+    private ViewPrivilegesAdvancedObject viewPrivilegesAdvancedObject;
+    private List<ViewPrivilegesAdvancedObject> viewPrivilegesAdvancedObjectList = new ArrayList<>();
     
     EntityManager em;
     EntityManagerFactory emf;
@@ -122,4 +133,124 @@ public class MBViewPrivilege {
         
         return viewsPrivilegeList;
     }
+
+////////////////////////////////////////////////////////////////////////////////
+    public void loadViewsPrivilegeListByGroupId(){
+        System.out.println("com.rasas.mbeans.MBViewPrivilege.loadViewsPrivilegeListByGroupId()");
+        
+        TypedQuery<ViewPrivilege> query = em.createQuery("SELECT v FROM ViewPrivilege v WHERE v.viewPrivilegePK.groupId = ?1", ViewPrivilege.class)
+                .setParameter(1, groupId); 
+        
+        List<ViewPrivilege> viewsPrivilegeList = query.getResultList();
+        
+        for(ViewPrivilege v: viewsPrivilegeList){
+    
+            privilegesAdvancedObject = new PrivilegesAdvancedObject();
+            viewPrivilegesAdvancedObject = new ViewPrivilegesAdvancedObject();
+            
+            viewPrivilegesAdvancedObject.setGroupId(v.getViewPrivilegePK().getGroupId());
+            viewPrivilegesAdvancedObject.setViewId(v.getViewPrivilegePK().getViewId());
+            
+            System.out.println(v.getViewPrivilegePK().getViewId() + " : " + v.getPrivilege().substring(0, 1) + " -- " + v.getPrivilege().substring(1, 2) + " -- " + 
+                    v.getPrivilege().substring(2, 3) + " -- " + v.getPrivilege().substring(3, 4) + " -- " + v.getPrivilege().substring(4, 5) + " -- " + v.getPrivilege().substring(5, 6));
+            
+
+            if(v.getPrivilege().substring(0, 1).equals("1")){
+                privilegesAdvancedObject.setView(true);
+            }else{
+                privilegesAdvancedObject.setView(false);
+            }
+            
+            if(v.getPrivilege().substring(1, 2).equals("1")){
+                privilegesAdvancedObject.setAdd(true);
+            }else{
+                privilegesAdvancedObject.setAdd(false);
+            }
+            
+            if(v.getPrivilege().substring(2, 3).equals("1")){
+                privilegesAdvancedObject.setDelete(true);
+            }else{
+                privilegesAdvancedObject.setDelete(false);
+            }
+            
+            if(v.getPrivilege().substring(3, 4).equals("1")){
+                privilegesAdvancedObject.setUpdate(true);
+            }else{
+                privilegesAdvancedObject.setUpdate(false);
+            }
+            
+            if(v.getPrivilege().substring(4, 5).equals("1")){
+                privilegesAdvancedObject.setNull1(true);
+            }else{
+                privilegesAdvancedObject.setNull1(false);
+            }
+            
+            if(v.getPrivilege().substring(5, 6).equals("1")){
+                privilegesAdvancedObject.setNull2(true);
+            }else{
+                privilegesAdvancedObject.setNull2(false);
+            }
+            
+            viewPrivilegesAdvancedObject.setPrivilege(privilegesAdvancedObject);
+            viewPrivilegesAdvancedObjectList.add(viewPrivilegesAdvancedObject);
+        }
+    }   
+    
+////////////////////////////////////////////////////////////////////////////////
+    public void saveViewsPrivileges(){
+        System.out.println("com.rasas.mbeans.MBViewPrivilege.saveViewsPrivileges()");
+        
+        System.out.println("------------------------------- " + viewPrivilegesAdvancedObjectList.size());
+        for(ViewPrivilegesAdvancedObject v: viewPrivilegesAdvancedObjectList){
+            System.out.println(v.getGroupId() + "" + v.getViewId() + "" + v.getPrivilege().isView() + "" + v.getPrivilege().isAdd() + "" + v.getPrivilege().isDelete()
+                               + "" + v.getPrivilege().isUpdate());
+        }
+        
+        
+    }
+    
+/////////////////////////////////Getters and Setters ///////////////////////////
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getPrivilege() {
+        return privilege;
+    }
+
+    public void setPrivilege(String privilege) {
+        this.privilege = privilege;
+    }
+
+    public String getViewId() {
+        return viewId;
+    }
+
+    public void setViewId(String viewId) {
+        this.viewId = viewId;
+    }    
+
+    public ViewPrivilegesAdvancedObject getViewPrivilegesAdvancedObject() {
+        return viewPrivilegesAdvancedObject;
+    }
+
+    public void setViewPrivilegesAdvancedObject(ViewPrivilegesAdvancedObject viewPrivilegesAdvancedObject) {
+        this.viewPrivilegesAdvancedObject = viewPrivilegesAdvancedObject;
+    }
+    
+    public List<ViewPrivilegesAdvancedObject> getViewPrivilegesAdvancedObjectList() {
+        return viewPrivilegesAdvancedObjectList;
+    }
+
+    public void setViewPrivilegesAdvancedObjectList(List<ViewPrivilegesAdvancedObject> viewPrivilegesAdvancedObjectList) {
+        this.viewPrivilegesAdvancedObjectList = viewPrivilegesAdvancedObjectList;
+    }
+    
+    
+    
 }

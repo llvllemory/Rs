@@ -26,7 +26,7 @@
         <div id="container">
             
             <center>
-                <p:outputLabel id = "lblTitle" style ="font-size: 30px;" value="صرف رصاص لمركز"/>
+                <p:outputLabel id = "lblTitle"  value="صرف رصاص لمركز"/>
             </center>
 
             <h:form styleClass="frmMain" >
@@ -58,6 +58,7 @@
                             <center>
                                 <p:commandButton id="btnSave" value="صرف الرصاص" action="#{mBRsMain.checkRsSubCenter()}" disabled="#{mBViewPrivilege.getBtnPrivilege(component.id)}" />
                                 <p:commandButton id="btnDelete" value="إلغاء صرف الرصاص" action="#{mBRsMain.checkRsSubCenterToDelete()}" disabled="#{mBViewPrivilege.getBtnPrivilege(component.id)}"/>
+                                <p:commandButton value="تفريغ الحقول" type="reset" />
                             </center>
                         </f:facet>
 
