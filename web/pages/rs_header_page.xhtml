@@ -46,8 +46,8 @@
                 
                 <p:submenu id="maintenance" label="الصيـــانة">
                     <p:submenu id="rasasMaintenance" label="صيانة الرصاص">
-                        <p:menuitem id="rs_center_page" value="صرف رصاص اللوازم" action="rs_center_page" disabled="#{mBViewPrivilege.getMenuPrivilege('rs_center_page')}"/>
-                        <p:menuitem id="rs_subcenter_page" value="صرف رصاص لمركز" action="rs_subcenter_page" disabled="#{mBViewPrivilege.getMenuPrivilege('rs_subcenter_page')}"/>
+                        <p:menuitem id="rs_center_page" value="صرف رصاص اللوازم" action="rs_center_page?faces-redirect=true" disabled="#{mBViewPrivilege.getMenuPrivilege('rs_center_page')}"/>
+                        <p:menuitem id="rs_subcenter_page" value="صرف رصاص لمركز" action="rs_subcenter_page?faces-redirect=true" disabled="#{mBViewPrivilege.getMenuPrivilege('rs_subcenter_page')}"/>
                     </p:submenu>
                     
                     <p:submenu id="rasasReg" label="تسديد الرصاص">
@@ -56,8 +56,8 @@
                         <p:menuitem id="rs_manual_page" value="تسديد الرصاص اليدوي" disabled="#{mBViewPrivilege.getMenuPrivilege('rs_manual_page')}"/>
                     </p:submenu>
                     
-                    <p:menuitem id="rs_change_pass_page" value="تعديل كلمة السر" action="rs_change_pass_page" disabled="#{mBViewPrivilege.getMenuPrivilege('rs_change_pass_page')}"/>
-                    <p:menuitem id="rs_security_page" value="الأمن والحماية" action="rs_security_page" disabled="#{mBViewPrivilege.getMenuPrivilege('rs_security_page')}"/>
+                    <p:menuitem id="rs_change_pass_page" value="تعديل كلمة السر" action="rs_change_pass_page?faces-redirect=true" disabled="#{mBViewPrivilege.getMenuPrivilege('rs_change_pass_page')}"/>
+                    <p:menuitem id="rs_security_page" value="الأمن والحماية" action="rs_security_page?faces-redirect=true" disabled="#{mBViewPrivilege.getMenuPrivilege('rs_security_page')}"/>
                     <p:menuitem id="exit" value="خروج" action="#{mBLogin.logout()}" />
                 </p:submenu>
             </p:menubar>

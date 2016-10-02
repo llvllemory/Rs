@@ -11,7 +11,7 @@
 
         <link rel="stylesheet" 
               type="text/css"
-              href="resources/css/rasas.css"/>
+              href="../resources/css/rasas.css"/>
 
     </h:head>
 
@@ -194,7 +194,7 @@
                                              rows="15" paginator="false" paginatorPosition="bottom" scrollable="true" scrollHeight="200"> 
                                     
                                     <p:column headerText="اسم الشاشة" width="150">
-                                        <p:outputLabel value="#{viewPrivilege.viewId}" />    
+                                        <p:outputLabel value="#{viewPrivilege.viewName}" />    
                                     </p:column>
                                     <p:column headerText="مشاهدة" width="20">
                                         <p:selectBooleanCheckbox value="#{viewPrivilege.privilege.view}" />

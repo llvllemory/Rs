@@ -29,6 +29,7 @@ public class MBViewPrivilege {
     private String viewId = "";
     private MBLogin mBLogin = new MBLogin();
     private MBGroupMembers mBGroupMembers = new MBGroupMembers();
+    private MBViews mBViews = new MBViews();
     
     private PrivilegesAdvancedObject privilegesAdvancedObject;
     private ViewPrivilegesAdvancedObject viewPrivilegesAdvancedObject;
@@ -175,6 +176,7 @@ public class MBViewPrivilege {
         }
 
         
+        
         for(ViewPrivilege v: viewsPrivilegeList){
     
             privilegesAdvancedObject = new PrivilegesAdvancedObject();
@@ -182,6 +184,8 @@ public class MBViewPrivilege {
             
             viewPrivilegesAdvancedObject.setGroupId(v.getViewPrivilegePK().getGroupId());
             viewPrivilegesAdvancedObject.setViewId(v.getViewPrivilegePK().getViewId());
+            viewPrivilegesAdvancedObject.setViewName(mBViews.getViewNameByViewId(v.getViewPrivilegePK().getViewId()));
+
             
             System.out.println(v.getViewPrivilegePK().getViewId() + " : " + v.getPrivilege().substring(0, 1) + " -- " + v.getPrivilege().substring(1, 2) + " -- " + 
                     v.getPrivilege().substring(2, 3) + " -- " + v.getPrivilege().substring(3, 4) + " -- " + v.getPrivilege().substring(4, 5) + " -- " + v.getPrivilege().substring(5, 6));

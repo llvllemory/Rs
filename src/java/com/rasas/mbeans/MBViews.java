@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
+import javax.swing.text.View;
 
 
 @ManagedBean
@@ -175,6 +176,16 @@ public class MBViews {
         viewName = view.getViewName();
     }
 
+////////////////////////////////////////////////////////////////////////////////
+    public String getViewNameByViewId(String viewId){
+        
+        emf.getCache().evictAll();
+        
+        view = new Views();
+        view = em.find(Views.class, viewId);
+        
+        return view.getViewName();
+    }
 ////////////////////// Getters and Setters /////////////////////////////////////
 
     public String getViewId() {

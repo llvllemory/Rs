@@ -11,13 +11,30 @@
         <title>شاشة الدخول لنظام الرصاص</title>
    
         <!--<META HTTP-EQUIV="refresh" CONTENT="15"/> --> 
+
         
-        <link rel="stylesheet" 
-              type="text/css"
-              href="resources/css/rasas.css"/>
+        
+        <style type="text/css">
+            
+            .txtCenter{
+                text-align: center;
+            }
+            
+            .ui-button{
+                margin: 10px;
+            }
+            
+            .ui-growl {
+                top: 7% !important;
+                left: 0.5%;
+                width: 350px;
+                direction: rtl;
+            }
+            
+        </style>
            
     </h:head>
-    <h:body dir="RTL">
+    <h:body dir="rtl">
         
         <p:growl id="growl" showDetail="true" life="5000"/>
         
@@ -38,6 +55,7 @@
                 <f:facet name="footer">
                     <center>
                         <p:commandButton id="lblBtnLogin" value="تسجيل دخول" action="#{mBLogin.login()}"/>
+                        <p:commandButton value="تفريغ الحقول" type="reset" />
                     </center>
                 </f:facet>
             </h:panelGrid>
