@@ -55,7 +55,9 @@ public class AuthorizationFilter implements Filter {
         + "<partial-response><redirect url=\"%s\"></redirect></partial-response>";
 
     @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws ServletException, IOException {    
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws ServletException, IOException { 
+        System.out.println("com.rasas.filters.AuthorizationFilter.doFilter()");
+        
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
         HttpSession session = request.getSession(false);

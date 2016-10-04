@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
  * @author Naser
  */
 @Embeddable
-public class ViewPrivilegePK implements Serializable {
+public class ViewsPrivilegesPK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
@@ -30,10 +30,10 @@ public class ViewPrivilegePK implements Serializable {
     @Column(name = "VIEW_ID")
     private String viewId;
 
-    public ViewPrivilegePK() {
+    public ViewsPrivilegesPK() {
     }
 
-    public ViewPrivilegePK(String groupId, String viewId) {
+    public ViewsPrivilegesPK(String groupId, String viewId) {
         this.groupId = groupId;
         this.viewId = viewId;
     }
@@ -65,10 +65,10 @@ public class ViewPrivilegePK implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ViewPrivilegePK)) {
+        if (!(object instanceof ViewsPrivilegesPK)) {
             return false;
         }
-        ViewPrivilegePK other = (ViewPrivilegePK) object;
+        ViewsPrivilegesPK other = (ViewsPrivilegesPK) object;
         if ((this.groupId == null && other.groupId != null) || (this.groupId != null && !this.groupId.equals(other.groupId))) {
             return false;
         }
@@ -80,7 +80,7 @@ public class ViewPrivilegePK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.rasas.entities.ViewPrivilegePK[ groupId=" + groupId + ", viewId=" + viewId + " ]";
+        return "com.rasas.entities.ViewsPrivilegesPK[ groupId=" + groupId + ", viewId=" + viewId + " ]";
     }
     
 }

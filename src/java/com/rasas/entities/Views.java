@@ -6,16 +6,20 @@
 package com.rasas.entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -40,6 +44,8 @@ public class Views implements Serializable {
     @Size(max = 100)
     @Column(name = "VIEW_NAME")
     private String viewName;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "views")
+    private Collection<ViewsPrivileges> viewsPrivilegesCollection;
 
     public Views() {
     }
@@ -62,6 +68,15 @@ public class Views implements Serializable {
 
     public void setViewName(String viewName) {
         this.viewName = viewName;
+    }
+
+    @XmlTransient
+    public Collection<ViewsPrivileges> getViewsPrivilegesCollection() {
+        return viewsPrivilegesCollection;
+    }
+
+    public void setViewsPrivilegesCollection(Collection<ViewsPrivileges> viewsPrivilegesCollection) {
+        this.viewsPrivilegesCollection = viewsPrivilegesCollection;
     }
 
     @Override

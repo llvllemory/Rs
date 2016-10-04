@@ -178,8 +178,8 @@
 
                             <h:panelGrid  columns="2" style = "width: 50%; margin-top: 5%;" cellspacing="5" >
                                 <p:outputLabel  value="اسم المجموعة : " />
-                                <h:selectOneMenu styleClass = "slctMenu" value ="#{mBViewPrivilege.groupId}">
-                                    <p:ajax listener="#{mBViewPrivilege.loadViewsPrivilegeListByGroupId()}" update=":tabViewSecurity:frmPrivilegeList:pnlViewsPrivilegeList"/>
+                                <h:selectOneMenu styleClass = "slctMenu" value ="#{mBViewsPrivileges.groupId}">
+                                    <p:ajax listener="#{mBViewsPrivileges.loadViewsPrivilegeListByGroupId()}" update=":tabViewSecurity:frmPrivilegeList:pnlViewsPrivilegeList"/>
                                     <f:selectItem itemLabel="إختر المجموعة"/>
                                     <f:selectItems value="#{mBUsers.allGroups}" var="allGroups" itemLabel="#{allGroups.userName}" itemValue="#{allGroups.userId}"/>
                                 </h:selectOneMenu>
@@ -190,30 +190,34 @@
                             <h:panelGrid  id ="pnlViewsPrivilegeList" columns="1" style = "width: 70%;" cellspacing="5" >
                                 <p:outputLabel  value="الصلاحيات على الشاشات" />
 
-                                <p:dataTable id="dta" value="#{mBViewPrivilege.viewPrivilegesAdvancedObjectList}" var="viewPrivilege" 
+                                <p:dataTable id="dta" value="#{mBViewsPrivileges.groupViewsPrivilegesList}" var="viewPrivilege" 
                                              rows="15" paginator="false" paginatorPosition="bottom" scrollable="true" scrollHeight="200"> 
                                     
-                                    <p:column headerText="اسم الشاشة" width="150">
-                                        <p:outputLabel value="#{viewPrivilege.viewName}" />    
-                                    </p:column>
-                                    <p:column headerText="مشاهدة" width="20">
-                                        <p:selectBooleanCheckbox value="#{viewPrivilege.privilege.view}" />
-                                    </p:column>    
-                                    <p:column headerText="إضافة" width="20">
-                                        <p:selectBooleanCheckbox value="#{viewPrivilege.privilege.add}" />
-                                    </p:column>    
-                                    <p:column headerText="حذف" width="20">
-                                        <p:selectBooleanCheckbox value="#{viewPrivilege.privilege.delete}" />
-                                    </p:column>    
-                                    <p:column headerText="تعديل" width="20">
-                                        <p:selectBooleanCheckbox value="#{viewPrivilege.privilege.update}" />
-                                    </p:column>
-
+                                       
+                                        <p:column headerText="اسم الشاشة" width="150">
+                                            <p:outputLabel value="#{viewPrivilege.views.viewName}" />    
+                                        </p:column>
+                                        <p:column headerText="مشاهدة" width="20">
+                                            <p:selectBooleanCheckbox value="#{viewPrivilege.canView}" />
+                                        </p:column>    
+                                        <p:column headerText="إضافة" width="20">
+                                            <p:selectBooleanCheckbox value="#{viewPrivilege.canSave}" />
+                                        </p:column>    
+                                        <p:column headerText="حذف" width="20">
+                                            <p:selectBooleanCheckbox value="#{viewPrivilege.canDelete}" />
+                                        </p:column>    
+                                        <p:column headerText="تعديل" width="20">
+                                            <p:selectBooleanCheckbox value="#{viewPrivilege.canUpdate}" />
+                                        </p:column>
+                                        <p:column headerText="طباعة" width="20">
+                                            <p:selectBooleanCheckbox value="#{viewPrivilege.canPrint}" />
+                                        </p:column>
+                                 
                                 </p:dataTable>
                             </h:panelGrid>
 
                             <h:panelGrid id="pnlBtns" columns="1"  style ="width: 80%;text-align: center;" cellpadding="5" >
-                                <p:commandButton id="btnAdd" value="تخزين" action="#{mBViewPrivilege.saveViewsPrivileges()}"/>
+                                <p:commandButton id="btnAdd" value="تخزين" action="#{mBViewsPrivileges.saveViewsPrivileges()}"/>
                             </h:panelGrid>
                         </h:form>
                     </p:tab>

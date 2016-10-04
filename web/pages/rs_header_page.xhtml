@@ -41,23 +41,24 @@
         <h:form id="frmMenuBar">  
             <p:menubar id="menuBar">
                 <p:submenu id="query" label="الإستفسارات">
-                    <p:menuitem id="rs_query_page" value="الإستفسار الشامل" disabled="#{mBViewPrivilege.getMenuPrivilege('rs_query_page')}"/>
+                    <p:menuitem id="rs_query_page" value="الإستفسار الشامل" disabled="#{mBViewsPrivileges.getMenuPrivilege('rs_query_page')}"/>
                 </p:submenu>
                 
                 <p:submenu id="maintenance" label="الصيـــانة">
                     <p:submenu id="rasasMaintenance" label="صيانة الرصاص">
-                        <p:menuitem id="rs_center_page" value="صرف رصاص اللوازم" action="rs_center_page?faces-redirect=true" disabled="#{mBViewPrivilege.getMenuPrivilege('rs_center_page')}"/>
-                        <p:menuitem id="rs_subcenter_page" value="صرف رصاص لمركز" action="rs_subcenter_page?faces-redirect=true" disabled="#{mBViewPrivilege.getMenuPrivilege('rs_subcenter_page')}"/>
+                        <p:menuitem id="rs_center_page" value="صرف رصاص اللوازم" action="rs_center_page?faces-redirect=true" disabled="#{mBViewsPrivileges.getMenuPrivilege('rs_center_page')}"/>
+                        <p:menuitem id="rs_subcenter_page" value="صرف رصاص لمركز" action="rs_subcenter_page?faces-redirect=true" disabled="#{mBViewsPrivileges.getMenuPrivilege('rs_subcenter_page')}"/>
                     </p:submenu>
                     
                     <p:submenu id="rasasReg" label="تسديد الرصاص">
-                        <p:menuitem id="rs_permnote_page" value="تسديد وثيقة النقل" disabled="#{mBViewPrivilege.getMenuPrivilege('rs_permnote_page')}"/>
-                        <p:menuitem id="rs_perm_page" value="تسديد تصريح خروج" disabled="#{mBViewPrivilege.getMenuPrivilege('rs_perm_page')}"/>
-                        <p:menuitem id="rs_manual_page" value="تسديد الرصاص اليدوي" disabled="#{mBViewPrivilege.getMenuPrivilege('rs_manual_page')}"/>
+                        <p:menuitem id="rs_permnote_page" value="تسديد وثيقة النقل" disabled="#{mBViewsPrivileges.getMenuPrivilege('rs_permnote_page')}"/>
+                        <p:menuitem id="rs_perm_page" value="تسديد تصريح خروج" disabled="#{mBViewsPrivileges.getMenuPrivilege('rs_perm_page')}"/>
+                        <p:menuitem id="rs_manual_page" value="تسديد الرصاص اليدوي" disabled="#{mBViewsPrivileges.getMenuPrivilege('rs_manual_page')}"/>
                     </p:submenu>
                     
-                    <p:menuitem id="rs_change_pass_page" value="تعديل كلمة السر" action="rs_change_pass_page?faces-redirect=true" disabled="#{mBViewPrivilege.getMenuPrivilege('rs_change_pass_page')}"/>
-                    <p:menuitem id="rs_security_page" value="الأمن والحماية" action="rs_security_page?faces-redirect=true" disabled="#{mBViewPrivilege.getMenuPrivilege('rs_security_page')}"/>
+                    <p:menuitem id="rs_change_pass_page" value="تعديل كلمة السر" action="rs_change_pass_page?faces-redirect=true" disabled="#{mBViewsPrivileges.getMenuPrivilege('rs_change_pass_page')}"/>
+                    <p:menuitem id="rs_security_page" value="الأمن والحماية" action="rs_security_page?faces-redirect=true" disabled="#{mBViewsPrivileges.getMenuPrivilege('rs_security_page')}"/>
+      
                     <p:menuitem id="exit" value="خروج" action="#{mBLogin.logout()}" />
                 </p:submenu>
             </p:menubar>
