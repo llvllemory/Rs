@@ -17,8 +17,10 @@ body{
     margin: 10px;
 }
 
-.txtCenter{
+.txtSecurity{
     text-align: center;
+    width: 240px;
+    
 }
 
 #lblTitle {     
@@ -31,7 +33,12 @@ body{
 }
 
 .slctMenu {
-    width: 190px; 
+    width: 210px; 
+    height: 25px;
+}
+
+.slctMenuSecurity {
+    width: 250px; 
     height: 25px;
 }
 
@@ -47,7 +54,7 @@ body{
 
 .txtRasas {
     text-align: center;
-    width: 170px;
+    width: 200px;
 }
 
 .tabView{
@@ -55,8 +62,5 @@ body{
     
 }
 
-.main_background {
-    background-image:url("resources/images/customs_logo.jpg"); 
-}
 
 

@@ -1,6 +1,5 @@
 package com.rasas.mbeans;
 
-import com.rasas.entities.Centers;
 import com.rasas.entities.SubCenters;
 import com.rasas.entities.Users;
 import java.io.Serializable;
@@ -98,10 +97,10 @@ public class MBUsers implements Serializable{
                 return "";
             }
 
-            if (userCenter == null) {
-                MBCommon.getWarnMessage("", "يجب إختيار مركز عمل المستخدم !");
-                return "";
-            }
+//            if (userCenter == null) {
+//                MBCommon.getWarnMessage("", "يجب إختيار مركز عمل المستخدم !");
+//                return "";
+//            }
         }
         
         usersList = new ArrayList<>();
@@ -175,10 +174,10 @@ public class MBUsers implements Serializable{
                 return "";
             }
 
-            if (userCenter == null) {
-                MBCommon.getWarnMessage("", "يجب إختيار مركز عمل المستخدم !");
-                return "";
-            }
+//            if (userCenter == null) {
+//                MBCommon.getWarnMessage("", "يجب إختيار مركز عمل المستخدم !");
+//                return "";
+//            }
         }
         
         usersList = new ArrayList<>();
@@ -436,7 +435,21 @@ public class MBUsers implements Serializable{
             return null;
         }
     }
-            
+////////////////////////////////////////////////////////////////////////////////
+    public List<SubCenters> getSubCentersByCenterNo(){
+        System.out.println("com.rasas.mbeans.MBUsers.getSubCentersByCenterNo()");
+        
+        TypedQuery<SubCenters> query = em.createQuery("SELECT s FROM SubCenters s WHERE s.centerNo = ?1 AND s.subCenterName IS NOT NULL ORDER BY s.subCenterNo DESC", SubCenters.class)
+                .setParameter(1, userCenter);
+        
+        List<SubCenters> subCentersList = query.getResultList();
+        
+        if(subCentersList.size() > 0){
+            return subCentersList;
+        }else{
+            return null;
+        }
+    }
 //////////////////// Getters and Setters ///////////////////////////////////////
 
     public String getUserId() {
