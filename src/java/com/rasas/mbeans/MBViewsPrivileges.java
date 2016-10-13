@@ -3,11 +3,13 @@ package com.rasas.mbeans;
 import com.rasas.entities.Views;
 import com.rasas.entities.ViewsPrivileges;
 import com.rasas.entities.ViewsPrivilegesPK;
+import com.rasas.helpers.AdvancedViewsPrivileges;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -15,7 +17,7 @@ import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
 @ManagedBean
-@RequestScoped
+@ViewScoped
 
 public class MBViewsPrivileges {
     
@@ -27,7 +29,11 @@ public class MBViewsPrivileges {
     private MBLogin mBLogin = new MBLogin();
     private MBGroupMembers mBGroupMembers = new MBGroupMembers();
     private MBViews mBViews = new MBViews();
+    
     private List<ViewsPrivileges> groupViewsPrivilegesList;
+    
+    private AdvancedViewsPrivileges advancedViewsPrivileges;
+    private List<AdvancedViewsPrivileges> advancedViewsPrivilegesList;
     
     EntityManager em;
     EntityManagerFactory emf;
@@ -132,54 +138,131 @@ public class MBViewsPrivileges {
     public void loadViewsPrivilegeListByGroupId(){
         System.out.println("com.rasas.mbeans.MBViewPrivilege.loadViewsPrivilegeListByGroupId()");
         
+        groupViewsPrivilegesList = new ArrayList<>(); 
+        advancedViewsPrivilegesList = new ArrayList<>();
+        
         emf.getCache().evictAll();
+        
         TypedQuery<Views> vQuery = em.createQuery("SELECT v FROM Views v", Views.class); 
         List<Views> allViewsList = vQuery.getResultList();
         
         TypedQuery<ViewsPrivileges> query = em.createQuery("SELECT v FROM ViewsPrivileges v WHERE v.viewsPrivilegesPK.groupId = ?1", ViewsPrivileges.class)
                 .setParameter(1, groupId); 
-        
         groupViewsPrivilegesList = query.getResultList();
-        
         
         for(Views v: allViewsList){
             
-            ViewsPrivileges tempViewPrivilege = new ViewsPrivileges();
-            ViewsPrivilegesPK tempViewPrivilegePK = new ViewsPrivilegesPK();
+            advancedViewsPrivileges = new AdvancedViewsPrivileges();
             
-            tempViewPrivilegePK.setGroupId(groupId);
-            tempViewPrivilegePK.setViewId(v.getViewId());
-                        
-            tempViewPrivilege.setViewsPrivilegesPK(tempViewPrivilegePK);
+            advancedViewsPrivileges.setGroupId(groupId);
+            advancedViewsPrivileges.setViewId(v.getViewId());
+            advancedViewsPrivileges.setViewName(v.getViewName());
             
-            tempViewPrivilege.setViews(v);
-            tempViewPrivilege.setCanView("false");
-            tempViewPrivilege.setCanSave("false");
-            tempViewPrivilege.setCanDelete("false");
-            tempViewPrivilege.setCanUpdate("false");
-            tempViewPrivilege.setCanPrint("false");
+            advancedViewsPrivileges.setCanView(false);
+            advancedViewsPrivileges.setCanSave(false);
+            advancedViewsPrivileges.setCanDelete(false);
+            advancedViewsPrivileges.setCanUpdate(false);
+            advancedViewsPrivileges.setCanPrint(false);
             
-            if(!groupViewsPrivilegesList.contains(tempViewPrivilege)){
-                groupViewsPrivilegesList.add(tempViewPrivilege);
+            advancedViewsPrivilegesList.add(advancedViewsPrivileges);
+            
+        }
+        
+        for(ViewsPrivileges v: groupViewsPrivilegesList){
+            
+            for(AdvancedViewsPrivileges av: advancedViewsPrivilegesList){
+                
+                if(av.getViewId().equals(v.getViewsPrivilegesPK().getViewId())){
+                    av.setCanView(v.getCanView().equals("true")? true: false);
+                    av.setCanSave(v.getCanSave().equals("true")? true: false);
+                    av.setCanDelete(v.getCanDelete().equals("true")? true: false);
+                    av.setCanUpdate(v.getCanUpdate().equals("true")? true: false);
+                    av.setCanPrint(v.getCanPrint().equals("true")? true: false);                   
+                }
             }
         }
+        
+        
 
-        Collections.sort(groupViewsPrivilegesList, new Comparator<ViewsPrivileges>() {
+        Collections.sort(advancedViewsPrivilegesList, new Comparator<AdvancedViewsPrivileges>() {
 
                 @Override
-                public int compare(ViewsPrivileges object_1, ViewsPrivileges object_2) {
-                    return object_2.getViewsPrivilegesPK().getViewId().compareTo(object_1.getViewsPrivilegesPK().getViewId());
+                public int compare(AdvancedViewsPrivileges object_1, AdvancedViewsPrivileges object_2) {
+                    return object_2.getViewId().compareTo(object_1.getViewId());
                 }
         });
+ 
     }   
-    
-////////////////////////////////////////////////////////////////////////////////
+        
+////////////////////////////////////////////////////////////////////////////////    
     public void saveViewsPrivileges(){
         System.out.println("com.rasas.mbeans.MBViewPrivilege.saveViewsPrivileges()");
         
-        System.out.println("---------------------------------------------------------------------------- " + groupViewsPrivilegesList);
+        ViewsPrivileges viewsPrivileges;
+        ViewsPrivilegesPK viewsPrivilegesPK;
+        groupViewsPrivilegesList = new ArrayList<>(); 
         
+        for(AdvancedViewsPrivileges av: advancedViewsPrivilegesList){
+            
+            viewsPrivileges = new ViewsPrivileges();
+            viewsPrivilegesPK = new ViewsPrivilegesPK();
+
+            viewsPrivilegesPK.setGroupId(groupId);
+            viewsPrivilegesPK.setViewId(av.getViewId());
+            viewsPrivileges.setViewsPrivilegesPK(viewsPrivilegesPK);
+
+            viewsPrivileges.setCanView(av.getCanView() == true ? "true" : "false");
+            viewsPrivileges.setCanSave(av.getCanSave() == true ? "true" : "false");
+            viewsPrivileges.setCanDelete(av.getCanDelete() == true ? "true" : "false");
+            viewsPrivileges.setCanUpdate(av.getCanUpdate() == true ? "true" : "false");
+            viewsPrivileges.setCanPrint(av.getCanPrint() == true ? "true" : "false");
+
+            groupViewsPrivilegesList.add(viewsPrivileges);
+            
+        }
+
+        for (ViewsPrivileges vx : groupViewsPrivilegesList) {
+
+            if(!em.getTransaction().isActive()){
+                em.getTransaction().begin();
+            }
+            
+            em.merge(vx);
+            em.flush();
+            em.clear();
+            
+            
+            
+            System.out.println(vx.getViewsPrivilegesPK().getGroupId() + ", " + vx.getViewsPrivilegesPK().getViewId() + ", " + vx.getCanView() + ", " + vx.getCanSave() + ", "
+                    + vx.getCanDelete() + ", " + vx.getCanUpdate() + ", " + vx.getCanPrint());
+        }
         
+        em.getTransaction().commit();
+    }
+    
+////////////////////////////////////////////////////////////////////////////////
+    public String getTabViewPrivilege(String tabId){
+        System.out.println("com.rasas.mbeans.MBViewsPrivileges.getTabViewPrivilege()");
+        
+        String status = "true";
+        String userGroupId = mBGroupMembers.getGroupIdByUserId(mBLogin.getLoggedUser().getUserId());
+        
+        if(userGroupId.equals("ADMIN")){
+            status = "false";
+        }else{
+            
+            if(tabId.equals("tabUser")){
+                status = "false";
+            }else if(tabId.equals("tabGroups")){
+                status = "false";
+            }else if(tabId.equals("tabViews")){
+                status = "true";
+            }else if(tabId.equals("tabPrivileges")){
+                status = "true";
+            }
+        }
+        
+        return status;
     }
     
 /////////////////////////////////Getters and Setters ///////////////////////////
@@ -214,6 +297,14 @@ public class MBViewsPrivileges {
 
     public void setGroupViewsPrivilegesList(List<ViewsPrivileges> groupViewsPrivilegesList) {
         this.groupViewsPrivilegesList = groupViewsPrivilegesList;
+    }
+
+    public List<AdvancedViewsPrivileges> getAdvancedViewsPrivilegesList() {
+        return advancedViewsPrivilegesList;
+    }
+
+    public void setAdvancedViewsPrivilegesList(List<AdvancedViewsPrivileges> advancedViewsPrivilegesList) {
+        this.advancedViewsPrivilegesList = advancedViewsPrivilegesList;
     }
     
     

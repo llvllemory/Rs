@@ -32,8 +32,9 @@ public class MBUsers implements Serializable{
     private String userTxtPasswordEdit = "false";
     
     private List<Users> usersList;
-    
     private MBLogin mBLogin;
+    
+    private MBGroupMembers mBGroupMembers;
     
     EntityManager em;
     EntityManagerFactory emf;
@@ -335,25 +336,24 @@ public class MBUsers implements Serializable{
         mBLogin = new MBLogin();
         usersList = new ArrayList<>();
         
-        if(mBLogin.getLoggedUser().getPrivilege() == 1){
+        mBGroupMembers = new MBGroupMembers();
+        String groupId = mBGroupMembers.getGroupIdByUserId(mBLogin.getLoggedUser().getUserId());
+        
+        if(groupId.equals("ADMIN")){
             
             TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u ORDER BY u.userId ASC", Users.class);
             usersList = query.getResultList();
             
         }else{
             
-            TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u WHERE u.privilege != 3 AND u.userCenter = ?1 ORDER BY u.userId ASC", Users.class)
+            TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u WHERE u.userType = 'U' AND u.privilege != 3 AND u.userCenter = ?1 ORDER BY u.userId ASC", Users.class)
                 .setParameter(1, mBLogin.getLoggedUser().getUserCenter());
         
             usersList = query.getResultList();
             
         }
         
-        if(usersList.size() > 0){
-            return usersList;
-        }else{
-            return null;
-        }
+        return usersList;
     }
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -425,31 +425,27 @@ public class MBUsers implements Serializable{
         emf.getCache().evictAll();
         usersList = new ArrayList<>();
         
-        TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u WHERE u.userType = 'G'", Users.class);
         
-        usersList = query.getResultList();
+        mBLogin = new MBLogin();
+        mBGroupMembers = new MBGroupMembers();
+        String groupId = mBGroupMembers.getGroupIdByUserId(mBLogin.getLoggedUser().getUserId());
         
-        if(usersList.size() > 0){
-            return usersList;
+        if(groupId.equals("ADMIN")){
+            
+            TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u WHERE u.userType = 'G'", Users.class);
+            usersList = query.getResultList();
+
         }else{
-            return null;
+            
+            TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u WHERE u.userType = 'G' AND u.userCenter = ?1" , Users.class)
+                    .setParameter(1, mBLogin.getLoggedUser().getUserCenter());
+
+            usersList = query.getResultList();
         }
+  
+        return usersList;
     }
-////////////////////////////////////////////////////////////////////////////////
-    public List<SubCenters> getSubCentersByCenterNo(){
-        System.out.println("com.rasas.mbeans.MBUsers.getSubCentersByCenterNo()");
-        
-        TypedQuery<SubCenters> query = em.createQuery("SELECT s FROM SubCenters s WHERE s.centerNo = ?1 AND s.subCenterName IS NOT NULL ORDER BY s.subCenterNo DESC", SubCenters.class)
-                .setParameter(1, userCenter);
-        
-        List<SubCenters> subCentersList = query.getResultList();
-        
-        if(subCentersList.size() > 0){
-            return subCentersList;
-        }else{
-            return null;
-        }
-    }
+
 //////////////////// Getters and Setters ///////////////////////////////////////
 
     public String getUserId() {

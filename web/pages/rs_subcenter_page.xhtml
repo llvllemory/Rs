@@ -37,7 +37,7 @@
                         <p:outputLabel id="lblSubCenterNo" value="المركز : " />
 
                         <h:selectOneMenu id ="slctSubCenters" styleClass = "slctMenu" value ="#{mBRsMain.rsSubCenter}">
-                            <f:selectItems value="#{mBSubCenters.subCentersByCenterNo}" var = "subCenter" itemLabel="#{subCenter.centerNo} - #{subCenter.subCenterNo} -- #{subCenter.subCenterName}" itemValue="#{subCenter.subCenterNo}"/>
+                            <f:selectItems value="#{mBSubCenters.subCentersByCenterNo}" var = "subCenter" itemLabel="#{subCenter.centerNo} -- #{subCenter.subCenterNo} - #{subCenter.subCenterName}" itemValue="#{subCenter.subCenterNo}"/>
                         </h:selectOneMenu>
 
                         <p:outputLabel id="lblCurrentYear" value=" السنة : "/>

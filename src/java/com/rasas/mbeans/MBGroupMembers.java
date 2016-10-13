@@ -25,7 +25,9 @@ public class MBGroupMembers {
 
     private List<GroupMembers> groupIdList;
     private List<GroupMembers> groupMembersList;
-            
+    
+    private MBLogin mBLogin;
+    
     EntityManager em;
     EntityManagerFactory emf;
     
@@ -151,10 +153,25 @@ public class MBGroupMembers {
         System.out.println("com.rasas.mbeans.MBGroupMembers.getAllMembers()");
         
         emf.getCache().evictAll();
- 
-        TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u WHERE u.userType = 'U' AND u.privilege <> 3 ORDER BY u.userId ASC", Users.class);
+        List<Users> usersList = new ArrayList<>();
         
-        List<Users> usersList = query.getResultList();
+        mBLogin = new MBLogin();
+        String groupId = getGroupIdByUserId(mBLogin.getLoggedUser().getUserId());
+        
+        if(groupId.equals("ADMIN")){
+            
+            TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u WHERE u.userType = 'U' AND u.privilege <> 3 ORDER BY u.userId ASC", Users.class);
+
+            usersList = query.getResultList();
+
+        }else{
+            
+            TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u WHERE u.userType = 'U' AND u.privilege <> 3 and u.userCenter = ?1 ORDER BY u.userId ASC", Users.class)
+                    .setParameter(1, mBLogin.getLoggedUser().getUserCenter());
+
+            usersList = query.getResultList();
+            
+        }
         
         return usersList;
     }

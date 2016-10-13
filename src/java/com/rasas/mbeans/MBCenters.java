@@ -17,6 +17,7 @@ public class MBCenters {
 
     private MBLogin mBLogin = new MBLogin();
     private List<Centers> centers;
+    private MBGroupMembers mBGroupMembers;
     
     EntityManager em;
     EntityManagerFactory emf;
@@ -47,7 +48,11 @@ public class MBCenters {
         
         centers = new ArrayList<>();
         
-        if(mBLogin.getLoggedUser().getPrivilege().toString().equals("1")){
+        mBGroupMembers = new MBGroupMembers();
+        String groupId = mBGroupMembers.getGroupIdByUserId(mBLogin.getLoggedUser().getUserId());
+        
+         
+        if(groupId.equals("ADMIN") || groupId.equals("CENTERS")){
             
             TypedQuery<Centers> query = em.createQuery("SELECT c FROM Centers c ORDER BY c.centerNo ASC", Centers.class);
             centers = query.getResultList();

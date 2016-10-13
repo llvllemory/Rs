@@ -31,8 +31,9 @@
             <br/>
             <center>    
                 <p:tabView id = "tabViewSecurity" styleClass="tabView" dir="rtl" cache="false">
-
-                    <p:tab id="tabUser" title="صيانة المستخدمين">
+                    
+                    <p:tab id="tabUser" title="صيانة المستخدمين" disabled="#{mBViewsPrivileges.getTabViewPrivilege('tabUser')}">
+                        
                         <h:panelGrid  id ="pnlUser" columns="2" style = "width: 100%; margin-top: 5%" cellspacing="5" >
 
                             <h:form id = "frmTabUsers">
@@ -45,16 +46,14 @@
 
                                     <p:outputLabel value="المركز : "/>
                                     <h:selectOneMenu styleClass = "slctMenuSecurity" value ="#{mBUsers.userCenter}">
-                                        <p:ajax update=":tabViewSecurity:frmTabUsers:slctSubCenters"/>
                                         <f:selectItem itemLabel="إختر المركز"/>
-                                        <f:selectItems value="#{mBCenters.centers}" var = "center" itemLabel="#{center.centerNo} - #{center.centerName}" itemValue="#{center.centerNo}"/>
-                                        
+                                        <f:selectItems value="#{mBCenters.centers}" var = "center" itemLabel="#{center.centerNo} -- #{center.centerName}" itemValue="#{center.centerNo}"/>                    
                                     </h:selectOneMenu>
 
                                     <p:outputLabel value="القسم : "/>
-                                    <h:selectOneMenu id ="slctSubCenters" styleClass = "slctMenuSecurity" value ="#{mBUsers.userSubCenter}">
+                                    <h:selectOneMenu id ="slctSubCenters" styleClass = "slctMenuSecurity" value="#{mBUsers.userSubCenter}">
                                         <f:selectItem itemLabel="إختر القسم"/>
-                                        <f:selectItems value="#{mBUsers.subCentersByCenterNo}" var = "subCenter" itemLabel="#{subCenter.centerNo} - #{subCenter.subCenterNo} -- #{subCenter.subCenterName}" itemValue="#{subCenter.subCenterNo}"/>
+                                        <f:selectItems value="#{mBSubCenters.subCentersByCenterNo}" var = "subCenter" itemLabel="#{subCenter.centerNo} -- #{subCenter.subCenterNo} - #{subCenter.subCenterName}" itemValue="#{subCenter.subCenterNo}"/> 
                                     </h:selectOneMenu>
 
                                     <p:outputLabel value="صفة المستخدم : "/>
@@ -100,7 +99,10 @@
                         </h:panelGrid>
                     </p:tab>
 
-                    <p:tab id="tabGroups" title="صيانة المجموعات">
+                    
+                    
+                    <p:tab id="tabGroups" title="صيانة المجموعات" disabled="#{mBViewsPrivileges.getTabViewPrivilege('tabGroups')}">
+                        
                         <h:form id="frmGroupsList">
 
                             <h:panelGrid  columns="2" style = "width: 50%; margin-top: 5%;" cellspacing="5" >
@@ -109,7 +111,6 @@
                                     <p:ajax  update=":tabViewSecurity:frmGroupsList:pnlGroupMembersList tabViewSecurity:frmGroupsList:pnlGroupsMembersList"/>
                                     <f:selectItem itemLabel="إختر المجموعة"/>
                                     <f:selectItems value="#{mBUsers.allGroups}" var="allGroups" itemLabel="#{allGroups.userName}" itemValue="#{allGroups.userId}"/>
-
                                 </h:selectOneMenu>
                             </h:panelGrid>
 
@@ -145,7 +146,10 @@
                         </h:form>
                     </p:tab>
 
-                    <p:tab id="tabViews" title="صيانة الشاشات" >
+                    
+                    
+                    <p:tab id="tabViews" title="صيانة الشاشات" disabled="#{mBViewsPrivileges.getTabViewPrivilege('tabViews')}">
+                        
                         <h:panelGrid  id ="pnlViews" columns="2" style = "width: 100%; margin-top: 5%" cellspacing="5" >
                             <h:form id = "frmTabView">
                                 <h:panelGrid  id = "pnlViewInfo" columns="2" style = "width: 100%" cellpadding="5">
@@ -175,7 +179,10 @@
                         </h:panelGrid>
                     </p:tab>
 
-                    <p:tab id="tabPrivilege" title="صيانة الصلاحيات">
+                    
+                    
+                    <p:tab id="tabPrivilege" title="صيانة الصلاحيات" disabled="#{mBViewsPrivileges.getTabViewPrivilege('tabPrivileges')}">
+                        
                         <h:form id="frmPrivilegeList">
 
                             <h:panelGrid  columns="2" style = "width: 50%; margin-top: 5%;" cellspacing="5" >
@@ -192,27 +199,26 @@
                             <h:panelGrid  id ="pnlViewsPrivilegeList" columns="1" style = "width: 70%;" cellspacing="5" >
                                 <p:outputLabel  value="الصلاحيات على الشاشات" />
 
-                                <p:dataTable id="dta" value="#{mBViewsPrivileges.groupViewsPrivilegesList}" var="viewPrivilege" 
+                                <p:dataTable id="dta" value="#{mBViewsPrivileges.advancedViewsPrivilegesList}" var="viewsPrivileges" 
                                              rows="15" paginator="false" paginatorPosition="bottom" scrollable="true" scrollHeight="200"> 
                                     
-                                       
                                         <p:column headerText="اسم الشاشة" width="150">
-                                            <p:outputLabel value="#{viewPrivilege.views.viewName}" />    
+                                            <p:outputLabel value="#{viewsPrivileges.viewName}" />    
                                         </p:column>
                                         <p:column headerText="مشاهدة" width="20">
-                                            <p:selectBooleanCheckbox value="#{viewPrivilege.canView}" />
+                                            <p:selectBooleanCheckbox value="#{viewsPrivileges.canView}" />
                                         </p:column>    
                                         <p:column headerText="إضافة" width="20">
-                                            <p:selectBooleanCheckbox value="#{viewPrivilege.canSave}" />
+                                            <p:selectBooleanCheckbox value="#{viewsPrivileges.canSave}" />
                                         </p:column>    
                                         <p:column headerText="حذف" width="20">
-                                            <p:selectBooleanCheckbox value="#{viewPrivilege.canDelete}" />
+                                            <p:selectBooleanCheckbox value="#{viewsPrivileges.canDelete}" />
                                         </p:column>    
                                         <p:column headerText="تعديل" width="20">
-                                            <p:selectBooleanCheckbox value="#{viewPrivilege.canUpdate}" />
+                                            <p:selectBooleanCheckbox value="#{viewsPrivileges.canUpdate}" />
                                         </p:column>
                                         <p:column headerText="طباعة" width="20">
-                                            <p:selectBooleanCheckbox value="#{viewPrivilege.canPrint}" />
+                                            <p:selectBooleanCheckbox value="#{viewsPrivileges.canPrint}" />
                                         </p:column>
                                  
                                 </p:dataTable>

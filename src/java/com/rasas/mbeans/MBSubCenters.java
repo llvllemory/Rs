@@ -1,6 +1,7 @@
 package com.rasas.mbeans;
 
 import com.rasas.entities.SubCenters;
+import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -14,7 +15,9 @@ import javax.persistence.TypedQuery;
 
 public class MBSubCenters {
     
+    private List<SubCenters> subCentersList;
     private MBLogin mBLogin = new MBLogin();
+    private MBGroupMembers mBGroupMembers;
     
     EntityManager em;
     EntityManagerFactory emf;
@@ -42,15 +45,25 @@ public class MBSubCenters {
     public List<SubCenters> getSubCentersByCenterNo(){
         System.out.println("com.rasas.mbeans.MBRsMain.getSubCentersByCenterNo()");
         
-        TypedQuery<SubCenters> query = em.createQuery("SELECT s FROM SubCenters s WHERE s.centerNo = ?1 AND s.subCenterName IS NOT NULL ORDER BY s.subCenterNo DESC", SubCenters.class)
-                .setParameter(1, mBLogin.getLoggedUser().getUserCenter());
+        subCentersList = new ArrayList<>();
         
-        List<SubCenters> subCentersList = query.getResultList();
+        mBGroupMembers = new MBGroupMembers();
+        String groupId = mBGroupMembers.getGroupIdByUserId(mBLogin.getLoggedUser().getUserId());
         
-        if(subCentersList.size() > 0){
-            return subCentersList;
+        if(groupId.equals("ADMIN")){
+            
+            TypedQuery<SubCenters> query = em.createQuery("SELECT s FROM SubCenters s WHERE s.subCenterName IS NOT NULL ORDER BY s.centerNo, s.subCenterNo DESC", SubCenters.class);
+
+            subCentersList = query.getResultList();
+            
         }else{
-            return null;
+            
+            TypedQuery<SubCenters> query = em.createQuery("SELECT s FROM SubCenters s WHERE s.centerNo = ?1 AND s.subCenterName IS NOT NULL ORDER BY s.subCenterNo DESC", SubCenters.class)
+                    .setParameter(1, mBLogin.getLoggedUser().getUserCenter());
+
+            subCentersList = query.getResultList();
         }
-    }  
+        
+        return subCentersList;
+    }
 }
