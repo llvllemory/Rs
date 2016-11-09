@@ -38,6 +38,11 @@ body{
     height: 25px;
 }
 
+.slctMenuYear {
+    width: 100px; 
+    height: 25px;
+}
+
 .slctMenuSecurity {
     width: 250px; 
     height: 25px;
@@ -56,6 +61,11 @@ body{
 .txtRasas {
     text-align: center;
     width: 200px;
+}
+
+.txtYear {
+    text-align: center;
+    width: 100px;
 }
 
 .tabView{

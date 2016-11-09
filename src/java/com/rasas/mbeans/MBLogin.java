@@ -19,7 +19,7 @@ public class MBLogin implements Serializable{
     private MBUsers mBUsers;
     private MBGroupMembers mBGroupMembers;
     
-    private final FacesContext context = FacesContext.getCurrentInstance();
+    //private final FacesContext context = FacesContext.getCurrentInstance();
     
     public MBLogin(){
         
@@ -60,8 +60,10 @@ public class MBLogin implements Serializable{
                             int x = mBUsers.updateUserLastLogin(usersList.get(0));
 
                             if (x > 0) {
-                                context.getExternalContext().getSessionMap().put("loggedUser", usersList.get(0));
-
+                                
+                                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loggedUser", usersList.get(0));
+                                //context.getExternalContext().getSessionMap().put("loggedUser", usersList.get(0));
+                                
                                 MBCommon.getInfoMessage("", "أهلا وسهلا بك " + usersList.get(0).getUserName());
                                 return "/pages/rs_main_page?faces-redirect=true";
                             } else {
@@ -106,7 +108,8 @@ public class MBLogin implements Serializable{
     public Users getLoggedUser(){
         System.out.println("com.rasas.mbeans.MBLogin.getLoggedUser()");
                           
-        Users loggedUser = (Users) context.getExternalContext().getSessionMap().get("loggedUser");
+        Users loggedUser = (Users) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedUser");
+        //Users loggedUser = (Users) context.getExternalContext().getSessionMap().get("loggedUser");
         
         return loggedUser;
     }

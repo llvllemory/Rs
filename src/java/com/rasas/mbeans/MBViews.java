@@ -1,6 +1,7 @@
 package com.rasas.mbeans;
 
 import com.rasas.entities.Views;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -15,7 +16,7 @@ import javax.swing.text.View;
 @ManagedBean
 @RequestScoped
 
-public class MBViews {
+public class MBViews implements Serializable{
     
     private String viewId;
     private String viewName;

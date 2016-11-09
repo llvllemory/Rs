@@ -2,6 +2,7 @@ package com.rasas.mbeans;
 
 import com.rasas.entities.GroupMembers;
 import com.rasas.entities.Users;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -17,7 +18,7 @@ import javax.persistence.TypedQuery;
 @ManagedBean
 @RequestScoped
 
-public class MBGroupMembers {
+public class MBGroupMembers implements Serializable{
     
     private String groupId;
     private String groupUser;

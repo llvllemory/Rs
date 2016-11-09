@@ -53,7 +53,7 @@
                     <p:submenu id="rasasReg" label="تسديد الرصاص">
                         <p:menuitem id="rs_permnote_page" value="تسديد وثيقة النقل" disabled="#{mBViewsPrivileges.getMenuPrivilege('rs_permnote_page')}"/>
                         <p:menuitem id="rs_perm_page" value="تسديد تصريح خروج" disabled="#{mBViewsPrivileges.getMenuPrivilege('rs_perm_page')}"/>
-                        <p:menuitem id="rs_manual_page" value="تسديد الرصاص اليدوي" disabled="#{mBViewsPrivileges.getMenuPrivilege('rs_manual_page')}"/>
+                        <p:menuitem id="rs_manual_page" value="تسديد الرصاص اليدوي" action="rs_manual_page?faces-redirect=true" disabled="#{mBViewsPrivileges.getMenuPrivilege('rs_manual_page')}"/>
                     </p:submenu>
                     
                     <p:menuitem id="rs_change_pass_page" value="تعديل كلمة السر" action="rs_change_pass_page?faces-redirect=true" disabled="#{mBViewsPrivileges.getMenuPrivilege('rs_change_pass_page')}"/>

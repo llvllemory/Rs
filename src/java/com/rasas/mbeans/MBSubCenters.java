@@ -1,6 +1,7 @@
 package com.rasas.mbeans;
 
 import com.rasas.entities.SubCenters;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -13,7 +14,7 @@ import javax.persistence.TypedQuery;
 @ManagedBean
 @RequestScoped
 
-public class MBSubCenters {
+public class MBSubCenters implements Serializable{
     
     private List<SubCenters> subCentersList;
     private MBLogin mBLogin = new MBLogin();

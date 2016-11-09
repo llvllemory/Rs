@@ -2,6 +2,7 @@ package com.rasas.mbeans;
 
 import com.rasas.entities.RsData;
 import com.rasas.entities.RsDataPK;
+import java.io.Serializable;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -13,7 +14,7 @@ import javax.persistence.TypedQuery;
 @ManagedBean
 @RequestScoped
 
-public class MBRsData {
+public class MBRsData implements Serializable{
     
     private int rsFrom;
     private int rsTo;

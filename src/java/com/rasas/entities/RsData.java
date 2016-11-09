@@ -6,6 +6,7 @@
 package com.rasas.entities;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -34,10 +35,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "RsData.findByRsEntryDate", query = "SELECT r FROM RsData r WHERE r.rsEntryDate = :rsEntryDate"),
     @NamedQuery(name = "RsData.findByRsUserId", query = "SELECT r FROM RsData r WHERE r.rsUserId = :rsUserId"),
     @NamedQuery(name = "RsData.findByRsTasDocNo", query = "SELECT r FROM RsData r WHERE r.rsTasDocNo = :rsTasDocNo"),
-    @NamedQuery(name = "RsData.findByRsTasCodYear", query = "SELECT r FROM RsData r WHERE r.rsTasCodYear = :rsTasCodYear"),
-    @NamedQuery(name = "RsData.findByRsTasCodType", query = "SELECT r FROM RsData r WHERE r.rsTasCodType = :rsTasCodType"),
+    @NamedQuery(name = "RsData.findByRsTasDocYear", query = "SELECT r FROM RsData r WHERE r.rsTasDocYear = :rsTasDocYear"),
+    @NamedQuery(name = "RsData.findByRsTasDocType", query = "SELECT r FROM RsData r WHERE r.rsTasDocType = :rsTasDocType"),
     @NamedQuery(name = "RsData.findByRsTasDate", query = "SELECT r FROM RsData r WHERE r.rsTasDate = :rsTasDate"),
     @NamedQuery(name = "RsData.findByRsTasUserId", query = "SELECT r FROM RsData r WHERE r.rsTasUserId = :rsTasUserId"),
+    @NamedQuery(name = "RsData.findByRsTasNote", query = "SELECT r FROM RsData r WHERE r.rsTasNote = :rsTasNote"),
     @NamedQuery(name = "RsData.findByRsCarNo", query = "SELECT r FROM RsData r WHERE r.rsCarNo = :rsCarNo"),
     @NamedQuery(name = "RsData.findByRsCarNat", query = "SELECT r FROM RsData r WHERE r.rsCarNat = :rsCarNat"),
     @NamedQuery(name = "RsData.findByRsCarWeight", query = "SELECT r FROM RsData r WHERE r.rsCarWeight = :rsCarWeight"),
@@ -59,18 +61,21 @@ public class RsData implements Serializable {
     @Column(name = "RS_USER_ID")
     private String rsUserId;
     @Column(name = "RS_TAS_DOC_NO")
-    private Integer rsTasDocNo;
+    private BigInteger rsTasDocNo;
     @Size(max = 4)
-    @Column(name = "RS_TAS_COD_YEAR")
-    private String rsTasCodYear;
-    @Column(name = "RS_TAS_COD_TYPE")
-    private Integer rsTasCodType;
+    @Column(name = "RS_TAS_DOC_YEAR")
+    private String rsTasDocYear;
+    @Column(name = "RS_TAS_DOC_TYPE")
+    private BigInteger rsTasDocType;
     @Column(name = "RS_TAS_DATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date rsTasDate;
     @Size(max = 10)
     @Column(name = "RS_TAS_USER_ID")
     private String rsTasUserId;
+    @Size(max = 200)
+    @Column(name = "RS_TAS_NOTE")
+    private String rsTasNote;
     @Size(max = 10)
     @Column(name = "RS_CAR_NO")
     private String rsCarNo;
@@ -78,14 +83,14 @@ public class RsData implements Serializable {
     @Column(name = "RS_CAR_NAT")
     private String rsCarNat;
     @Column(name = "RS_CAR_WEIGHT")
-    private Integer rsCarWeight;
+    private BigInteger rsCarWeight;
     @Size(max = 11)
     @Column(name = "RS_CTN_NO")
     private String rsCtnNo;
     @Column(name = "RS_CTN_WEIGHT")
-    private Integer rsCtnWeight;
+    private BigInteger rsCtnWeight;
     @Column(name = "RS_GROSS_WEIGHT")
-    private Integer rsGrossWeight;
+    private BigInteger rsGrossWeight;
 
     public RsData() {
     }
@@ -130,28 +135,28 @@ public class RsData implements Serializable {
         this.rsUserId = rsUserId;
     }
 
-    public Integer getRsTasDocNo() {
+    public BigInteger getRsTasDocNo() {
         return rsTasDocNo;
     }
 
-    public void setRsTasDocNo(Integer rsTasDocNo) {
+    public void setRsTasDocNo(BigInteger rsTasDocNo) {
         this.rsTasDocNo = rsTasDocNo;
     }
 
-    public String getRsTasCodYear() {
-        return rsTasCodYear;
+    public String getRsTasDocYear() {
+        return rsTasDocYear;
     }
 
-    public void setRsTasCodYear(String rsTasCodYear) {
-        this.rsTasCodYear = rsTasCodYear;
+    public void setRsTasDocYear(String rsTasDocYear) {
+        this.rsTasDocYear = rsTasDocYear;
     }
 
-    public Integer getRsTasCodType() {
-        return rsTasCodType;
+    public BigInteger getRsTasDocType() {
+        return rsTasDocType;
     }
 
-    public void setRsTasCodType(Integer rsTasCodType) {
-        this.rsTasCodType = rsTasCodType;
+    public void setRsTasDocType(BigInteger rsTasDocType) {
+        this.rsTasDocType = rsTasDocType;
     }
 
     public Date getRsTasDate() {
@@ -170,6 +175,14 @@ public class RsData implements Serializable {
         this.rsTasUserId = rsTasUserId;
     }
 
+    public String getRsTasNote() {
+        return rsTasNote;
+    }
+
+    public void setRsTasNote(String rsTasNote) {
+        this.rsTasNote = rsTasNote;
+    }
+
     public String getRsCarNo() {
         return rsCarNo;
     }
@@ -186,11 +199,11 @@ public class RsData implements Serializable {
         this.rsCarNat = rsCarNat;
     }
 
-    public Integer getRsCarWeight() {
+    public BigInteger getRsCarWeight() {
         return rsCarWeight;
     }
 
-    public void setRsCarWeight(Integer rsCarWeight) {
+    public void setRsCarWeight(BigInteger rsCarWeight) {
         this.rsCarWeight = rsCarWeight;
     }
 
@@ -202,19 +215,19 @@ public class RsData implements Serializable {
         this.rsCtnNo = rsCtnNo;
     }
 
-    public Integer getRsCtnWeight() {
+    public BigInteger getRsCtnWeight() {
         return rsCtnWeight;
     }
 
-    public void setRsCtnWeight(Integer rsCtnWeight) {
+    public void setRsCtnWeight(BigInteger rsCtnWeight) {
         this.rsCtnWeight = rsCtnWeight;
     }
 
-    public Integer getRsGrossWeight() {
+    public BigInteger getRsGrossWeight() {
         return rsGrossWeight;
     }
 
-    public void setRsGrossWeight(Integer rsGrossWeight) {
+    public void setRsGrossWeight(BigInteger rsGrossWeight) {
         this.rsGrossWeight = rsGrossWeight;
     }
 

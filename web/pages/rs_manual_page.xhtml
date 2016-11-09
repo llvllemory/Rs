@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>تسديد الرصاص اليدوي</title>
+
+        <link rel="stylesheet" 
+              type="text/css"
+              href="../resources/css/rasas.css"/>
+
+    </h:head>
+
+    <h:body>
+        
+        <p:growl id="growl" showDetail="true" life="5000"/>
+        
+        <ui:insert name="header">
+		<ui:include src="rs_header_page.xhtml" />
+	</ui:insert>
+        
+        <div id="container">
+
+            <center>
+                <p:outputLabel id = "lblTitle" style ="font-size: 30px;" value="تسديد الرصاص اليدوي"/>
+            </center>
+
+            <h:form id="frmTasManual" styleClass="frmMain" >
+                <center>
+
+                    <h:panelGrid id="rsDetails" styleClass="pnl" columns="6" cellpadding="10">
+                        
+                        <p:outputLabel value="من رصاص رقم : " />
+                        <p:inputText value="#{mBTasManual.rsFrom}" styleClass="txtRasas" maxlength="10" required="true"/>
+                        
+                        <p:outputLabel value="الى رصاص رقم : " />
+                        <p:inputText value="#{mBTasManual.rsTo}" styleClass="txtRasas" maxlength="10" required="true"/>
+                        
+                        <p:outputLabel value="سنة الرصاص: " />
+                        <h:selectOneMenu styleClass = "slctMenuYear" value="#{mBTasManual.rsYear}" >
+                            <f:selectItems value="#{mBCommon.yearsList}" var="rsYearList" itemLabel="#{rsYearList}" itemValue="#{rsYearList}"/>
+                        </h:selectOneMenu>
+                      
+                        <p:spacer/><p:spacer/><p:spacer/><p:spacer/><p:spacer/><p:spacer/>    
+                    
+                        <p:outputLabel id="lblCenterNo" value="نوع التسديد : " />
+                        <h:selectOneMenu styleClass = "slctMenu" value ="#{mBTasManual.tasDocType}">
+                            <f:selectItems value="#{mBTasTypes.tasTypesList}" var = "tasType" itemLabel="#{tasType.tasType} -- #{tasType.tasDesc}" itemValue="#{tasType.tasDesc}"/>
+                        </h:selectOneMenu>
+
+                        <p:spacer/><p:spacer/><p:spacer/><p:spacer/>
+                        
+                        
+                        <p:outputLabel value="رقم الوثيقة : " />
+                        <p:inputText value="#{mBTasManual.tasDocNo}" styleClass="txtRasas" maxlength="10"/>
+
+                        <p:outputLabel value="سنة الوثيقة : " />
+
+                        <h:selectOneMenu styleClass = "slctMenuYear" value="#{mBTasManual.tasDocYear}" >
+                            <f:selectItems value="#{mBCommon.yearsList}" var="rsYearList" itemLabel="#{rsYearList}" itemValue="#{rsYearList}"/>
+                        </h:selectOneMenu>
+                        
+                        <p:spacer/><p:spacer/>
+                        
+                        <p:outputLabel value="رقم السيارة : " />
+                        <p:inputText value="#{mBTasManual.tasCarNo}" styleClass="txtRasas" maxlength="10"/>
+
+                        <p:outputLabel value="جنسية السيارة : " />
+                        <p:inputText value="#{mBTasManual.tasCarNat}" styleClass="txtYear" maxlength="3"/>
+                        
+                        <p:spacer/><p:spacer/>
+                        
+                    </h:panelGrid>    
+                    
+                    <h:panelGrid id="pnlRegDetails" styleClass="pnl" columns="6" cellpadding="10">
+                            <p:outputLabel value="الملاحظــات : " />
+                            <p:inputTextarea value="#{mBTasManual.tasNote}" style="width: 780px;" maxlength="200" required="true" rows="4" scrollHeight="4" />
+                    </h:panelGrid>
+                    
+                    <h:panelGrid id="pnlBtns" styleClass="pnl" columns="3" cellpadding="10">
+                        <f:facet name="footer">
+                            <center>
+                                <p:commandButton id="btnSave" value="تسديد الرصاص"  action="#{mBTasManual.checkRsToClose()}" disabled="#{mBViewsPrivileges.getBtnPrivilege(component.id)}"/>
+                                <p:commandButton id="btnDelete" value="إلغاء تسديد الرصاص"  disabled="#{mBViewsPrivileges.getBtnPrivilege(component.id)}"/>
+                                <p:commandButton value="تفريغ الحقول" type="reset" />
+                            </center>
+                        </f:facet>
+                    </h:panelGrid> 
+                </center>
+            </h:form>
+        </div>
+    </h:body>
+</html>

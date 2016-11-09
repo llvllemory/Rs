@@ -1,6 +1,7 @@
 package com.rasas.mbeans;
 
 import com.rasas.entities.Centers;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -13,7 +14,7 @@ import javax.persistence.TypedQuery;
 @ManagedBean
 @RequestScoped
 
-public class MBCenters {
+public class MBCenters implements Serializable{
 
     private MBLogin mBLogin = new MBLogin();
     private List<Centers> centers;

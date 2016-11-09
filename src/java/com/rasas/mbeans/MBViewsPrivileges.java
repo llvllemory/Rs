@@ -4,6 +4,7 @@ import com.rasas.entities.Views;
 import com.rasas.entities.ViewsPrivileges;
 import com.rasas.entities.ViewsPrivilegesPK;
 import com.rasas.helpers.AdvancedViewsPrivileges;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -19,7 +20,7 @@ import javax.persistence.TypedQuery;
 @ManagedBean
 @ViewScoped
 
-public class MBViewsPrivileges {
+public class MBViewsPrivileges implements Serializable{
     
     
     private String groupId;

@@ -159,9 +159,10 @@ public class MBRsMain implements Serializable{
         }
         
         rsMainList = new ArrayList<>();
-        rsMainList = getRsCenterByRsCenterAndRsYear(mBLogin.getLoggedUser().getUserCenter(), rsYear);
+        rsMainList = getRsCenterByRsCenterAndRsYear(mBLogin.getLoggedUser().getUserCenter(), rsYear); // user must be at the same center of rasas << this is critical for privileges 
 
         if (rsMainList.size() > 0) {
+            
             rsFound = 0;
             for (RsMain rs : rsMainList) {
                 for (int i = rsFrom; i <= rsTo; i++) {
@@ -178,7 +179,7 @@ public class MBRsMain implements Serializable{
             } else if (rsFound == ((rsTo - rsFrom) + 1)) {
             
                 rsMainList = new ArrayList<>();
-                rsMainList = getNullRsCenterByRsCenterAndRsYear(mBLogin.getLoggedUser().getUserCenter(), rsYear);
+                rsMainList = getNullRsCenterByRsCenterAndRsYear(mBLogin.getLoggedUser().getUserCenter(), rsYear); // user must be at the same center of rasas << this is critical for privileges
 
                 if (rsMainList.size() > 0) {
 
@@ -414,20 +415,6 @@ public class MBRsMain implements Serializable{
             MBCommon.getErrorMessage("", "لا يوجد رصاص لهذا المركز في الملف الرئيسي, الرجاء التأكد والمحاولة مرة اخرى!");
         }
         return "";
-    }
-    
-////////////////////////////////////////////////////////////////////////////////
-    public List<String> getYearsList(){
-        System.out.println("com.rasas.mbeans.MBRsMain.getYearsList()");
-        
-        List<String> yearsList = new ArrayList<>();
-        
-        int year = Integer.valueOf(MBCommon.getCurrentYear());
-        
-        yearsList.add(String.valueOf(year));
-        yearsList.add(String.valueOf(year - 1));
-        
-        return yearsList;
     }
     
 ////////////////////////////////////////////////////////////////////////////////    

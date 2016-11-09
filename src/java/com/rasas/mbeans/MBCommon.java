@@ -1,8 +1,11 @@
 package com.rasas.mbeans;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -12,7 +15,7 @@ import org.primefaces.context.RequestContext;
 @ManagedBean
 @RequestScoped
 
-public class MBCommon {
+public class MBCommon implements Serializable{
 
     public MBCommon(){
         
@@ -63,4 +66,16 @@ public class MBCommon {
         Calendar cal = Calendar.getInstance();
         return dateFormat.format(cal.getTime());
    }
+   
+   public List<String> getYearsList(){
+        
+        List<String> yearsList = new ArrayList<>();
+        
+        int year = Integer.valueOf(MBCommon.getCurrentYear());
+        
+        yearsList.add(String.valueOf(year));
+        yearsList.add(String.valueOf(year - 1));
+        
+        return yearsList;
+    }
 }
