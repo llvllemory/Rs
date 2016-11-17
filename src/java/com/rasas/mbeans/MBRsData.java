@@ -3,12 +3,14 @@ package com.rasas.mbeans;
 import com.rasas.entities.RsData;
 import com.rasas.entities.RsDataPK;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 @ManagedBean
@@ -76,6 +78,21 @@ public class MBRsData implements Serializable{
         
         return rasasData;
     }
+    
+////////////////////////////////////////////////////////////////////////////////
+    public List<RsData> getRsDataByRsYearRsCenterRsSubCenterRsFromRsTo(String rsYear, String rsCenter, String rsSubCenter, int rsFrom, int rsTo){
+        System.out.println("com.rasas.mbeans.MBRsData.getRsDataByRsYearRsCenterRsSubCenterRsFromRsTo()");
+        
+        emf.getCache().evictAll();
+        TypedQuery<RsData> query = em.createQuery("SELECT r FROM RsData r WHERE r.rsDataPK.rsYear = ?1 AND r.rsDataPK.rsCenter = ?2 AND r.rsSubCenter =?3 AND r.rsDataPK.rsNo BETWEEN ?4 AND ?5", RsData.class)
+                .setParameter(1, rsYear)
+                .setParameter(2, rsCenter)
+                .setParameter(3, rsSubCenter)
+                .setParameter(4, rsFrom)
+                .setParameter(5, rsTo);
+
+        return query.getResultList();
+    }    
 ////////////////////////////////////////////////////////////////////////////////
     public int saveRsData(List<RsData> rsDataList){
         System.out.println("com.rasas.mbeans.MBRsData.saveRsData()----------> " + MBCommon.getCurrentDateTime());
@@ -106,7 +123,62 @@ public class MBRsData implements Serializable{
         System.out.println("---------- RsData updated rows ----------------> " + rows + " >> " + MBCommon.getCurrentDateTime());
         return rows;  
     }
+////////////////////////////////////////////////////////////////////////////////
+    public int rsDataClose(int rsFrom, int rsTo, String rsYear, String rsCenter, String rsSubCenter, int rsTasDocNo, 
+            String rsTasDocYear, int rsTasDocType, Date rsTasDate, String rsTasUserId, String rsTasNote, String rsTasCarNo, String rsTasCarNat, 
+            int rsCarWeight, String rsCtnNo, int rsCtnWeight, int rsGrossWeight){
+        System.out.println("com.rasas.mbeans.MBRsData.rsDataClose()");
+        
+        emf.getCache().evictAll();
+        int rows = 0;
+        
+        Query query = em.createQuery("UPDATE RsData r SET r.rsTasDocNo = ?1, r.rsTasDocYear = ?2, r.rsTasDocType = ?3, r.rsTasDate = ?4, r.rsTasUserId = ?5, r.rsTasNote = ?6, "
+                + "r.rsCarNo = ?7, r.rsCarNat = ?8, r.rsCarWeight = ?9, r.rsCtnNo = ?10, r.rsCtnWeight = ?11, r.rsGrossWeight = ?12 WHERE r.rsDataPK.rsNo BETWEEN ?13 AND ?14 AND r.rsDataPK.rsYear = ?15 AND r.rsDataPK.rsCenter = ?16 AND r.rsSubCenter = ?17")
+                .setParameter(1, rsTasDocNo)
+                .setParameter(2, rsTasDocYear)
+                .setParameter(3, rsTasDocType)
+                .setParameter(4, rsTasDate)
+                .setParameter(5, rsTasUserId)
+                .setParameter(6, rsTasNote)
+                .setParameter(7, rsTasCarNo)
+                .setParameter(8, rsTasCarNat)
+                .setParameter(9, rsCarWeight)
+                .setParameter(10, rsCtnNo)
+                .setParameter(11, rsCtnWeight)
+                .setParameter(12, rsGrossWeight)
+                .setParameter(13, rsFrom)
+                .setParameter(14, rsTo)
+                .setParameter(15, rsYear)
+                .setParameter(16, rsCenter)
+                .setParameter(17, rsSubCenter);
+                
+        rows = query.executeUpdate();
+        
+        System.out.println("---------- RsData colsed rows ------------------> " + rows + " >> " + MBCommon.getCurrentDateTime());
+        return rows;
+    }
 
+////////////////////////////////////////////////////////////////////////////////
+    public int rsDataOpen(int rsFrom, int rsTo, String rsYear, String rsCenter, String rsSubCenter, String rsTasNote){
+        System.out.println("com.rasas.mbeans.MBRsData.rsDataOpen()");
+        
+        emf.getCache().evictAll();
+        int rows = 0;
+        
+        Query query = em.createQuery("UPDATE RsData r SET r.rsTasDocNo = null, r.rsTasDocYear = null, r.rsTasDocType = null, r.rsTasDate = null, r.rsTasUserId = null, r.rsTasNote = ?6, "
+                + "r.rsCarNo = null, r.rsCarNat = null, r.rsCarWeight = null, r.rsCtnNo = null, r.rsCtnWeight = null, r.rsGrossWeight = null WHERE r.rsDataPK.rsNo BETWEEN ?1 AND ?2 AND r.rsDataPK.rsYear = ?3 AND r.rsDataPK.rsCenter = ?4 AND r.rsSubCenter = ?5")
+                .setParameter(1, rsFrom)
+                .setParameter(2, rsTo)
+                .setParameter(3, rsYear)
+                .setParameter(4, rsCenter)
+                .setParameter(5, rsSubCenter)
+                .setParameter(6, rsTasNote);
+                
+        rows = query.executeUpdate();
+        
+        System.out.println("---------- RsData opened rows ------------------> " + rows + " >> " + MBCommon.getCurrentDateTime());
+        return rows;
+    }    
 ////////////////////////////////////////////////////////////////////////////////
     public int removeRsDataByRsCenterAndRsYear(int rsFrom, int rsTo, String rsCenter, String rsYear){
         System.out.println("com.rasas.mbeans.MBRsData.removeRsDataByRsCenterAndRsYear()----------> " + MBCommon.getCurrentDateTime());

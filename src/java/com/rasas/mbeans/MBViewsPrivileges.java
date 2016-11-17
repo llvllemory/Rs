@@ -183,8 +183,6 @@ public class MBViewsPrivileges implements Serializable{
             }
         }
         
-        
-
         Collections.sort(advancedViewsPrivilegesList, new Comparator<AdvancedViewsPrivileges>() {
 
                 @Override

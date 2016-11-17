@@ -443,6 +443,7 @@ public class MBRsMain implements Serializable{
 
         return rasasList;
     } 
+   
 ////////////////////////////////////////////////////////////////////////////////
     public List<RsMain> getRsSubCenterByRsSubCenterAndRsYear(String rsSubCenter, String rsYear){
         System.out.println("com.rasas.mbeans.MBRsMain.getRsSubCenterByRsSubCenterAndRsYear()----------> " + MBCommon.getCurrentDateTime());
@@ -456,7 +457,24 @@ public class MBRsMain implements Serializable{
 
         return rasasList;
     } 
+
+////////////////////////////////////////////////////////////////////////////////
+    public List<RsMain> getRsMainByRsYearRsCenterRsSubCenterRsFromRsTo(String rsYear, String rsCenter, String rsSubCenter, int rsFrom, int rsTo){
+        System.out.println("com.rasas.mbeans.MBRsMain.getRsMainByRsYearRsCenterRsSubCenterRsFromRsTo()");
         
+        emf.getCache().evictAll();
+        TypedQuery<RsMain> query = em.createQuery("SELECT r FROM RsMain r WHERE r.rsMainPK.rsYear = ?1 AND r.rsMainPK.rsCenter = ?2 AND r.rsSubCenter =?3 AND r.rsMainPK.rsNo BETWEEN ?4 AND ?5", RsMain.class)
+                .setParameter(1, rsYear)
+                .setParameter(2, rsCenter)
+                .setParameter(3, rsSubCenter)
+                .setParameter(4, rsFrom)
+                .setParameter(5, rsTo);
+        
+        List rasasList = query.getResultList();
+        
+        return rasasList;
+    }
+    
 ////////////////////////////////////////////////////////////////////////////////    
     public int saveRsCenter(int rsFrom, int rsTo, String rsCenter, String rsYear, Date rsCenterDate, String loggedUser){
         System.out.println("com.rasas.mbeans.MBRsMain.saveRsCenter() ----------> " + MBCommon.getCurrentDateTime());

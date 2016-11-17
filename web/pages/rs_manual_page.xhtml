@@ -32,13 +32,13 @@
             <h:form id="frmTasManual" styleClass="frmMain" >
                 <center>
 
-                    <h:panelGrid id="rsDetails" styleClass="pnl" columns="6" cellpadding="10">
+                    <h:panelGrid id="pnlDetails" styleClass="pnl" columns="6" cellpadding="10">
                         
                         <p:outputLabel value="من رصاص رقم : " />
-                        <p:inputText value="#{mBTasManual.rsFrom}" styleClass="txtRasas" maxlength="10" required="true"/>
+                        <p:inputText value="#{mBTasManual.rsFrom}" styleClass="txtRasas" maxlength="10"/>
                         
                         <p:outputLabel value="الى رصاص رقم : " />
-                        <p:inputText value="#{mBTasManual.rsTo}" styleClass="txtRasas" maxlength="10" required="true"/>
+                        <p:inputText value="#{mBTasManual.rsTo}" styleClass="txtRasas" maxlength="10"/>
                         
                         <p:outputLabel value="سنة الرصاص: " />
                         <h:selectOneMenu styleClass = "slctMenuYear" value="#{mBTasManual.rsYear}" >
@@ -47,19 +47,17 @@
                       
                         <p:spacer/><p:spacer/><p:spacer/><p:spacer/><p:spacer/><p:spacer/>    
                     
-                        <p:outputLabel id="lblCenterNo" value="نوع التسديد : " />
+                        <p:outputLabel id="lblTasType" value="نوع التسديد : " />
                         <h:selectOneMenu styleClass = "slctMenu" value ="#{mBTasManual.tasDocType}">
-                            <f:selectItems value="#{mBTasTypes.tasTypesList}" var = "tasType" itemLabel="#{tasType.tasType} -- #{tasType.tasDesc}" itemValue="#{tasType.tasDesc}"/>
+                            <f:selectItems value="#{mBTasTypes.tasTypesList}" var = "tasType" itemLabel="#{tasType.tasType} -- #{tasType.tasDesc}" itemValue="#{tasType.tasType}"/>
                         </h:selectOneMenu>
 
                         <p:spacer/><p:spacer/><p:spacer/><p:spacer/>
-                        
-                        
+
                         <p:outputLabel value="رقم الوثيقة : " />
                         <p:inputText value="#{mBTasManual.tasDocNo}" styleClass="txtRasas" maxlength="10"/>
 
                         <p:outputLabel value="سنة الوثيقة : " />
-
                         <h:selectOneMenu styleClass = "slctMenuYear" value="#{mBTasManual.tasDocYear}" >
                             <f:selectItems value="#{mBCommon.yearsList}" var="rsYearList" itemLabel="#{rsYearList}" itemValue="#{rsYearList}"/>
                         </h:selectOneMenu>
@@ -76,16 +74,16 @@
                         
                     </h:panelGrid>    
                     
-                    <h:panelGrid id="pnlRegDetails" styleClass="pnl" columns="6" cellpadding="10">
+                    <h:panelGrid id="pnlNote" styleClass="pnl" columns="6" cellpadding="10">
                             <p:outputLabel value="الملاحظــات : " />
-                            <p:inputTextarea value="#{mBTasManual.tasNote}" style="width: 780px;" maxlength="200" required="true" rows="4" scrollHeight="4" />
+                            <p:inputTextarea value="#{mBTasManual.tasNote}" style="width: 780px;" maxlength="200" rows="4" />
                     </h:panelGrid>
                     
                     <h:panelGrid id="pnlBtns" styleClass="pnl" columns="3" cellpadding="10">
                         <f:facet name="footer">
                             <center>
                                 <p:commandButton id="btnSave" value="تسديد الرصاص"  action="#{mBTasManual.checkRsToClose()}" disabled="#{mBViewsPrivileges.getBtnPrivilege(component.id)}"/>
-                                <p:commandButton id="btnDelete" value="إلغاء تسديد الرصاص"  disabled="#{mBViewsPrivileges.getBtnPrivilege(component.id)}"/>
+                                <p:commandButton id="btnDelete" value="إلغاء تسديد الرصاص"  action="#{mBTasManual.checkRsToOpen()}" disabled="#{mBViewsPrivileges.getBtnPrivilege(component.id)}"/>
                                 <p:commandButton value="تفريغ الحقول" type="reset" />
                             </center>
                         </f:facet>

@@ -61,12 +61,12 @@ public class RsData implements Serializable {
     @Column(name = "RS_USER_ID")
     private String rsUserId;
     @Column(name = "RS_TAS_DOC_NO")
-    private BigInteger rsTasDocNo;
+    private Integer rsTasDocNo;
     @Size(max = 4)
     @Column(name = "RS_TAS_DOC_YEAR")
     private String rsTasDocYear;
     @Column(name = "RS_TAS_DOC_TYPE")
-    private BigInteger rsTasDocType;
+    private Integer rsTasDocType;
     @Column(name = "RS_TAS_DATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date rsTasDate;
@@ -83,14 +83,14 @@ public class RsData implements Serializable {
     @Column(name = "RS_CAR_NAT")
     private String rsCarNat;
     @Column(name = "RS_CAR_WEIGHT")
-    private BigInteger rsCarWeight;
+    private Integer rsCarWeight;
     @Size(max = 11)
     @Column(name = "RS_CTN_NO")
     private String rsCtnNo;
     @Column(name = "RS_CTN_WEIGHT")
-    private BigInteger rsCtnWeight;
+    private Integer rsCtnWeight;
     @Column(name = "RS_GROSS_WEIGHT")
-    private BigInteger rsGrossWeight;
+    private Integer rsGrossWeight;
 
     public RsData() {
     }
@@ -135,11 +135,11 @@ public class RsData implements Serializable {
         this.rsUserId = rsUserId;
     }
 
-    public BigInteger getRsTasDocNo() {
+    public Integer getRsTasDocNo() {
         return rsTasDocNo;
     }
 
-    public void setRsTasDocNo(BigInteger rsTasDocNo) {
+    public void setRsTasDocNo(Integer rsTasDocNo) {
         this.rsTasDocNo = rsTasDocNo;
     }
 
@@ -151,11 +151,11 @@ public class RsData implements Serializable {
         this.rsTasDocYear = rsTasDocYear;
     }
 
-    public BigInteger getRsTasDocType() {
+    public Integer getRsTasDocType() {
         return rsTasDocType;
     }
 
-    public void setRsTasDocType(BigInteger rsTasDocType) {
+    public void setRsTasDocType(Integer rsTasDocType) {
         this.rsTasDocType = rsTasDocType;
     }
 
@@ -199,11 +199,11 @@ public class RsData implements Serializable {
         this.rsCarNat = rsCarNat;
     }
 
-    public BigInteger getRsCarWeight() {
+    public Integer getRsCarWeight() {
         return rsCarWeight;
     }
 
-    public void setRsCarWeight(BigInteger rsCarWeight) {
+    public void setRsCarWeight(Integer rsCarWeight) {
         this.rsCarWeight = rsCarWeight;
     }
 
@@ -215,19 +215,19 @@ public class RsData implements Serializable {
         this.rsCtnNo = rsCtnNo;
     }
 
-    public BigInteger getRsCtnWeight() {
+    public Integer getRsCtnWeight() {
         return rsCtnWeight;
     }
 
-    public void setRsCtnWeight(BigInteger rsCtnWeight) {
+    public void setRsCtnWeight(Integer rsCtnWeight) {
         this.rsCtnWeight = rsCtnWeight;
     }
 
-    public BigInteger getRsGrossWeight() {
+    public Integer getRsGrossWeight() {
         return rsGrossWeight;
     }
 
-    public void setRsGrossWeight(BigInteger rsGrossWeight) {
+    public void setRsGrossWeight(Integer rsGrossWeight) {
         this.rsGrossWeight = rsGrossWeight;
     }
 
