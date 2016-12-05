@@ -38,6 +38,13 @@
         
         <p:growl id="growl" showDetail="true" life="5000"/>
         
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false" >
+            <p:graphicImage  url="resources/images/ajax-loader.gif"/>
+
+        </p:dialog>
+        
         <h:form>
             <center>
                 <h:panelGrid columns="2" cellpadding="10" style="margin-top: 15%">
@@ -47,7 +54,9 @@
                 </f:facet>
                 
                 <p:outputLabel id="lblUsername" value="الرقم الوظيفي : "/>
-                <p:inputText id="txtUsername" styleClass="txtCenter" value="#{mBLogin.userId}" placeholder="الرقم الوظيفي" />
+                <p:inputText id="txtUsername" styleClass="txtCenter" value="#{mBLogin.userId}" placeholder="الرقم الوظيفي">
+                    <p:focus for="txtUsername"/>
+                </p:inputText>
                 
                 <p:outputLabel id="lblPassword" value="كلمة السر : "/>
                 <p:password id="txtPassword" styleClass="txtCenter" value="#{mBLogin.password}" placeholder="كلمة السر"/>

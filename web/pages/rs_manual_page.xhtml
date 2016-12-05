@@ -22,58 +22,154 @@
         <ui:insert name="header">
 		<ui:include src="rs_header_page.xhtml" />
 	</ui:insert>
+
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false" >
+            <p:graphicImage  url="../resources/images/ajax-loader.gif"/>
+        </p:dialog>
         
         <div id="container">
 
             <center>
                 <p:outputLabel id = "lblTitle" style ="font-size: 30px;" value="تسديد الرصاص اليدوي"/>
             </center>
-
+         
             <h:form id="frmTasManual" styleClass="frmMain" >
                 <center>
 
                     <h:panelGrid id="pnlDetails" styleClass="pnl" columns="6" cellpadding="10">
                         
+                        <p:outputLabel id="lblTasType" value="نوع التسديد : " />
+                        <h:selectOneMenu styleClass = "slctMenu" value ="#{mBTasManual.tasDocType}">
+                            <f:selectItem itemLabel="اختر نوع التسديد" itemValue="0" />
+                            <f:selectItems value="#{mBTasTypes.tasTypesList}" var = "tasType" itemLabel="#{tasType.tasType} -- #{tasType.tasDesc}" itemValue="#{tasType.tasType}"/>
+                            <f:ajax render="@form"/>
+                        </h:selectOneMenu>
+                        
+                        <p:spacer/><p:spacer/><p:spacer/><p:spacer/>
+                        
                         <p:outputLabel value="من رصاص رقم : " />
                         <p:inputText value="#{mBTasManual.rsFrom}" styleClass="txtRasas" maxlength="10"/>
                         
                         <p:outputLabel value="الى رصاص رقم : " />
-                        <p:inputText value="#{mBTasManual.rsTo}" styleClass="txtRasas" maxlength="10"/>
+                        <p:inputText value="#{mBTasManual.rsTo}" styleClass="txtRasas" maxlength="10">
+                            <p:ajax event="blur" listener="#{mBTasManual.checkToLoadRsDataForDataTable()}" process="@form" update=":frmTasManual:dtaTablersData"/>
+                        </p:inputText>
                         
                         <p:outputLabel value="سنة الرصاص: " />
                         <h:selectOneMenu styleClass = "slctMenuYear" value="#{mBTasManual.rsYear}" >
                             <f:selectItems value="#{mBCommon.yearsList}" var="rsYearList" itemLabel="#{rsYearList}" itemValue="#{rsYearList}"/>
                         </h:selectOneMenu>
-                      
-                        <p:spacer/><p:spacer/><p:spacer/><p:spacer/><p:spacer/><p:spacer/>    
-                    
-                        <p:outputLabel id="lblTasType" value="نوع التسديد : " />
-                        <h:selectOneMenu styleClass = "slctMenu" value ="#{mBTasManual.tasDocType}">
-                            <f:selectItems value="#{mBTasTypes.tasTypesList}" var = "tasType" itemLabel="#{tasType.tasType} -- #{tasType.tasDesc}" itemValue="#{tasType.tasType}"/>
-                        </h:selectOneMenu>
-
-                        <p:spacer/><p:spacer/><p:spacer/><p:spacer/>
-
-                        <p:outputLabel value="رقم الوثيقة : " />
-                        <p:inputText value="#{mBTasManual.tasDocNo}" styleClass="txtRasas" maxlength="10"/>
-
-                        <p:outputLabel value="سنة الوثيقة : " />
-                        <h:selectOneMenu styleClass = "slctMenuYear" value="#{mBTasManual.tasDocYear}" >
-                            <f:selectItems value="#{mBCommon.yearsList}" var="rsYearList" itemLabel="#{rsYearList}" itemValue="#{rsYearList}"/>
-                        </h:selectOneMenu>
-                        
-                        <p:spacer/><p:spacer/>
-                        
-                        <p:outputLabel value="رقم السيارة : " />
-                        <p:inputText value="#{mBTasManual.tasCarNo}" styleClass="txtRasas" maxlength="10"/>
-
-                        <p:outputLabel value="جنسية السيارة : " />
-                        <p:inputText value="#{mBTasManual.tasCarNat}" styleClass="txtYear" maxlength="3"/>
-                        
-                        <p:spacer/><p:spacer/>
-                        
+   
                     </h:panelGrid>    
+     
+                    <p:dataTable id="dtaTablersData" value="#{mBTasManual.rsDataListDataTable}" var="rsDataTable" 
+                                 style="width: 60%; font-size: 15px; display: #{(mBTasManual.rsDataListDataTable.size() gt 0)?'':'none'};"
+                                 scrollable="true" scrollHeight="150">
+                                                 
+                        
+                        <p:column headerText="رقم الرصاص" style="width: 100px">
+                            <h:outputText value="#{rsDataTable.rsDataPK.rsNo}" />
+                        </p:column>
+                        
+                        <p:column headerText="سنة الرصاص" style="width: 100px">
+                            <h:outputText value="#{rsDataTable.rsDataPK.rsYear}" />
+                        </p:column>
+                        
+                        <p:column headerText="المركز" style="width: 100px">
+                            <h:outputText value="#{rsDataTable.rsSubCenter}" />
+                        </p:column>
+                        
+                        <p:column headerText="مسددة من قبل" style="width: 120px">
+                            <h:outputText value="#{rsDataTable.rsTasUserId}" />
+                        </p:column>
+                        
+                        <p:column headerText="تاريخ التسديد" style="width: 200px">
+                            <h:outputText value="#{rsDataTable.rsTasDate}" />
+                        </p:column>
+                        
+                        <p:column headerText="وثيقة التسديد" style="width: 100px">
+                            <h:outputText value="#{rsDataTable.rsTasDocNo}" />
+                        </p:column>
+                        
+                        <p:column headerText="سنة الوثيقة" style="width: 100px">
+                            <h:outputText value="#{rsDataTable.rsTasDocYear}" />
+                        </p:column>
+
+                    </p:dataTable>
+                    <p:spacer/><p:spacer/><p:spacer/><p:spacer/><p:spacer/><p:spacer/>
+
+                    <h:form id="frmPerm" rendered="#{(mBTasManual.tasDocType eq 1)?'true':'false'}" >
+                        <h:panelGrid id="pnlTasPerm"  columns="6" cellpadding="10">
+                            
+                            <p:outputLabel value="رقم التصريح : " />
+                            <p:inputText id="txtDocNo" value="#{mBTasManual.tasDocNo}" styleClass="txtRasas" maxlength="10" />
+
+                            <p:outputLabel value="سنة التصريح : " />
+                            <h:selectOneMenu styleClass = "slctMenuYear" value="#{mBTasManual.tasDocYear}" >
+                                <f:selectItems value="#{mBCommon.yearsList}" var="rsYearList" itemLabel="#{rsYearList}" itemValue="#{rsYearList}"/>
+                            </h:selectOneMenu>                            
+                            <p:spacer/><p:spacer/>
+
+                            <p:outputLabel value="رقم السيارة : " />
+                            <p:inputText value="#{mBTasManual.tasCarNo}" styleClass="txtRasas" maxlength="10"/>
+
+                            <p:outputLabel value="جنسية السيارة : " />
+                            <p:inputText value="#{mBTasManual.tasCarNat}" styleClass="txtYear" maxlength="3"/>
+                            <p:spacer/><p:spacer/>
+
+                            <p:outputLabel value="وزن السيارة : " />
+                            <p:inputText value="#{mBTasManual.carWeight}" styleClass="txtYear"/>
+
+                            <p:outputLabel value="وزن الحاوية : " />
+                            <p:inputText value="#{mBTasManual.ctnWeight}" styleClass="txtYear"/>
+
+                            <p:outputLabel value="الوزن القائم : " />
+                            <p:inputText value="#{mBTasManual.grossWeight}" styleClass="txtYear"/>
+
+                            <p:outputLabel value="رقم الحاوية : "/>
+                            <p:inputText value="#{mBTasManual.ctnNo}" styleClass="txtRasas" maxlength="11"/>
+
+                            <p:outputLabel value="نموذج المعاينة : " />
+                            <p:inputText value="#{mBTasManual.inspDoc}" styleClass="txtYear"/>
+
+                        </h:panelGrid>
+
+                    </h:form>
                     
+                    <h:form id="frmDelete" rendered="#{(mBTasManual.tasDocType eq 2)?'true':'false'}" >
+                        <h:panelGrid id="pnlTasDelete"  columns="6" cellpadding="10">
+                                                        
+                            <p:outputLabel value="يجب إدخال سبب إتلاف الرصاص في الملاحظات" />
+                            <p:spacer/><p:spacer/><p:spacer/><p:spacer/><p:spacer/>
+                            
+                        </h:panelGrid>
+                    </h:form>
+                    
+                    <h:form id="frmBook" rendered="#{(mBTasManual.tasDocType eq 3)?'true':'false'}" >
+                        <h:panelGrid id="pnlTasBook"  columns="6" cellpadding="10">
+                            
+                            <p:outputLabel value="رقم الكتاب : " />
+                            <p:inputText id="txtDocNo" value="#{mBTasManual.tasDocNo}" styleClass="txtRasas" maxlength="10" />
+
+                            <p:outputLabel value="سنة الكتاب : " />
+                            <h:selectOneMenu styleClass = "slctMenuYear" value="#{mBTasManual.tasDocYear}">
+                                <f:selectItems value="#{mBCommon.yearsList}" var="rsYearList" itemLabel="#{rsYearList}" itemValue="#{rsYearList}"/>
+                            </h:selectOneMenu>                            
+                            <p:spacer/><p:spacer/>
+                            
+                        </h:panelGrid>
+                    </h:form>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+
                     <h:panelGrid id="pnlNote" styleClass="pnl" columns="6" cellpadding="10">
                             <p:outputLabel value="الملاحظــات : " />
                             <p:inputTextarea value="#{mBTasManual.tasNote}" style="width: 780px;" maxlength="200" rows="4" />
@@ -84,10 +180,13 @@
                             <center>
                                 <p:commandButton id="btnSave" value="تسديد الرصاص"  action="#{mBTasManual.checkRsToClose()}" disabled="#{mBViewsPrivileges.getBtnPrivilege(component.id)}"/>
                                 <p:commandButton id="btnDelete" value="إلغاء تسديد الرصاص"  action="#{mBTasManual.checkRsToOpen()}" disabled="#{mBViewsPrivileges.getBtnPrivilege(component.id)}"/>
-                                <p:commandButton value="تفريغ الحقول" type="reset" />
+                                <p:commandButton value="تفريغ الحقول" type="reset" >
+                                    <p:ajax update="@form" />
+                                </p:commandButton>
                             </center>
                         </f:facet>
                     </h:panelGrid> 
+   
                 </center>
             </h:form>
         </div>

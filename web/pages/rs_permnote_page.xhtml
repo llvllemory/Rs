@@ -1,0 +1,170 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>تسديد وثائق النقل</title>
+
+        <link rel="stylesheet" 
+              type="text/css"
+              href="../resources/css/rasas.css"/>
+
+    </h:head>
+
+    <h:body>
+
+        <p:growl id="growl" showDetail="true" life="5000"/>
+
+        <ui:insert name="header">
+            <ui:include src="rs_header_page.xhtml" />
+        </ui:insert>
+
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false" >
+            <p:graphicImage  url="../resources/images/ajax-loader.gif"/>                
+        </p:dialog>
+
+        <div id="container">
+
+            <center>
+                <p:outputLabel id = "lblTitle" style ="font-size: 30px;" value="تسديد وثائق النقل"/>
+            </center>
+
+
+            <h:form id="frmTasNote" styleClass="frmMain" >
+                <center>
+                    <p:panelGrid id="pnlPermNoteBarcode" styleClass="pnl" columns="2"  >
+
+                        <p:outputLabel value="الباركود : " />
+                        <p:inputText id="txtBarcode" value="#{mBTasPermNote.barcode}" maxlength="18" style="text-align: center; width: 350px;"
+                                     onchange="if(this.value.length == this.getAttribute('maxlength')) {this.blur()}">
+
+                            <p:focus for="txtBarcode"/>
+                            <p:ajax  event="change" listener="#{mBTasPermNote.checkPermNoteToClose()}" process="@this" update="@all"/>
+                        </p:inputText>
+
+                    </p:panelGrid>    
+
+                    <p:spacer/>
+
+                    <h:panelGrid id="pnlNoteDetails" styleClass="pnl" columns="6" cellpadding="0">
+                        <p:outputLabel value="رقم الوثيقة : " />
+                        <h:panelGroup>
+
+                            <p:inputText value="#{mBTasPermNote.permNoteId}" style="width: 100px;text-align: center;" disabled="true"/>
+                            <p:inputText value="#{mBTasPermNote.permNoteNo}" style="width: 100px;text-align: center;" disabled="true"/>
+                            <p:inputText value="#{mBTasPermNote.permNoteYear}" style="width: 60px;text-align: center;" disabled="true"/>
+
+                        </h:panelGroup>
+
+
+                        <p:outputLabel value="تسلسل الوثيقة : " />
+                        <p:inputText value="#{mBTasPermNote.permNoteSerial}" style="width: 50px;text-align: center" disabled="true"/>
+
+                        <p:spacer/><p:spacer/>
+
+                        <p:outputLabel value = "رقم البيان: " />
+                        <p:inputText value = "#{mBTasPermNote.permNoteSadRegNber}" style="width: 200px;text-align: center" disabled="true"/>
+
+                        <p:outputLabel value="تاريخه : " />
+                        <p:inputText value="#{mBTasPermNote.permNoteSadRegDate}" style="width: 150px;text-align: center" disabled="true">
+                            <f:convertDateTime pattern="yyyy/MM/dd" type="date" />
+                        </p:inputText>
+
+                        <p:spacer/><p:spacer/>
+
+                        <p:outputLabel value = "شركة التخليص : " />
+                        <p:inputText value = "#{mBTasPermNote.permNoteKeyDec} -- #{mBTasPermNote.permNoteKeyDecName}" style="width: 450px;text-align: center" disabled="true"/>
+
+                        <p:spacer/><p:spacer/><p:spacer/><p:spacer/>
+
+                        <p:outputLabel value = "رقم الحاوية : " />
+                        <p:inputText value = "#{mBTasPermNote.permNoteCtnNo}" style="width: 200px;text-align: center" disabled="true"/>
+
+                        <p:outputLabel value = "عدد الطرود : " />
+                        <p:inputText value = "#{mBTasPermNote.permNotePacksNo}" style="width: 60px;text-align: center" disabled="true"/>
+
+                        <p:spacer/><p:spacer/>
+
+                    </h:panelGrid> 
+
+                    <h:panelGrid id="pnlNoteGoods" styleClass="pnl" columns="6" cellpadding="10">
+                        <p:outputLabel value="المحتويات : " />
+                        <p:inputTextarea value="#{mBTasPermNote.permNoteGoods}" style="width: 725px;" maxlength="450" rows="2"  disabled="true"/>
+                    </h:panelGrid>
+                    <p:separator style="width: 60%;"/>
+
+                    <p:spacer/><p:spacer/>
+                    
+                    <h:form id="frmTasNoteDetails" styleClass="frmMain" rendered="#{(mBTasPermNote.permNoteNo > 0)?'true':'false'}" >
+                        
+                        
+                        
+                        <h:panelGrid id="pnlTasDetails" styleClass="pnl" columns="6" cellpadding="5">
+
+                            <p:outputLabel value="من رصاص رقم : " />
+                            <p:inputText id="txtRsFrom" value="#{mBTasPermNote.rsFrom}" styleClass="txtRasas" maxlength="10" readonly="true" >
+                                <p:focus for="txtRsFrom"/>
+                            </p:inputText>
+
+                            <p:outputLabel value="الى رصاص رقم : " />
+                            <p:inputText id="txtRsTo" value="#{mBTasPermNote.rsTo}" styleClass="txtRasas" maxlength="10">
+
+                            </p:inputText>
+
+                            <p:outputLabel value="سنة الرصاص: " />
+                            <h:selectOneMenu id="sMenuRsYear" styleClass = "slctMenuYear" value="#{mBTasPermNote.rsYear}">    
+                                <f:selectItems value="#{mBCommon.yearsList}" var="rsYearList" itemLabel="#{rsYearList}" itemValue="#{rsYearList}"/>
+                                <p:ajax  event="blur" update="@form" listener="#{mBTasPermNote.loadMaxRasas()}" process="@all"/>
+                                
+                            </h:selectOneMenu>
+
+                            <p:outputLabel value="رقم السيارة : " />
+                            <p:inputText value="#{mBTasPermNote.tasCarNo}" styleClass="txtRasas" maxlength="10"/>
+
+                            <p:outputLabel value="جنسية السيارة : " />
+                            <p:inputText value="#{mBTasPermNote.tasCarNat}" styleClass="txtYear" maxlength="3"/>
+
+                            <p:outputLabel value="وزن السيارة : " />
+                            <p:inputText value="#{mBTasPermNote.carWeight}" styleClass="txtYear"/>
+
+                            <p:outputLabel value="وزن الحاوية : " />
+                            <p:inputText value="#{mBTasPermNote.ctnWeight}" styleClass="txtYear"/>
+
+                            <p:outputLabel value="الوزن القائم : " />
+                            <p:inputText value="#{mBTasPermNote.grossWeight}" styleClass="txtYear"/>
+
+                            <p:outputLabel value="نموذج المعاينة : " />
+                            <p:inputText value="#{mBTasPermNote.inspDoc}" styleClass="txtYear"/>
+
+                        </h:panelGrid>
+
+                        <h:panelGrid id="pnlTasNote" styleClass="pnl" columns="6" cellpadding="10">
+                            <p:outputLabel value="الملاحظــات : " />
+                            <p:inputTextarea value="#{mBTasPermNote.tasNote}" style="width: 750px;" maxlength="200" rows="2" />
+                        </h:panelGrid>
+
+
+                        <h:panelGrid id="pnlBtns" styleClass="pnl" columns="2" cellpadding="10">
+                            <f:facet name="footer">
+                                <center>
+                                    <p:commandButton id="btnSave" action="#{mBTasPermNote.printFormData()}" value="تسديد الرصاص" />
+
+                                    <p:commandButton value="تفريغ الحقول" type="reset" >
+                                        <p:ajax update="@all" />
+                                    </p:commandButton>
+                                </center>
+                            </f:facet>
+                        </h:panelGrid>
+                    
+                    </h:form>
+                </center>    
+            </h:form>
+        </div>
+    </h:body>
+</html>

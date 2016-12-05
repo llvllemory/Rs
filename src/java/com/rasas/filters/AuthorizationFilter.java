@@ -70,7 +70,7 @@ public class AuthorizationFilter implements Filter {
 
         
         
-        System.out.println("-------------------------------------------------- " + session.getAttribute("loggedUser"));
+       // System.out.println("-------------------------------------------------- " + session.getAttribute("loggedUser"));
         
         if (loggedIn || loginRequest || resourceRequest) {
             if (!resourceRequest) { // Prevent browser from caching restricted resources. See also http://stackoverflow.com/q/4194207/157882

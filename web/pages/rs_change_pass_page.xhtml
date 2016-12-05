@@ -23,6 +23,12 @@
 		<ui:include src="rs_header_page.xhtml" />
 	</ui:insert>
         
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false" >
+            <p:graphicImage  url="../resources/images/ajax-loader.gif"/>                
+        </p:dialog>
+        
         <div id="container">
             <center>
                 <p:outputLabel id = "lblTitle" style ="font-size: 30px;" value="تعديل كلمة السر"/>

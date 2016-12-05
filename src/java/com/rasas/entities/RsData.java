@@ -6,7 +6,6 @@
 package com.rasas.entities;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -45,7 +44,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "RsData.findByRsCarWeight", query = "SELECT r FROM RsData r WHERE r.rsCarWeight = :rsCarWeight"),
     @NamedQuery(name = "RsData.findByRsCtnNo", query = "SELECT r FROM RsData r WHERE r.rsCtnNo = :rsCtnNo"),
     @NamedQuery(name = "RsData.findByRsCtnWeight", query = "SELECT r FROM RsData r WHERE r.rsCtnWeight = :rsCtnWeight"),
-    @NamedQuery(name = "RsData.findByRsGrossWeight", query = "SELECT r FROM RsData r WHERE r.rsGrossWeight = :rsGrossWeight")})
+    @NamedQuery(name = "RsData.findByRsGrossWeight", query = "SELECT r FROM RsData r WHERE r.rsGrossWeight = :rsGrossWeight"),
+    @NamedQuery(name = "RsData.findByRsInspDoc", query = "SELECT r FROM RsData r WHERE r.rsInspDoc = :rsInspDoc"),
+    @NamedQuery(name = "RsData.findByRsTasScreen", query = "SELECT r FROM RsData r WHERE r.rsTasScreen = :rsTasScreen")})
 public class RsData implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -91,6 +92,11 @@ public class RsData implements Serializable {
     private Integer rsCtnWeight;
     @Column(name = "RS_GROSS_WEIGHT")
     private Integer rsGrossWeight;
+    @Column(name = "RS_INSP_DOC")
+    private Integer rsInspDoc;
+    @Size(max = 20)
+    @Column(name = "RS_TAS_SCREEN")
+    private String rsTasScreen;
 
     public RsData() {
     }
@@ -229,6 +235,22 @@ public class RsData implements Serializable {
 
     public void setRsGrossWeight(Integer rsGrossWeight) {
         this.rsGrossWeight = rsGrossWeight;
+    }
+
+    public Integer getRsInspDoc() {
+        return rsInspDoc;
+    }
+
+    public void setRsInspDoc(Integer rsInspDoc) {
+        this.rsInspDoc = rsInspDoc;
+    }
+
+    public String getRsTasScreen() {
+        return rsTasScreen;
+    }
+
+    public void setRsTasScreen(String rsTasScreen) {
+        this.rsTasScreen = rsTasScreen;
     }
 
     @Override

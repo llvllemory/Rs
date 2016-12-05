@@ -37,7 +37,7 @@ public class MBRsData implements Serializable{
     }
 
 ////////////////////////////////////////////////////////////////////////////////
-   public List<RsData> getRsDataByRsNoAndRsCenterAndRsYearAndRsSubCenter(int rsNo, String rsCenter, String rsYear, String rsSubCenter){
+    public List<RsData> getRsDataByRsNoAndRsCenterAndRsYearAndRsSubCenter(int rsNo, String rsCenter, String rsYear, String rsSubCenter){
        System.out.println("com.rasas.mbeans.MBRsData.getRsDataByRsNoAndRsCenterAndRsYearAndRsSubCenter()----------> " + MBCommon.getCurrentDateTime());
        
        emf.getCache().evictAll();
@@ -82,7 +82,7 @@ public class MBRsData implements Serializable{
 ////////////////////////////////////////////////////////////////////////////////
     public List<RsData> getRsDataByRsYearRsCenterRsSubCenterRsFromRsTo(String rsYear, String rsCenter, String rsSubCenter, int rsFrom, int rsTo){
         System.out.println("com.rasas.mbeans.MBRsData.getRsDataByRsYearRsCenterRsSubCenterRsFromRsTo()");
-        
+       
         emf.getCache().evictAll();
         TypedQuery<RsData> query = em.createQuery("SELECT r FROM RsData r WHERE r.rsDataPK.rsYear = ?1 AND r.rsDataPK.rsCenter = ?2 AND r.rsSubCenter =?3 AND r.rsDataPK.rsNo BETWEEN ?4 AND ?5", RsData.class)
                 .setParameter(1, rsYear)
@@ -126,14 +126,19 @@ public class MBRsData implements Serializable{
 ////////////////////////////////////////////////////////////////////////////////
     public int rsDataClose(int rsFrom, int rsTo, String rsYear, String rsCenter, String rsSubCenter, int rsTasDocNo, 
             String rsTasDocYear, int rsTasDocType, Date rsTasDate, String rsTasUserId, String rsTasNote, String rsTasCarNo, String rsTasCarNat, 
-            int rsCarWeight, String rsCtnNo, int rsCtnWeight, int rsGrossWeight){
+            int rsCarWeight, String rsCtnNo, int rsCtnWeight, int rsGrossWeight, int rsInspDoc, String rsTasScreen){
         System.out.println("com.rasas.mbeans.MBRsData.rsDataClose()");
         
         emf.getCache().evictAll();
         int rows = 0;
         
+//        System.out.println("rsFrom : " + rsFrom + ", rsTo : " + rsTo + ", rsYear : " + rsYear +", rsCenter : " + rsCenter + ", rsSubCenter : " + rsSubCenter + ", rsTasDocNo : " + rsTasDocNo + ", rsTasDocYear : " + rsTasDocYear + ", rsTasDocType : " + rsTasDocType + 
+//                ", rsTasDate : " + rsTasDate + ", rsTasUserId : " + rsTasUserId + ", rsTasNote : " + rsTasNote + ", rsTasCarNo : " + rsTasCarNo + ", rsTasCarNat : " + rsTasCarNat + ", rsCarWeight : " + rsCarWeight + ", rsCtnNo : " + rsCtnNo + ", rsCtnWeight : " + rsCtnWeight + 
+//                ", rsGrossWeight : " + rsGrossWeight + ", rsInspDoc : " + rsInspDoc + ", rsTasScreen : " + rsTasScreen);
+        
         Query query = em.createQuery("UPDATE RsData r SET r.rsTasDocNo = ?1, r.rsTasDocYear = ?2, r.rsTasDocType = ?3, r.rsTasDate = ?4, r.rsTasUserId = ?5, r.rsTasNote = ?6, "
-                + "r.rsCarNo = ?7, r.rsCarNat = ?8, r.rsCarWeight = ?9, r.rsCtnNo = ?10, r.rsCtnWeight = ?11, r.rsGrossWeight = ?12 WHERE r.rsDataPK.rsNo BETWEEN ?13 AND ?14 AND r.rsDataPK.rsYear = ?15 AND r.rsDataPK.rsCenter = ?16 AND r.rsSubCenter = ?17")
+                + "r.rsCarNo = ?7, r.rsCarNat = ?8, r.rsCarWeight = ?9, r.rsCtnNo = ?10, r.rsCtnWeight = ?11, r.rsGrossWeight = ?12, r.rsInspDoc = ?13, r.rsTasScreen = ?14 "
+                + "WHERE r.rsDataPK.rsNo BETWEEN ?15 AND ?16 AND r.rsDataPK.rsYear = ?17 AND r.rsDataPK.rsCenter = ?18 AND r.rsSubCenter = ?19")
                 .setParameter(1, rsTasDocNo)
                 .setParameter(2, rsTasDocYear)
                 .setParameter(3, rsTasDocType)
@@ -146,11 +151,13 @@ public class MBRsData implements Serializable{
                 .setParameter(10, rsCtnNo)
                 .setParameter(11, rsCtnWeight)
                 .setParameter(12, rsGrossWeight)
-                .setParameter(13, rsFrom)
-                .setParameter(14, rsTo)
-                .setParameter(15, rsYear)
-                .setParameter(16, rsCenter)
-                .setParameter(17, rsSubCenter);
+                .setParameter(13, rsInspDoc)
+                .setParameter(14, rsTasScreen)
+                .setParameter(15, rsFrom)
+                .setParameter(16, rsTo)
+                .setParameter(17, rsYear)
+                .setParameter(18, rsCenter)
+                .setParameter(19, rsSubCenter);
                 
         rows = query.executeUpdate();
         
@@ -159,20 +166,20 @@ public class MBRsData implements Serializable{
     }
 
 ////////////////////////////////////////////////////////////////////////////////
-    public int rsDataOpen(int rsFrom, int rsTo, String rsYear, String rsCenter, String rsSubCenter, String rsTasNote){
+    public int rsDataOpen(int rsFrom, int rsTo, String rsYear, String rsCenter, String rsSubCenter){
         System.out.println("com.rasas.mbeans.MBRsData.rsDataOpen()");
         
         emf.getCache().evictAll();
         int rows = 0;
         
-        Query query = em.createQuery("UPDATE RsData r SET r.rsTasDocNo = null, r.rsTasDocYear = null, r.rsTasDocType = null, r.rsTasDate = null, r.rsTasUserId = null, r.rsTasNote = ?6, "
-                + "r.rsCarNo = null, r.rsCarNat = null, r.rsCarWeight = null, r.rsCtnNo = null, r.rsCtnWeight = null, r.rsGrossWeight = null WHERE r.rsDataPK.rsNo BETWEEN ?1 AND ?2 AND r.rsDataPK.rsYear = ?3 AND r.rsDataPK.rsCenter = ?4 AND r.rsSubCenter = ?5")
+        Query query = em.createQuery("UPDATE RsData r SET r.rsTasDocNo = null, r.rsTasDocYear = null, r.rsTasDocType = null, r.rsTasDate = null, r.rsTasUserId = null, r.rsTasNote = null, "
+                + "r.rsCarNo = null, r.rsCarNat = null, r.rsCarWeight = null, r.rsCtnNo = null, r.rsCtnWeight = null, r.rsGrossWeight = null, r.rsInspDoc = null, r.rsTasScreen = null "
+                + "WHERE r.rsDataPK.rsNo BETWEEN ?1 AND ?2 AND r.rsDataPK.rsYear = ?3 AND r.rsDataPK.rsCenter = ?4 AND r.rsSubCenter = ?5")
                 .setParameter(1, rsFrom)
                 .setParameter(2, rsTo)
                 .setParameter(3, rsYear)
                 .setParameter(4, rsCenter)
-                .setParameter(5, rsSubCenter)
-                .setParameter(6, rsTasNote);
+                .setParameter(5, rsSubCenter);
                 
         rows = query.executeUpdate();
         
@@ -213,6 +220,21 @@ public class MBRsData implements Serializable{
         
         System.out.println("---------- RsData removed rows ----------------> " + rows + " >> " + MBCommon.getCurrentDateTime());
         return rows;
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+    public List<RsData> getMinOpenRsDataByCenterAndSubCenter(String rsYear, String rsCenterNo, String rsSubCenterNo){
+        System.out.println("com.rasas.mbeans.MBRsData.getMinOpenRsDataByCenterAndSubCenter()");
+        
+        emf.getCache().evictAll();
+        
+        TypedQuery<RsData> query = em.createQuery("SELECT r FROM RsData r WHERE r.rsDataPK.rsNo = (SELECT MIN(r.rsDataPK.rsNo) FROM RsData r WHERE r.rsDataPK.rsYear = ?1 AND r.rsDataPK.rsCenter = ?2 AND r.rsSubCenter = ?3 AND r.rsTasDate IS NULL)", RsData.class)
+                .setParameter(1, rsYear)
+                .setParameter(2, rsCenterNo)
+                .setParameter(3, rsSubCenterNo);
+        
+        return query.getResultList();
+        
     }
 //////////////////// Getters and Setters ///////////////////////////////////////
 

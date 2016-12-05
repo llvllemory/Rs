@@ -1,10 +1,8 @@
 package com.rasas.mbeans;
 
 import com.rasas.entities.RsData;
-import com.rasas.entities.RsMain;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -25,6 +23,11 @@ public class MBTasManual implements Serializable{
     private String tasDocYear;
     private String tasCarNo;
     private String tasCarNat;
+    private int carWeight;
+    private int ctnWeight;
+    private int grossWeight;
+    private String ctnNo;
+    private int inspDoc;
     private String tasNote;
     
     private int rsFound;
@@ -34,9 +37,9 @@ public class MBTasManual implements Serializable{
     private MBLogin mBLogin = new MBLogin();
     private MBRsMain mBRsMain = new MBRsMain();
     private MBRsData mBRsData = new MBRsData();
-    private List<RsMain> rsMainList;
     private List<RsData> rsDataList;
-    
+    private List<RsData> rsDataListDataTable;
+        
     
     EntityManager em;
     EntityManagerFactory emf;
@@ -47,9 +50,14 @@ public class MBTasManual implements Serializable{
         em.getTransaction().begin();
     }
     
-////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////    
     public String checkRsToClose(){
         System.out.println("com.rasas.mbeans.MBTasManual.checkRsToClose()");
+        
+        if(tasDocType == 0){
+            MBCommon.getWarnMessage("", "يجب إختيار نوع التسديد!");
+            return "";
+        }
         
         if(rsFrom == 0 || rsFrom < 0){
             MBCommon.getWarnMessage("", "بداية الرصاص يجب ان يكون اكبر من صفر!");
@@ -70,6 +78,7 @@ public class MBTasManual implements Serializable{
             MBCommon.getWarnMessage("", "يحب إختيار سنة الرصاص!");
             return "";
         }
+      
         
         if(tasNote.equals("")){
             MBCommon.getWarnMessage("", "بجب إدخال الملاحظات!");
@@ -79,7 +88,7 @@ public class MBTasManual implements Serializable{
         rsDataList = new ArrayList<>();
         rsDataList = mBRsData.getRsDataByRsYearRsCenterRsSubCenterRsFromRsTo(rsYear, mBLogin.getLoggedUser().getUserCenter(), mBLogin.getLoggedUser().getUserSubCenter(), rsFrom, rsTo);
         
-        if(rsDataList.size() == 0){
+        if(rsDataList.isEmpty()){
             MBCommon.getWarnMessage("", "الرصاص غير موجود او مصروف للمركز في ملف الرصاص. الرجاء التأكد من ارقام الرصاص!");
             return "";
             
@@ -101,7 +110,7 @@ public class MBTasManual implements Serializable{
                     }  
                 }
                 
-                if (r.getRsTasUserId() == null) {
+                if (r.getRsTasUserId() == null && r.getRsTasDate() == null) {
                     rsOpen++;
                 }
             }
@@ -117,7 +126,7 @@ public class MBTasManual implements Serializable{
             } else if (rsOpen == rsFound) {
 
                 rows = mBRsData.rsDataClose(rsFrom, rsTo, rsYear, mBLogin.getLoggedUser().getUserCenter(), mBLogin.getLoggedUser().getUserSubCenter(),
-                        tasDocNo, tasDocYear, tasDocType, new java.util.Date(), mBLogin.getLoggedUser().getUserId(), tasNote, tasCarNo, tasCarNat, 0, "", 0, 0);
+                        tasDocNo, tasDocYear, tasDocType, new java.util.Date(), mBLogin.getLoggedUser().getUserId(), tasNote, tasCarNo, tasCarNat, carWeight, ctnNo, ctnWeight, grossWeight, inspDoc, "rsManual");
 
                 if (rows == 0) {
                     MBCommon.getErrorMessage("", "حدث خطأ في عملية التخزين, الرجاء التأكد والمحاولة مرة اخرى!");
@@ -127,9 +136,9 @@ public class MBTasManual implements Serializable{
 
                 } else if (rows == ((rsTo - rsFrom) + 1)) {
                     MBCommon.getInfoMessage("", "تم تسديد الرصاص بنجاح!");
- 
+                    return "rs_manual_page.xhtml?faces-redirect=true";
                 }
-                return "";
+                return null;
             }
         }
         return "";
@@ -167,7 +176,7 @@ public class MBTasManual implements Serializable{
         rsDataList = new ArrayList<>();
         rsDataList = mBRsData.getRsDataByRsYearRsCenterRsSubCenterRsFromRsTo(rsYear, mBLogin.getLoggedUser().getUserCenter(), mBLogin.getLoggedUser().getUserSubCenter(), rsFrom, rsTo);
         
-        if(rsDataList.size() == 0){
+        if(rsDataList.isEmpty()){
             MBCommon.getWarnMessage("", "الرصاص غير موجود او مصروف للمركز في ملف الرصاص. الرجاء التأكد من ارقام الرصاص!");
             return "";
             
@@ -189,7 +198,7 @@ public class MBTasManual implements Serializable{
                     }  
                 }
                 
-                if (r.getRsTasUserId() == null) {
+                if (r.getRsTasUserId() == null && r.getRsTasDate() == null) {
                     rsOpen++;
                 }
             }
@@ -204,7 +213,7 @@ public class MBTasManual implements Serializable{
 
             } else if (rsOpen == 0) {
 
-                rows = mBRsData.rsDataOpen(rsFrom, rsTo, rsYear, mBLogin.getLoggedUser().getUserCenter(), mBLogin.getLoggedUser().getUserSubCenter(),tasNote);
+                rows = mBRsData.rsDataOpen(rsFrom, rsTo, rsYear, mBLogin.getLoggedUser().getUserCenter(), mBLogin.getLoggedUser().getUserSubCenter());
 
                 if (rows == 0) {
                     MBCommon.getErrorMessage("", "حدث خطأ في عملية إلغاء التسديد, الرجاء التأكد والمحاولة مرة اخرى!");
@@ -214,14 +223,82 @@ public class MBTasManual implements Serializable{
 
                 } else if (rows == ((rsTo - rsFrom) + 1)) {
                     MBCommon.getInfoMessage("", "تم إلغاء تسديد الرصاص بنجاح!");
+                    return "rs_manual_page.xhtml?faces-redirect=true";
                 }
                 return "";
             }
         }
         return "";
-    }    
-////////////////////////////////////////////////////////////////////////////////
+    }
 
+////////////////////////////////////////////////////////////////////////////////
+    public String checkToLoadRsDataForDataTable(){
+        System.out.println("com.rasas.mbeans.MBTasManual.checkToLoadRsDataForDataTable()");
+              
+        if(rsFrom == 0 || rsFrom < 0){
+            MBCommon.getWarnMessage("", "بداية الرصاص يجب ان يكون اكبر من صفر!");
+            return "";
+        }
+        
+        if(rsTo == 0 || rsTo < 0){
+            MBCommon.getWarnMessage("", "نهاية الرصاص يجب ان يكون اكبر من صفر!");
+            return "";
+        }
+        
+        if(rsTo < rsFrom){
+            MBCommon.getWarnMessage("", "يجب ان يكون بداية الرصاص اقل او يساوي نهايته!");
+            return "";
+        }
+        
+        if(rsYear == null){
+            MBCommon.getWarnMessage("", "يحب إختيار سنة الرصاص!");
+            return "";
+        }
+        
+        
+        rsDataListDataTable = new ArrayList<>();
+        rsDataListDataTable = mBRsData.getRsDataByRsYearRsCenterRsSubCenterRsFromRsTo(rsYear, mBLogin.getLoggedUser().getUserCenter(), mBLogin.getLoggedUser().getUserSubCenter(), rsFrom, rsTo);
+        
+        if(rsDataListDataTable.isEmpty()){
+            MBCommon.getWarnMessage("", "الرصاص غير موجود او مصروف للمركز في ملف الرصاص. الرجاء التأكد من ارقام الرصاص!");
+            return "";
+            
+        }else if(rsDataListDataTable.size() != ((rsTo - rsFrom) + 1)){
+           MBCommon.getWarnMessage("", "هنالك رصاص غير موجود او مصروف للمركز من هذا الرصاص, الرجاء التأكد من ارقام الرصاص!");
+           return ""; 
+            
+        }else if(rsDataListDataTable.size() == ((rsTo - rsFrom) + 1)){
+           
+            rsFound = 0;
+            rsOpen = 0;
+            rows = 0;
+            
+            for(RsData r: rsDataListDataTable){
+
+                for(int rd = rsFrom; rd <= rsTo; rd++){
+                    if (r.getRsDataPK().getRsNo() == rd) {
+                        rsFound++;
+                    }  
+                }
+                
+                if (r.getRsTasUserId() == null && r.getRsTasDate() == null) {
+                    rsOpen++;
+                }
+            }
+
+            if (rsOpen == 0) {
+                MBCommon.getWarnMessage("", "الرصاص مسدد مسبقا, الرجاء التأكد من ارقام الرصاص والمحاولة مرة اخرى!");
+                return "";
+
+            } else if (rsOpen > 0 && rsOpen < rsFound) {
+                MBCommon.getWarnMessage("", "هنالك رصاص مسدد مسبقا, الرجاء التأكد من ارقام الرصاص والمحاولة مرة اخرى!");
+                return "";
+
+            } 
+        }
+        
+        return "";
+    }
 
 ////////////////////// Getters and Setters /////////////////////////////////////    
 
@@ -289,6 +366,46 @@ public class MBTasManual implements Serializable{
         this.tasCarNat = tasCarNat;
     }
 
+    public int getCarWeight() {
+        return carWeight;
+    }
+
+    public void setCarWeight(int carWeight) {
+        this.carWeight = carWeight;
+    }
+
+    public int getCtnWeight() {
+        return ctnWeight;
+    }
+
+    public void setCtnWeight(int ctnWeight) {
+        this.ctnWeight = ctnWeight;
+    }
+
+    public int getGrossWeight() {
+        return grossWeight;
+    }
+
+    public void setGrossWeight(int grossWeight) {
+        this.grossWeight = grossWeight;
+    }
+
+    public String getCtnNo() {
+        return ctnNo;
+    }
+
+    public void setCtnNo(String ctnNo) {
+        this.ctnNo = ctnNo;
+    }
+
+    public int getInspDoc() {
+        return inspDoc;
+    }
+
+    public void setInspDoc(int inspDoc) {
+        this.inspDoc = inspDoc;
+    }
+
     public String getTasNote() {
         return tasNote;
     }
@@ -297,5 +414,14 @@ public class MBTasManual implements Serializable{
         this.tasNote = tasNote;
     }
 
-     
+    public List<RsData> getRsDataListDataTable() {
+        return rsDataListDataTable;
+    }
+
+    public void setRsDataListDataTable(List<RsData> rsDataListDataTable) {
+        this.rsDataListDataTable = rsDataListDataTable;
+    }
+    
+    
+
 }
